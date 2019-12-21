@@ -1,0 +1,6 @@
+tag;nome;id;tipo_de_acesso
+CD C7 35 7D;Lucas Vellozo de Sousa;11074711;aluno
+84 FC 45 72;Thiago Henrique Gomes Panini;11016214;aluno
+16 FC EA 91;Thiago Viana de Oliveira;11071413;aluno
+26 A6 DF 4F;Arthur Luiz Ferreira;11034516;aluno
+06 45 FA 4F;Gerson Luiz Mantovani;1730523;professor

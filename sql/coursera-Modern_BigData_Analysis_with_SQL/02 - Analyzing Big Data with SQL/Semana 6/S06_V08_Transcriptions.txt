@@ -1,0 +1,17 @@
+In a typical join, the join conditions are expressed as one or more
+equality conditions. This is called an equijoin. A non-equijoin is
+a join that uses some other comparison
+instead of equality. In a non-equijoin, you can use comparisons such as not equal, less than, or greater than
+in the join conditions. Here's an example:
+The employees table lists the salary
+for each employee, and the salary_grades table lists the salary grades or levels and their associated minimum
+and maximum salaries. To find the salary grade
+for each employee, you could use a non-equijoin with inequality comparisons
+for the join conditions. For instance, in
+the results you can see Ambrosia Rojas has
+salary grade 2, because his salary, which is 25,784, is greater than or equal
+to the minimum salary for grade 2, which is 20,000,
+and less than or equal to the maximum salary for
+grade 2, which is 29,999. Impala, MySQL, PostgreSQL, and some other SQL engines support non-equijoin queries
+like this one. But with Hive, only equality conditions
+are allowed in joins.

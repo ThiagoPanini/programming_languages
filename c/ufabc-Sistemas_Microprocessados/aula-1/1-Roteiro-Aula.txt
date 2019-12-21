@@ -1,0 +1,16 @@
+Programação do dia.
+
+- Configuração do Arduino ATMEGA 2560
+- Ajuste Portal Serial
+- Teste com programa pronto Blink
+- Ajuste no programa Blink (3s ON / 1s OFF)
+- Serial event
+- Modificar Serial Event para devolver a string ao contrário (responder caracteres invertidos)
+	- Exemplo: ola / R: alo
+
+
+
+Links úteis:
+
+Site oficial 2560: https://store.arduino.cc/usa/arduino-mega-2560-rev3
+Getting Started 2560: https://www.arduino.cc/en/Guide/ArduinoMega2560

@@ -1,0 +1,62 @@
+Unlike other types of joins, a cross join does not try to match records based on the values in
+corresponding columns. Instead, what a cross join does is it returns
+every possible combination of the records from the tables. In other words, a cross join
+generates the cross product, also known as the Cartesian
+product, of the datasets. For this reason, it's also
+known as a Cartesian join. Be careful when
+doing cross joins, because they can generate
+huge amounts of data. The number of rows a
+cross join generates is equal to the product (the multiplication) of the number
+of rows in each table. In many cases the result of
+a cross join is meaningless. The rows of the result set contain values that
+have no correspondence. However, in some cases generating every possible combination
+of values can be useful, as in this example. There's a table named
+card_rank with 13 rows, one row for each rank of a playing card in
+a standard deck of cards, 2 through 10, and Jack, Queen, King, and Ace. And there's a table named card_suit, with four rows, for Clubs, Diamonds, Hearts, and Spades. If you do a cross join
+on these two tables, you get a result set
+with 13 times 4 rows, that's 52 rows, and each row represents one card in
+a standard 52-card deck. The best way to write a SQL statement that
+performs a cross join is to explicitly specify
+CROSS JOIN in your statement, like I did in this example. But many SQL engines
+will also perform a cross join if you simply
+omit the join condition. In other words, if you use
+only the JOIN keyword, and no other keywords
+between the two table names, and you leave off
+the join condition, so there's no ON keyword, then most SQL engines will
+perform a cross join. This feature is dangerous
+because it means that by simply forgetting to include
+the join condition in an inner join query, you can inadvertently
+cause the SQL engine to return an enormous
+number of rows. So remember to specify
+the join condition whenever you do not want
+to do a cross join. All of this also
+applies when you use the SQL-89-style
+inner join syntax, where you use a comma
+instead of the JOIN keyword, and you put the join condition
+in the WHERE clause. If you use that syntax, but you forget to include the join condition
+in the WHERE clause, then the SQL engine will
+perform a cross join. It can be helpful to understand an inner join as a cross join followed by a filter. I'll use an example to
+show what I mean by this. I'll use the SQL-89- style inner join syntax
+in this example, because it demonstrates
+the point more clearly. This statement
+performs a cross join. It's written like an inner join, but with no join condition, so it returns every
+possible combination of toys and makers. There are three toys
+and three makers, so it returns three times
+three rows, nine rows. Most of these rows contain values that do not
+correspond to one another. In most of the rows, the maker_id value from
+the toys table is not equal to the id value
+from the makers table. But if you add a WHERE clause to filter this cross join result so it only contains the rows in which the join key 
+column values are equal, then what you have
+is an inner join. All the join key values
+in the result set match, and all the values in
+each row correspond. This is exactly the same
+result you get if you use the SQL-92-style
+inner join syntax. So an inner join is effectively
+the same as a cross join followed by a filter. This equivalence is
+especially evident when you use
+the SQL-89-style syntax, where an inner join
+is literally written as a cross join
+followed by a filter. What a SQL engine does internally when it
+performs an inner join is much more efficient
+than what would happen if it actually generated
+all possible combinations and then filtered them, but the end result is equivalent.

@@ -1,0 +1,29 @@
+In all the required lessons
+in this course, you can use Q as the SQL
+interface to Hive and Impala. But if you're working
+as a data analyst in the real world, there are times
+when you'll need or want to instead use
+a command-line interface, or CLI to run SQL queries. For example, you might only have command-line access to a cluster
+running Hive or Impala, or you might need to incorporate some Hive or Impala queries into a process that's implemented
+using command-line tools. In cases like these, you can use two specialized
+command-line interfaces, also known as shells
+for Hive and Impala. In this video, I'll give a brief overview of
+these two shells. Then in the next two videos, you'll learn how to use them. Beeline is the command-line
+interface for Hive. Beeline is based on an open source utility
+called SQL line. It uses JDBC to connect to Hive. You can use it interactively where you start up
+the Beeline shell, and then enter and run
+SQL statements in it, or you can use it as
+a batch tool to run a single SQL statement or
+a set of SQL statements, and then exit when it's finished. Impala shell is the command-line
+interface for Impala. Impala shell actually doesn't use ODBC or JDBC to
+connect to Impala. It uses a different interface
+called Apache Thrift, but you don't need to know or
+understand that to use it. Like Beeline, it can
+be used interactively, or it can run one or more
+statements then exit. These two utilities, Beeline and Impala shell have
+similar functionality and they are comparable to
+the command line utilities that are available
+for interacting with traditional relational
+database systems like MySQL. But these two utilities
+differ in some notable ways, and there are
+some specific details you need to know to use them.

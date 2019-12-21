@@ -1,0 +1,122 @@
+In the simple examples
+in the previous video, I showed how you
+can use operators, like less than and
+equals in expressions in the WHERE Clause to compare column values with
+literal values. Recall the examples, like
+WHERE list_price less than 10, and WHERE inventor
+equals Elizabeth Maggie. In this video, I'll show the common comparison
+operators that you can use in Boolean expressions in SQL and I'll describe
+how you can use them. All of these are
+binary operators, meaning that there's
+an operand on both sides of the operator, and all of these work across
+all the major SQL engines. The equals sign in a SQL expression tests for
+equality of the operands. You can use this operator
+with any data types, including numeric
+and character string if the operands on the left
+side and the right side, call them X and Y. If they are exactly equal, then the expression X
+equals Y evaluates to true. If you have any experience
+with programming languages, then you're probably more familiar with the use
+of double equals, two equals signs for
+equality comparison. That's because
+a single equal sign is used for variable assignment in
+many programming languages, but in a SQL SELECT Statement, there's no variable assignment, so you just use
+a single equal sign for equality comparison. The not-equals operator test for inequality of the operands. This is basically the opposite
+of the equal sign. When X equals Y is true, then X not-equals Y is
+false and vice versa. But you'll see in
+an upcoming video, that in the case
+of missing values, it is possible to have
+two operands that are neither equal nor unequal. There are two forms of
+the not-equals operator in SQL, exclamation mark equals, and
+less than, greater than. Both of these work with
+most major SQL engines. The first form,
+exclamation mark equals is more widely used today and it's what I'll
+use in this course. Less than and greater than are two operators that should be
+familiar to almost everyone. These are typically used
+with numeric operands. The same is true of
+the less than or equal to and greater than or
+equal to operators. Each of these operators
+is two characters with the equals sign right after the less than or
+greater than symbol. At this stage of the course, you should not try to use these last four operators with non-numeric operands,
+like character strings. You'll learn more in a later week of the course about
+how SQL engines compare the ordinal values of different strings but for now, just avoid using these operators with non-numeric operands. When you're using these
+comparison operators in an expression in SQL, the operands on the left
+and right sides can be column references
+or literal values. For example, you can
+compare the values in one column to the values
+in the same rows in another column or you can compare the values in a column
+to a literal value. Here are some simple examples
+based on the data in the crayons table
+in the wax database. Recall that there are columns in that table named, red, green, and blue with integer values
+between zero and 255, these represent colors
+with the RGB color model. You could query this table to
+return only the colors that have a green value larger
+than the red value. To do this, you would use the expression green
+greater than read, this compares each value in the green column to
+the value in the same row in the red column or
+you could answer the question which colors have a blue value of 50 or lower. To do this, you would
+use the expression blue less than or equal to 50, this compares each value in the blue column to
+the literal number 50. Try writing some
+SELECT Statements to query the crayons table, using expressions like
+these in the WHERE Clause. The operands on the left
+and right sides of comparison operators can
+also be expressions. The SQL engine evaluates
+the expressions on both sides of
+the comparison operator, then evaluates the whole
+Boolean expression to compare the left and
+right sides for each row. I'll demonstrate this
+with an example. In the RGB color model, very high values of red, green, and blue, yield colors that are very
+light, close to white. So we could find the lightest crayon
+colors by looking for the ones where
+the sum of the red, green, and blue values
+is large, say over 650. To do this, you would
+use the expression, red plus green plus
+blue greater than 650. Now, try using some expressions like this in the WHERE Clause, using arithmetic operators or built-in functions to create an expression on
+one or both sides of the comparison operator. The example I just showed used
+an arithmetic expression, red plus green plus blue on one side of
+the comparison operator, and a literal number, 650 on the other side. When you use this expression in the WHERE Clause of
+a SELECT Statement, then the rows in
+the results set all have red plus green plus
+blue greater than 650, but the results set
+does not include a column giving these values
+of red plus green plus blue, the SQL engine calculate these sums and uses them
+to filter the data, but it does not return
+these sums in the results set. But it might be good to include
+them in the results set, maybe to see how close
+to 650 each one is. So you might try
+something like this, compute the sum of these colors in an expression in
+the select list, give this result column
+an alias, rgb_sum, and then use that alias in the expression in
+the WHERE Clause, rgb_sum greater than 650. Unfortunately, this
+does not work. The reason is that
+SQL engines process the WHERE Clause before they compute the expressions
+in the select list. In other words, they
+filter the rows of the table before they build the columns
+for the result set. So aliases defined in
+the select list are not available for you to
+use in the WHERE Clause. There are some
+exceptions to this, but most SQL engines
+have this limitation. You can work around
+this by entering the expression again
+in the select list. If this seems a bit kludgy, needing to use
+the same expression twice, I agree, it is. In a later course in
+this specialization, you'll learn about
+other possible workarounds. In this video, I've
+focused on using these Boolean expressions
+in the WHERE Clause, but you can use them in
+the select list too, then you get a Boolean
+column in your result set. For example, here I moved
+the whole Boolean expression, red plus green plus
+blue greater than 650, out of the WHERE Clause and into the select list and I
+gave it the column alias, light because these colors with high RGB values are light colors. Then the results that includes
+a column named light, containing true or false values. You can see Almond
+has a light color, Antique Brass is not, and so on. The results set has not been
+filtered by this expression, instead, the expression
+just returns a column of Boolean values
+in the results set. With many SQL engines, Boolean is a datatype, just like the numeric and
+character string data types you learned about earlier. Instead of being
+numbers or strings, a Boolean column contains
+true and false values. Hive, Impala, Presto, Drill, and PostgreSQL, all have
+a Boolean data type. But many SQL engines actually do not have a Boolean
+data type, instead, they use integers to represent
+true and false values, zero is false and one is true, MySQL works this way. So if you ran a query
+like this with MySQL, you would get a column of ones and zeros in the results set.

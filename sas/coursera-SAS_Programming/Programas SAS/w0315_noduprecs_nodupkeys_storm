@@ -1,0 +1,60 @@
+/*********************************************************
+	     	     Semana 3 - Programa 15
+	  	Removendo duplicatas no SAS - Demonstração
+**********************************************************
+Removendo linhas totalmente duplicadas:
+
+    PROC SORT DATA=input_table <OUT=output_table>
+    	NODUPRECS <DUPOUT=output_table>;
+    BY _ALL;
+    RUN;
+
+Removendo valores-chave duplicados:
+
+	PROC SORT DATA=input-table <OUT=output-table>        
+        NODUPKEY <DUPOUT=output-table>;                  
+        BY <DESCENDING> col-name (s);                    
+    RUN; 
+    
+***********************************************************
+Demonstração:
+
+	1) Modificar o primeiro PROC SORT para ordenar por todas
+	as colunas (BY _ALL_) e remover as linhas duplicatas.
+	Mostrar as linhas duplicadas na tabela storm_dups.
+	Confirmar que há 107.821 linhas na tabela storm_clean
+	e 214 na tabela storm_dups.
+	
+	2) Executar o segundo PROC SORT e confirmar que a primeira
+	linha para cada tempestade represente o valor mínimo
+	da Pressão.
+	Nota: por conta da reutilização do nome das tempestades
+	ao longo dos anos e bains, tempestades únicas são agrupada
+	através da ordenação por Season, Basin e Name
+	
+	3) Modificar o terceiro PROC SORT para ordenar por 
+	a tabela min_pressure (criada no passo anterior) para
+	manter apenas a primeira linha de cada tempestade
+	(a primeira linha de min_pressure contém o valor mínimo
+	da pressão para cada instância). Não é preciso armazenar
+	as duplicatas removidas
+
+***********************************************************/
+
+/* 1) Removendo duplicatas e armazenando em tabela */
+proc sort data=pg1.storm_detail out=storm_clean
+	noduprecs
+	dupout=storm_dups;
+	by _all_;
+run;
+
+/* 2) Verificando ordenação */
+proc sort data=pg1.storm_detail out=min_pressure;
+	where Pressure is not missing and Name is not missing;
+	by descending Season Basin Name Pressure;
+run;
+
+/* 3) Manter apenas a primeira instância de cada tempestade */
+proc sort data=min_pressure nodupkey;
+	by descending Season Basin Name;
+run;

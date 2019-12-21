@@ -1,0 +1,79 @@
+Grouping and aggregation
+go hand in hand. In practice, they're
+mostly used together. But you can use an aggregate expression
+without a GROUP BY clause, and it's also possible to use a GROUP BY clause without
+an aggregate expression. In this video, I'll describe
+the rules governing how you can use each one
+without the other. You can't use aggregation
+without grouping. You can use an
+aggregate expression in the select list in
+a statement that has no GROUP BY clause. When you do this, the
+SQL engine aggregates the whole table down to
+one row in the results set. In effect, when you use an aggregate expression
+with no GROUP BY clause, there is an implicit GROUP BY clause that creates one group
+for the whole table. You can also use two or more
+aggregate expressions in the select list with
+no GROUP BY clause. The result will still
+have just one row, but it will have
+multiple columns, one for each of the expressions
+in the select list. Now what about grouping
+without aggregation? You might imagine that
+if you ran a query like select star from games, GROUP BY min age, that maybe it would return a set of multiple result tables, each with one unique
+value of min age. But SQL does not work that way. A query result can have
+only one table in it. When you use a GROUP BY clause, the select list must consist only of aggregate expressions, the expressions used in the GROUP BY list,
+and literal values. Here are some examples to
+demonstrate what you can do. Here's the statement
+with a GROUP BY clause but no aggregate expression. The select list has just one item which is
+the grouping column, min age. This statement
+returns three rows, one for each unique
+value of min age, and just one column, giving those values of min age. There's nothing else
+in the select list so that's all it returns. You could run a statement
+like this just to return the unique
+values of min age, but it's typically better to do this using SELECT DISTINCT. Like this, SELECT DISTINCT
+min age from games. That statement
+expresses the intent of your query more clearly. It's better to use the GROUP
+BY clause only when you're actually going to compute aggregates like in this example. The select list here
+consists of min age, the grouping column, and max list price,
+an aggregate expression. This is the classic form of
+a simple GROUP BY query. Here's an example that also has a literal value in
+the select list. When you use a literal value in the select list in a statement
+with a GROUP BY clause, that literal value is just repeated in each row
+of the result set. This is often not useful, but there are
+some cases where you might want to do it
+like in this example. This statement groups
+the games table into three groups based on min age, and returns the average
+list price, the tax rate, and the average list price with tax for the games in
+these three groups. The tax rate is a constant
+value of 21 percent. It does not vary
+between the groups. So, it's specified here
+as a literal value, 0.21. In this case, it is helpful to display this literal value
+in the results set even though it's just the same value
+repeated in each row. So, to review, when you
+use a GROUP BY clause, the select list must consist only of aggregate expressions, the expressions used in the GROUP BY list,
+and literal values. Although you can use
+a GROUP BY clause with no aggregate expressions
+in the select list, it's better to use SELECT
+DISTINCT for that instead. Unfortunately, not all
+SQL engines enforce these rules for what's allowed in a select statement when
+you use a GROUP BY clause. MySQL for example. MySQL is a fine relational
+database system I've used it a lot, but it has one really atrocious
+behavior in my opinion. It allows you to use
+non aggregate expressions in the select list in a query
+that has a GROUP BY clause. For example, with MySQL, you can run a query like select star from games
+grouped by min age. Most SQL engines will
+throw an error if you try to run a query like
+this but not MySQL. What MySQL does is it splits the games table into
+three groups based on min age, and then it picks
+one arbitrary row from each group to include
+in the results set. If that seems strange
+to you, I agree. Similarly, MySQL will let you run this query which has in
+the select list min age, the column that's in the GROUP
+BY clause, and list price, a column that's not in
+the clause GROUP BY with no aggregation
+performed on it. In the results at the min age column gives the three unique
+values of min age, but the list price column
+just gives prices picked from arbitrary rows
+in the corresponding groups. To me, SQL engines should
+not behave this way. There are some logical reasons for the behavior but overall I think it causes much more
+confusion than it's worth, and it's best to avoid
+writing queries like this.

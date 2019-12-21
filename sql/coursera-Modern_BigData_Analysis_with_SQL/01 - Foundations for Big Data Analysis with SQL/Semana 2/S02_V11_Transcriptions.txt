@@ -1,0 +1,39 @@
+Up until now I've avoided discussing a major feature of some - but not all - 
+relational database management systems: database transactions. When I presented nine statements in SQL - 
+SELECT, INSERT, UPDATE, DELETE, CREATE, ALTER, DROP, GRANT, REVOKE - I pointed out that this was not 
+a complete list of all the statements in SQL. Remember, the DML category has three statements: 
+INSERT, UPDATE, DELETE. For a system that support transactions, I will add three more fundamental statements to the DML category: START TRANSACTION, 
+COMMIT, and ROLLBACK. A database transaction allows you to bundle multiple DML statements into 
+one indivisible action in the database. Consider this example: Suppose customer 860 wants to transfer 100 units of money from their savings account 
+to their checking account. I'm not going to present complete SQL syntax here, but I will say that this transfer requires 
+two separate UPDATE statements. One: subtract 100 from savings. And Two: add 100 to checking. The problem is this: What if the program that initiates this transfer 
+fails midway through the process? There is a big problem if the first action - the subtraction from savings - completes, but the second action - the addition to checking - does not happen before the program fails. Then funds simply disappear for this customer, only because of a computer glitch! This is unacceptable in any production database system. The solution to this problem is 
+to combine multiple DML statements together into a single atomic operation: 
+a transaction. This list gives the gist of four SQL statements, 
+which together form one transaction. Statement 1, begins a new transaction with the database. Statements 2 and 3, the two UPDATE statements are carried out 
+on a "pending" basis. The COMMIT statement at the end causes 
+the pending changes of the two UPDATEs to become permanent 
+*at the same time.* So, this sequence of statements acts as one atomic action that makes 
+two changes in the database. Up until the time that the 
+COMMIT statement completes, none of the data changes 
+in the transaction is permanent. The program issuing these statements 
+could fail for some reason - like a power outage. If this occurs, then the database will automatically ROLL BACK, or undo, 
+the pending updates, and the tables will be left 
+in the same state they were in before that transaction began. If the program issuing the DML statements needs to, it can issue a ROLLBACK command explicitly, 
+and this will order the database to discard any DML changes that the program 
+has issued, and that are still pending. In other words, a START TRANSACTION command establishes a starting point in the database state. Then a number of INSERT, UPDATE, and DELETE statements can be issued, and these are all kept on 
+a pending basis in the database. Finally, a COMMIT will make 
+all these changes permanent at one time, or a ROLLBACK will discard all 
+the pending changes since the START TRANSACTION. A failure of the program issuing commands, or a failure of the program's connection to the database, 
+or even a power outage in the database, will result in an automatic database ROLLBACK 
+to the state before the transaction. So, the bundling of multiple DML statements 
+into one transaction allows programs to take the database 
+from one consistent state, to another consistent state, without the risk 
+of leaving the system in some inconsistent intermediate state should 
+anything go wrong midway. If you use these transactional commands, it's up to you to make sure that the combination of DML statements you use in one transaction should be reasonable in taking your database from an initial correct state to another correct state. So, don't take money from savings, then COMMIT and then put money into 
+checking, then COMMIT again! That would defeat the purpose of having 
+transactional capability in your database! Not all RDBMSs support transactions, but those that do will usually allow 
+a generous number of separate DML statements to be bundled 
+together in one transaction. So, for example, you could have a single transaction 
+that inserts an order row, plus a set of line item rows for that order; then deducts funds from a customer deposit; then adds a bill for remaining funds due; and then alters the customer's 
+credit rating in your system - all in one transaction.

@@ -1,0 +1,67 @@
+In this video, I'll describe
+a limitation that you need to know about when using the ORDER BY clause with Hive, a shortcut for specifying the ORDER BY clause with Impala, and some general advice for using ORDER BY with engines
+like Hive and Impala. First the Hive limitation. With Hive when you want to
+order by a specific column, that column must be
+included in the result set. So for example,
+the query shown here gives an error when you
+try to run it with Hive, because it's ordering
+by list price, but list price is not one of the columns that's specified
+in the select list. To resolve this error, you need to either add
+the list price column to the select list or
+use select star. So all the columns including
+list price are returned. Both of these queries run
+without error in Hive. You'll also encounter this
+limitation if you try to use an expression in
+the ORDER BY clause that has one or more
+column references in it. Like in this example with
+order by quantity times price. This gives the same type of error if you try
+to run it in Hive. Once again, to resolve the error, you'll need to include
+those columns quantity and price in the select list
+or you select star. As long as you do
+this, the select list doesn't need to include
+the expression itself. Or with expressions, another option is to
+use the expression in the select list give it a column alias and then use that column alias in
+the ORDER BY clause. Because recall that
+most SQL engines allow you to use a column alias
+in the ORDER BY clause. With Hive that method works and it gets
+around this limitation. This limitation only affects Hive not Impala and not most
+other SQL engines. Now I'll describe a shortcut for specifying the ORDER BY
+clause with Impala. With Impala, you can specify which columns to order by
+using position numbers. These are integers
+starting from one that refer to columns in the results
+set by their position. Here's an example to demonstrate
+this; in this query, the price column is the third
+column in the select list, shop is one, game is two, and price is three. So two order by the price column, you can specify order by three. This is a convenient shortcut
+that can save you from typing the full column name
+in the ORDER BY clause. As I said this works in Impala and it works in
+some other SQL engines too, it might work with Hive if the instance of
+Hive you're using is configured a certain way or if you're using
+a newer version of Hive, but you should not count
+on it working in Hive. You can try this out
+to see if it works with the SQL engine you're using, but keep in mind that
+if it doesn't work you won't necessarily
+see an error. Instead the SQL engine will probably act like
+you're asking it to sort the results by a scalar number
+repeated in every row. So it will just return
+the results in arbitrary order. In general, I don't
+recommend using the shortcut method
+because it makes it harder to see what your query does and it could
+cause trouble if you changed your select list but then forgot to change
+your ORDER BY clause. Finally, some advice for using ORDER BY with engines
+like Hive and Impala. When you're working with
+very large datasets, sorting them it uses
+a lot of computing power. Sorting is a notoriously
+difficult operation to optimize especially
+for distributed systems. So you should only sort
+your results when you need to. If you're accustomed to using relational database systems with small to medium sized data, you might be in
+the habit of using ORDER BY when it's not
+strictly necessary. Because in that situation it doesn't introduce as much
+of a performance penalty. But you should break
+that habit when you're using
+distributed SQL engines. Sorting happens after all the other operations
+that you learned about. After filtering, after
+grouping, and aggregation. So one good strategy is to
+use those prior operations to reduce the number of rows
+in the data as much as possible before using ORDER BY. That will help your ORDER
+BY queries to use fewer compute resources
+and finish faster.

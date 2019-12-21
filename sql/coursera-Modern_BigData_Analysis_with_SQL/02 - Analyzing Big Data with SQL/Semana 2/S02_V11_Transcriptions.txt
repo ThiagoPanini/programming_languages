@@ -1,0 +1,65 @@
+In the example SELECT statements presented in this course, you might have noticed
+that sometimes the SELECT clause and the FROM clause are
+both on the same line, and other times
+the FROM clause is on a separate line below
+the SELECT clause. Either way is fine because in SQL extra white-space
+is generally ignored. You can include as many
+new lines, spaces, and tab characters
+as you like between the keywords and names
+and literals and operators that make
+up the statement, and SQL engines
+will ignore at all. The only time when
+extra white-space is not ignored is when it's used inside
+key words or names or literals. For example, you cannot just put a whitespace character
+in the middle of a keyword like SELECT or in the middle of a function name
+or table name or number. If you add a whitespace character inside a quoted literal string, then it will represent
+that literal whitespace character
+within the string. Of course, there are many places
+where you need to use at least one whitespace
+character like to separate the keywords SELECT from
+the list that comes after it and to separate the keyword FROM and the table reference
+that comes after it. In these places, any extra white-space
+you use is ignored. Because extra white-space has
+no meaning to a SQL engine, you can use it to format SQL statements to make
+them easier to read. With very short statements, this is usually not necessary, you can just put
+the whole statement on one line. But with longer statements, it really helps with readability, if you use some
+extra white-space. For longer statements,
+a convention is to put each clause on a new line and indent all the clauses after the first one with a tab
+or several spaces. Also, if there's
+an individual clause that's too long to
+fit on a single line, then you can split it up
+using new lines and use double indentation
+at the beginning of the lines that the cause
+continues onto. Here's an example. Notice
+that this statement has a very long SELECT list and
+it's been split up into three lines by adding new lines
+after some of the commas. The FROM clause is
+on its own line too and is indented
+with two spaces. The lines that
+the SELECT list continues onto are indented
+with four spaces. Using four spaces instead of
+two to indent those lines, makes it easier to see
+when the SELECT clause ends and the FROM clause begins. That's the convention
+I'll use for formatting longer SQL
+statements in this course, except in cases where there's not enough room and I need to format it differently to
+fit on the screen. I encourage you to also
+follow this convention or perhaps some other convention
+of your choice that keeps your SELECT statements looking
+tidy and easily readable. Again, using new lines or extra spaces is never necessary, but it's helpful for
+readability and it will be even more
+helpful as you use additional clauses
+and write longer and more complex SQL statements in the later parts
+of this course. Another thing you should
+keep in mind as you learn about the other clauses is that the order of the clauses in the SELECT statement
+is important. In general, you cannot go
+moving around the clauses. They need to be in
+the correct order or the SQL statement
+will be invalid. There are some
+exceptions to this. For example, HIVE will
+actually allow you to put the FROM clause before
+the SELECT clause, which is fine if you like to write SQL like
+the way Yoda speaks. But you should not
+generally do this. It will work with HIVE, but not with
+many other SQL engines, and it might not even
+work with HIVE depending on what client application
+you're using.

@@ -1,0 +1,97 @@
+The most basic way to use aggregate functions in SQL query, is to use them in
+the select list. Here's an example to
+demonstrate this. Recall that the aggregate
+function for counting is count, and the syntax for
+using this function to count rows is count star. If you want to use
+the count function to count the number of rows
+in the employees table, then here's how you would do it. Select count star,
+from employees. This returns a result
+set with just one row, and one column containing
+the number five. There are five rows in the employees table and the count function
+aggregated over all of them, reducing these five rows down to a single value, the number 5. You can use
+a column alias to give a name to the column that's
+returned by this statement. After count star, add
+as num underscore rows. So now the result column
+is named num rows. The example I just showed use the aggregate function count. Here's an example that uses sum. Select sum salary from employees. This returns the sum of all the values in
+the salary column. They add up to 185,403. Again, you could add
+an as expression after sum salary to give
+an alias to the result column. So count and sum are
+aggregate functions, and when you use
+an aggregate function in a select clause, like in these examples, it makes an aggregate expression. So count star and sum salary, those are aggregate expressions. You can include two or
+more aggregate expressions in the select list, like in this example, select min salary as
+lowest salary comma, max salary as highest salary
+from employees. This returns a result
+set with just one row, but with two columns, one for each of
+the aggregate expression. You can see the lowest salary
+in the employees table is 25,784 and the highest
+salary is 54,523. Those examples all used very simple aggregate
+expressions. They all had just a single
+aggregate function, with no other functions
+or operators. But you can use more complex
+aggregate expressions. For example, this query
+returns the range or spread of the salaries
+in the employees table. The aggregate expression is
+max salary minus min salary. Here's another example of a more complex
+aggregate expression. This one answers the question, if there's a 6.2 percent
+payroll tax for each employee, then what's the total tax for all employees rounded
+to the nearest dollar? The aggregate expression
+to compute this is, round sum salary times 0.062. You can also use an expression as an argument to
+an aggregate function. The argument does not need to
+just be a column reference, it could be any valid expression. In this example, the expression
+round salary times 0.062, is used as the argument
+to the sum function. This is just another
+way to answer the question from
+the previous example, although the round function
+is applied differently here, and this might make the result
+slightly different. In each of the examples
+I just showed, the expression aggregates
+over all the rows, and returns a single row. That's what makes
+these expressions aggregate expressions. They can combine values from multiple rows, aggregating
+them together. These are different
+from the expressions you learned about
+earlier in the course, which operate independently
+on the values in each row. Those are called non-aggregate expressions or
+scalar expressions. They return one value per row. When you write SQL queries, you need to be
+careful about mixing aggregate and scalar operations. You can use aggregate and
+scalar operations together in an expression like in some
+of the statements I showed. For example, you can take
+an average, then round it. Average is an aggregate operation and rounding is
+a scalar operation, but they can be combined
+together like this to form a valid
+aggregate expression. You can also use scalar arithmetic operators
+together with aggregate functions to form a valid aggregate expression
+like in this example, where you take a numeric column, multiply it by a literal number, then find the sum. But aggregate and
+scalar operations can form invalid expressions
+in some cases. For example, you might
+try to use an expression like salary minus average salary to try to compute the difference between each individual employees salary and the average salary
+of all the employees. The right side of
+this expression aggregates, but the left side does not. As a result, this expression is invalid and will throw an error
+with most SQL engines. There is actually a valid way to compute the difference between each individual employee salary and the average salary
+of all the employees, but this is not it, and that's a more advanced topic that's beyond the scope
+of this course. Also, you cannot use scalar and aggregate expressions together in a select list. For example, this query has
+two items in the select list. The first is just the column
+reference first name, that evaluates as
+a scalar expression. It returns a value for each
+row in the employees table. The second is the aggregate
+expression, sum salary. That returns just one row that aggregates all the salary values
+in the employees table. You cannot use both
+of these types of expressions together
+in one select list. Most SQL engines will
+throw an error if you try. When you use aggregate
+expressions in the select list, you can also use a where clause. You learned about
+the where clause in the previous week
+of the course, and you can continue to use it in this week of
+the course and beyond. For example, to
+answer the question, how many employees make
+more than $30,000, you could use count star
+in the select list, together with the where clause, where salary greater than 30,000. This returns three. However, do not try to use aggregate expressions
+in the where clause. The where clause always
+processes individual rows, so you cannot use it
+to examine aggregates. All the aggregation
+examples I showed in this lesson returned a results
+set with only one row. They all aggregated the whole
+table down to a single row. But what if you
+wanted to aggregate subsets of the table and return a result that gives separate aggregates for
+the different subsets? This is what the group
+by clause is for. You'll see how to use
+that clause in the next lesson.

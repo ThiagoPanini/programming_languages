@@ -1,0 +1,93 @@
+The database names and
+table names you use in the FROM clause are
+types of identifiers. The column reference is used in the select list are
+also identifiers. This is a good time to pause, to clarify some things
+about identifiers, and some related topics
+like keywords and case as in uppercase
+and lowercase. There are some rules
+governing what is a valid identifier in SQL. The rules vary depending on
+what SQL engine you're using. But here is a stringent set of rules that should
+be safe to follow with any of the major SQL engines including Hive and Impala. Identifiers can consist
+of alphabetic characters, that's the letters a to z, digits, zero to nine
+and underscores. Other things like
+Unicode characters, punctuation, emoji, and so on should not
+be used in identifiers. The first character of an identifier should
+be a letter, a to z. The letters in identifiers
+should all be lowercase, and identifiers can be as
+short as one character long. The maximum length varies, but it's a good idea
+to limit them to 30 characters or fewer. Those rules are pretty stringent
+and some of them can be relaxed depending on
+which SQL engine you're using. There are also some particular
+words that you cannot use as an identifier even though they do
+follow these rules. These are called Reserved words. An example is the keyword SELECT. SELECT is a special keyword in SQL that signals
+the start of a clause. So you should never
+try to use it by itself as an identifier. Making it lowercase
+doesn't change this, reserved words are reserved
+regardless of their case. Other familiar keywords
+like FROM, AS, DISTINCT, SHOW, and USE, are also reserved words. The full list depends on
+what SQL engine you're using. For Hive and Impala, you can follow
+the provided links to see the full list
+of reserved words. The list for Hive distinguishes reserved keywords from
+a non reserved keywords. It's just the reserved ones
+that you need to avoid. For Impala under the list
+of current reserved words, there's also a list of
+possible future reserved words. You should also avoid using
+any of those as identifiers. It is possible with most SQL engines to break some of the rules
+for identifiers. But to do this, you
+need to enclose the offending identifier
+in some quote characters. Different SQL engines use different quote characters
+around identifiers. Hive, Impala, Presto, Drill, and MySQL, all use back ticks. But in Post SQL you use double
+quotes around identifiers. If you're using
+another SQL engine, you should check
+what characters it uses. Here's a silly example
+for Hive or Impala. If someone has made
+the terrible choice of creating a database named 'use'
+containing a table named 'from' with a column named 'select' then
+to switch into that database and to query
+it you would need to enclose all the identifiers
+in back ticks as shown here. USE 'use' then SELECT
+'select' FROM 'from'. It's a joke among SQL experts to see how long you
+can keep going like this having each identifier be the same as the
+keyword before it. But if you ever see
+identifiers like this in databases
+in the real-world, you should probably mistrust
+the person who created them. Even if identifier
+don't break the rules, you can always enclose
+them in quote characters. In fact, it's often considered a good practice to quote
+all your identifiers. This is especially true if you're writing
+SQL statements that might be used for many years or
+built into an application. But for ad hoc queries that
+will just execute once, it's probably not worth the fas. So identifier's in SQL
+include database names, table names, and column names. But another type of identifier, is the column aliases that
+you can use in SELECT list. Recall that you can use
+these aliases to control the names of the columns
+in the result set. If you use unquoted aliases, then the rules for what
+is a valid alias are essentially the same as the rules for other types
+of identifiers. Only lowercase letters, digits, and underscores, starts with the letter no reserved words. But if you quote an alias, then the rules for what you can use are typically much looser. When you quote an alias, you can use reserved words, and you can often use things like spaces and punctuation
+characters too. When enclosing
+an alias in quotes, you should use
+the same quote characters you use to quote database names, table names, and column names. Again, for Hive and
+Impala, it's back ticks. To continue the silly
+example from earlier, you could use
+the quoted reserved word AS as a column alias
+as shown here, SELECT 'select' AS
+'as' FROM 'from'. This again would be
+a terrible choice. When you're choosing aliases
+it's a good practice to follow the stringent rules
+I described earlier. With Hive and Impala and
+many other SQL engines, identifiers are case insensitive. That means, that the statement SELECT NAME FROM
+FUN.GAMES; in all capital letters will work
+exactly the same as SELECT name FROM fun. Games. You could use
+any combination of upper and lowercase letters
+in the database name, table name, and column name, and it would still work. This is true whether or not
+you quote your identifiers, but I strongly encourage
+you to only use lowercase letters in
+identifiers for consistency. Some databases are fussier
+about the case of identifiers. For example, Post SQL
+is sensitive to the case of identifiers but only when they're enclosed
+in double quotes. If you're using
+some other SQL engine, search for the details regarding case sensitivity of identifiers. Also, please see the reading for some more information
+about case in SQL. If you need help understanding the meanings of some
+of the terms I used in this video like
+identifier and keyword, see the glossary in
+Course Resources which includes definitions for these and many other terms.

@@ -1,0 +1,20 @@
+Welcome to Week 3 of
+Analyzing Big Data with SQL. In the previous week's lessons, you learned about two of the clauses
+that make up a select state. The SELECT clause, which specifies what column should
+be returned in your result set, and the FROM clause, which specifies where
+the data you're querying should come from. The SELECT clause is a required
+part of every SELECT statement, and the FROM clause is required to query
+actual rows of data from tables. In this week of the course and
+throughout the remaining weeks, you'll learn about several more
+clauses that are not required but that enable you to answer
+different types of questions. This week is all about the WHERE clause, which filters the rows of data
+based on some specified conditions. Even though we’re moving on
+to a new clause this week, you’ll see that we will revisit many of
+the topics covered in the previous week, including data types, expressions,
+operators, and functions. These are just important in the WHERE
+clause as they are in the SELECT clause. And in this week of the course,
+I'll extend to some of those topics. You'll learn about Boolean data types,
+how to write Boolean expressions, how to use logical operators and
+conditional function. Understanding each of these topics will
+help you specify the conditions to control which rows of data
+are returned in a result set.

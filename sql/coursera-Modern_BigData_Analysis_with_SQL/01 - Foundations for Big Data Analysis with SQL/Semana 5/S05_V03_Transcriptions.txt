@@ -1,0 +1,177 @@
+This is an exercise environment
+like the one you will use this week and for the remainder of
+this specialization. It contains all the software
+and data and everything you need for this exercise and for the remainder of the courses
+in this specialization. It's a simple Linux desktop, a few things on the desktop, and some useful invocations in the menu bar that we'll use; a web browser,
+a command line prompt, and a text editor, all useful in
+this specialization. So, here I am invoking
+a web browser. If you look on the lower right, you can see that you can click to invoke a different workspace or different desktop
+so you can switch between workspaces or
+desktops as you wish. Now, I'm going to invoke Hue, an open source project in our big data environment
+that acts as a web page over a lot of other useful applications
+like Impala and Hive. I'll log on with
+user training password training, and I'll let the browser
+remember that if I wish. So Hue comes up, and it comes up with
+a little hint window that I can dismiss if I wish. There's the main Hue web page. It has a menu bar
+across the top with a few useful indications
+that the menu on the left, a drop list, a search window, and a few other
+invocations on the right. There's a quick browse area
+on the left that I can hide or display. I'll leave that displayed. There's a main application
+area on the right. Here in the quick browse area, I'm looking at database-type
+native sources, so table-like data sources
+including some databases. I'll go to the
+Impala data source. There you can see Impala
+has already supplied with five databases
+that I can use; the default database
+which is a collection of related tables;
+customers, employees, and so on, the fly database, a different set of tables,
+and other databases. So a database is it's just its own little collection
+of related tables. I want to create a report
+on the default database, but first, I'm going to perform an important action for Impala. You see that little
+refresh icon here? I'm going to click
+that, and choose the bottom item in the radio list there,
+and click refresh. This causes Impala to
+synchronize all of its information about
+these tables and databases with what is
+in the big data store, so everything is lined up. Now, going back to
+the default database, and I'll also choose in the menu, browsers and the table browser. So then the table browser
+comes up on the right. It's redundant with
+the quick browser on the left. I'm going to have both of
+those open for my use. So you can see I can navigate around different databases,
+different tables. There I can see in
+the path at the top, I'm in databases default, and there's the list
+of the five tables in that database; customers,
+employees, offices. There's a bit more information on the screen that I can ignore. Now, I'm opening a text editor
+because I want to create a database overview document
+about the default database. I'll call it "Database Overview." I'll sign it and date it. This is going to be
+useful for me later. Maybe I'll come back in six months and start
+working with this database. It's good to know who wrote
+it and when it was done. So I'll name
+the database default. This is what the report
+is going to be about. I want to start by listing
+the tables in the database. There's a customers' table,
+employees', and others. I can type those or I can just select and copy and paste
+into the text document, and then clean up
+the layout a little bit. Now, I want to get
+some overview information about each table individually. So I'll start with
+the first table, customers. I can click on the customers'
+table in the table browser, and I'll see some information
+about that table. Again, there's some
+information I can skip over for now,
+some properties, but what I really care about are the two things you
+see here; columns, that's the names of the
+columns and their data types, and a sample of
+a few rows in the table. This is just so
+that I can start to intuitively get to know
+what's in that table. I can select, and copy, and paste that information
+into my text document. This is a little bit of a messy extra information and alignment. I'll clean up the document
+a little bit. So there I have my column
+names and their datatypes, and here's some sample rows with column headings and
+three sample rows. Now I want to go to
+my document and add some column comments where
+I think those are suitable. So I'm going to write that the cust_id column
+is customer ID, and the code PK says
+that I think that column is a primary key unique
+for each row in the table, and that the country column
+is a two-letter country code. Name is pretty much self-evident. If I wanted to make a note, I could, but I'll
+leave it for now. That's my overview of
+the customers table. I'll go on to
+the employees table, put a heading in the document, go back to the table browser, go to the employees table, and select, and copy, and paste, and clean up. I'll make a few comments. The empl_id column is
+a numeric employee id, and maybe make
+another comment, the salary. There's a number there, but the unit of what
+the salary is is not known. So I'll make a note
+there, unknown units. Maybe that's US dollars. But I might want to go back to the original data source and confirm with the originator of the data what that unit is. I'm going to come back to the empl_id and office_id
+columns later on. I'll leave that for now, and on to create a summary
+of the offices table. That's the basic cleaned up
+data from the office's table. I'm going to go on and create the summary of the order's table. But wait, let me put my
+comments on the office's table. So office_id is I
+think a primary key. I can put the comment it's an office_id or maybe
+say that's obvious. I might note that this state
+province column is a state or province
+depending on what that is. Remembering again
+here that country is a two-letter country code. Now on to create a summary
+of the orders table. I'll put some comments
+on the orders table. The order_id column is I
+believe a primary key. The cust_id column
+is a foreign key. I can go over to
+the Quick Browser area, look at the column names
+in the other tables, expand customers and employees, and it stands to reason
+that the cust_id column in orders refers to the customers
+table, its cust_id column. So table name.column name. So orders.cust_id references,
+customers.cust_id. You can see up here
+looking at a sample of the data for customers
+cust_id is a simple letter. Those letters for
+cust_id appear in the sample data for
+orders cust_id. Similarly, empl_id is a foreign key that references
+employees.empl_id. We made it easy here by using common column names
+between the two tables. Total, that's an order total, and I'll make a note
+again, unknown units. I don't know what monetary
+unit that might be, might make a note
+maybe it's US dollars, maybe not, I'm not sure. That's the orders table. Finally, the salary grades table. While I'm copying
+and pasting this, I'll talk about it. This is what I would
+call a lookup table. It will only have
+just a few rows of some static information that I don't really expect
+to change very much. But that has useful information
+that I can put into my database to go with other data that might
+be changing more often. What it does is that it
+shows ranges of salaries, and maps those two salary grades. So looking at the data, you can see that grade one is a salary grade with a
+minimum salary of 10,000, and a maximum salary of 19,999, and grade two is 20,000 up to but not including
+30,000 and so on. You see these three sample rows. So then for the comment
+for min_salary, that's a minimum salary
+for a certain grade. Grade one is minimum salary
+of 10,000, maximum to 19,999. I'll make a note, and it's not really
+a foreign key, is not an exact value
+that will occur exactly as such in
+the employee salary. But that I'm giving ranges. You'll learn later how to combine tables with
+information like this, where values don't occur exactly. But I'm just noting that's a minimum salary for the range, see employees.salary column, so on for the max salary column. Though, so both are
+the table in the database. I'm going to go to the top
+and add a couple of important notes to
+my database overview document. Note one is important. All the comments that I'm making, the notes that I'm making about these columns are
+not authoritative. They're my estimates of what I see on initially
+examining these tables, just looking at some sample rows and the table definitions, and I'm putting
+my little short notes about the columns, they're
+not authoritative. So I'm pointing that out. This is not from the original data source where these descriptions
+are coming. At a later time, I may
+be able to interview the data source and come up with more authoritative information
+about these columns, like the monetary units
+for example. My other note is this, the primary key, foreign key, and references notes
+that I'm making are not actual database constraints. Because an impala
+Data-store doesn't have database constraints rigorously
+enforced in the database, the way a real relational
+database would do. Instead, this is relational like, and I'm really describing data relationships than I'm assuming based on
+the data that I see. If my maintenance of
+this data is disciplined, then those relationships
+will hold. So there's my report, my database overview document, and that's what I
+wanted to produce for an overview of this database. Going back to
+the employees table and remembering that empl_id acts
+like a primary key, and office_id in
+the employees table is a foreign key referencing
+offices.office_id. At least it behaves like a
+foreign key in the data. So this whole report took
+about 20 minutes to produce, and I think that was time well spent beginning to
+get to know the data. I'll save this report
+in a document. I'll give it a decent name. I'll save it on the desktop
+in this simple case, and there's that report. Now, if I have DDL, that's data definition authority on these databases and tables, then I can actually add
+comments using you, where the table
+browser says comment, where I can click and add
+a comment as I'm doing here. Noting where I think
+something is a primary key, simple notes about columns. Maybe not a note
+about every column, but notes where I think
+they're called for. I can put a comment on the table, and I'll put a short
+description of the table, these are international customers for some company that
+this database refers to. There's comments on
+the customers table. I'll go on to the next table, and describing all the tables. Now, I can use a desktop
+utility and just take a screen grab of the tables and their descriptions
+directly out of here, and go to the customers table, and take a screenshot
+of those columns with their descriptions and
+the sample data from Hue. I can create similar screenshots for all the other tables, and put those into a nice pretty looking
+document using Word, or Google Docs, or
+something like that. Then, here's the
+original text document of a database overview, or if I have DDL
+access to the tables, I could go in and create comments on the tables
+and the columns in Hue, and then use screenshots and
+create a prettier document. Whether the document
+is this text document, or the prettier document, does not matter as much as the information in the document. Is the information good? Is information clear? The database overview
+is the important thing. This exercise of creating it is the beginning of
+my Exploratory Data Analysis, EDA database, and will
+be useful going forward.

@@ -1,0 +1,105 @@
+The WHERE clause if you use it, must contain only
+one boolean expression, as I described in
+an earlier video. You cannot have
+multiple expressions separated by commas
+in the WHERE clause. However, you can
+use what are called logical operators to combine multiple smaller boolean
+expressions or sub-expressions into
+a single boolean expression. I'll demonstrate this
+with some examples using the games table
+in the fund database. What if you're looking to
+buy a game that six people can play and you have
+$10 to spend on it. In the WHERE clause, you would need to combine
+these two conditions. Max_players greater
+than or equal to 6 and list_price less
+than or equal to 10. You would combine them
+with an AND operator in this case because you want to both of these
+conditions to be true. Here's another example. What if you're
+looking for a game to play with no specific number of players in mind but you
+only have $10 to spend on it. Also, you already own monopoly. So Monopoly is also an option
+regardless of the price. In the WHERE clause, you would combine
+these two conditions, list price less than or equal to 10 and name equals Monopoly. You would combine them with the OR operator in this case
+because you're just looking for either one of these two conditions to be
+true not necessarily both. AND and OR in these examples are binary logical operators. Meaning that there's
+an operand on both sides of the operator. In SQL there's also a unary logical operator which
+comes before its operand, and that is the NOT operator. Here's a simple example
+using the NOT operator. Return all the games except Risk. You could do this by using the WHERE clause WHERE
+NOT name equals Risk. Of course, you could also use the NOT equals comparison
+operator to do this that gives
+the same results and that's a clearer way to
+write it for this example. If you've used
+a programming language, you might be accustomed to using symbols for these
+logical operators. Often, it's an exclamation mark
+for the NOT operator, an ampersand for
+the AND operator, and a pipe character
+or the OR operator. But in SQL, you
+use the words NOT, AND, and OR as logical operators. Also, NOT, AND, and OR are case insensitive but the convention is to put them in
+all uppercase letters. Each of the examples I showed used just one logical operator; AND, OR, or NOT. But you can write arbitrarily
+complex expressions that use as many logical operators as you want in whatever
+combination you want. But if you use
+multiple logical operators together in an expression, you need to be mindful
+of order of operations. In SQL, the precedence of
+logical operators is NOT, AND, and OR in that order. If you forget that
+you can end up with a totally incorrect result. For example, if
+you want to return all the games except
+Candy Land and Risk, you might write
+expressions like these. NOT name equals Candy Land AND
+name equals Risk. Or NOT name equals Candy Land
+OR name equals Risk. You might think that
+the NOT would be applied to both of the equality
+comparisons coming after it, but that is not what happens. The NOT operator applies only to the equality comparison
+immediately after it. So both of those statements return results that are not
+what you're looking for. To get the result
+you're looking for, you need to use the NOT operator before both equality comparisons, and combine them with
+an AND operator. That gives the result
+you're looking for. Alternatively, you could just use the NOT equals
+comparison operator, that would also work fine. Another option is to use
+parentheses around parts of the expression to control
+the order of operations. Using parentheses, you can override the usual rules
+of operator precedence. Parenthesize sub-expressions
+are evaluated first. For example, you can
+enclose name equals Candy Land or name equals
+Risk in parentheses, then put the NOT operator
+before the opening parenthesis, so it negates the entire
+sub-expression in parenthesis. This will give
+the result you expect. All the games except
+Candy Land and Risk. Here's an example that
+demonstrates the precedence of the AND operator over
+the OR operator. I'll combine
+the first two examples I showed in this video. You're looking to buy a game
+that's six people can play and you have
+$10 to spend on it, but you already own Monopoly, so that's an option too. To express this in
+a WHERE clause, you need to combine
+three comparisons into one boolean expression. You might try to do it like this, WHERE list_price less than
+or equal to 10 OR name equals Monopoly AND max_players greater than or equal to 6. That might seem correct, but because the AND takes
+precedence over the OR, the max_player is greater
+than or equal to 6 part first gets combined with
+the name equals Monopoly part. This limits the results
+only to Monopoly. Then the list_price
+less than or equal to 10 part on
+the left side of the OR broadens this to include any game with list_price
+less than or equal to 10. So you end up with Candy Land
+in the results set, even though Candy Land
+has max_players four. The solution is to use parenthesis to express
+what you really intended. The $10 limit on the list price or
+the game being Monopoly, that's one condition
+that must be true, and the max_players
+being six or more, that's a separate condition
+that must be true. So you should put
+parentheses around the list price and name conditions to combine
+them into one condition. That fixes the precedence problem and gives you the result
+you're looking for. It's important to clearly understand the conditions
+that you want to use to filter the data before you try to express those conditions
+in a WHERE clause. So as I've said before
+when you're doing a data analysis to answer a question that
+someone asked to you, then you might need to ask
+them to clarify the question. Or you might need to make some assumptions but then clearly communicate
+those assumptions when you share your results. Also, Boolean logic
+can be confusing. So when you're working
+as a data analyst, don't be afraid to ask
+someone else to review your more complex
+boolean expressions to check your logic. Also, always do a sanity check
+on your result. Take a look at the number
+of rows in the results set and examined some
+of the values in it to try to catch errors that
+you might have made that would cause the result to be different than expected.

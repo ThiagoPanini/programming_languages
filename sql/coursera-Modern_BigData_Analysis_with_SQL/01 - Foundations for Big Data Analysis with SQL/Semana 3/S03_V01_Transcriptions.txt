@@ -1,0 +1,30 @@
+The first question some people ask 
+about big data is: How big? The answer is a bit nuanced. Let me give a few sizes. A bit, of course, is a minimal unit 
+of digital data, usually represented as a value 
+0 or 1. A byte is 8 bits, and can store 
+an integer from 0 to 255, or a single letter, or symbol 
+from a narrow character set. 4 bytes can store an integer in the range 
+around plus or minus 2 billion, and the most popular character encoding 
+is UTF-8, which takes 1 to 4 bytes per character. Here are some larger units of storage, and I could go beyond exabytes 
+to zettabytes or yottabytes. You probably know the size of the 
+memory and disk storage of a powerful personal 
+computer. The memory may be a handful of 
+gigabytes are a little more, and the disk storage is likely 
+to be a few terabytes or less. This machine allows you to store 
+many emails, books, spreadsheets, photographs, 
+applications, and more. You can readily run a relational 
+database sized at a few gigabytes. Now, think of the size database 
+that you would consider out of the question to 
+maintain on this personal computer. Imagine if the computer is sized up 
+for business use, and you can probably multiply the 
+sizes by 10 or maybe 20. (Of course I'm giving only general 
+figures here.) Now compare this to an analytic database I know of (running Apache Hive) that was 
+sized at 300 petabytes in early 2014. There were larger data stores then, and there are even larger ones now. The biggest organizations today think 
+in exabytes at the scale of their big data. So, what is the minimum volume for big data? I hate to commit to an exact number, but I once heard a speaker say 
+around 30 terabytes. That sounds about right to me - - something on that order of magnitude:
+of tens of terabytes. At that size, things slow down and you reach the limits of 
+what you can expect to do with conventional software 
+on a single-computer setup. The two important concepts I'm going 
+to talk about in the next videos are one, the volume of big data is not 
+just more: it's different. And two, technology that handles 
+modest volumes of data breaks down with larger volumes of data. I'll elaborate in the next video, and later in the course.

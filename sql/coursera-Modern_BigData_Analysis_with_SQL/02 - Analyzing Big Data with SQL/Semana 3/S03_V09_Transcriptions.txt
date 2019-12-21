@@ -1,0 +1,89 @@
+SQL engines provide
+several facilities for identifying and handling
+null values in tables. These includes several operators and functions that you can use in expressions in the SELECT clause or
+in the WHERE clause. In this video, I'll
+introduce the operators. Then in the next video, I'll introduce some
+of the functions. But there's one thing you
+need to understand first. You cannot test for null values using the standard comparison
+operators like equals, not equals, less than, and so on. For example, you might think that you could
+return the row with the missing price in the inventory table
+using the WHERE clause, where price equals null. You might think you could return all the other rows except this one using WHERE
+price not equals null. But neither of these
+work that way. They would both return zero rows. That's because when you use the standard comparison
+operators in SQL expressions, any value compared to
+null always returns null. Recall from the last video, when the expression in the WHERE clause
+returns null for a row, that row is excluded
+from the results set. I want to emphasize this point, that whenever you use a
+standard comparison operator in an expression than any value compared to null
+always yields null. For example, five equals
+null, evaluates to null. Five not equals null,
+evaluates to null. Five less than null,
+evaluates to null. Even null equals null
+evaluates to null, and null not equals null
+also evaluates to null. Look at the last
+two examples here. The best way to understand
+these is to remember that null means some unknown value. So does some unknown value equals some unknown value
+or are they different? There's just no way to know. These comparisons return
+unknown, they return null. In SQL statements, to check for null values you need to
+use a special operator. The IS NULL operator. You use this operator by
+putting the keywords IS NULL after a column
+reference or expression. There's another version
+of this operator, IS NOT NULL. Here's an example. If you want to return
+only the rows of the inventory table
+where the price is null, you would use the WHERE clause, WHERE price is NULL. This returns the one row representing Candy Land
+in the boredom shop. If you want to
+return all the rows except the one where
+the price is null, you would use WHERE
+price is not NULL. That returns all the other
+rows from the table. Returning to the famous case
+of US Airways Flight 1549, recall that in the row in the flights table
+representing that flight, the departure time
+is not missing, but the arrival time is missing. Go ahead and modify
+the SELECT statement you wrote for the question about
+that in the last video, this time return
+the rows representing all the flights on
+that same day, January 15th, 2009 that have non-missing
+departure time in the depo_time column and missing arrival time in
+the ARR_time column. You'll need to use both IS NULL and IS NOT NULL to do this. In addition to IS
+NULL and IS NOT NUL, there is another pair of operators that can help
+you to handle null values. They are, IS DISTINCT FROM
+and IS NOT DISTINCT FROM. I'll explain this
+with an example. The office's table in
+the default database has four rows representing
+four different offices. What if you wanted to
+write a WHERE clause to filter out
+the office in Illinois, to return the three offices
+that are not in Illinois. You might try to write
+a WHERE clause like WHERE state_province
+not equal to Illinois. But this returns only two rows. Though row representing
+the Singapore office is not in the result set. That's because
+the state province value in that row is null, and null not equal to
+Illinois evaluates to null. So that row is excluded
+from the results set. But in this case, you know from context that this null value
+doesn't mean unknown, it means not applicable because Singapore does not have
+states or provinces. This is the type
+of situation where the IS DISTINCT FROM
+operator is useful. If you replace not equals
+with IS DISTINCT FROM, then the results set includes
+the Singapore office. The IS DISTINCT FROM operator is like the not equals operator, but it treats null values and non null values as
+explicitly unequal. Whenever the operand
+on one side is null and the operand on
+the other side is not null, it evaluates to true. Compare that to
+the not equals operator which evaluates to
+null in that case. Also, if both operands are null, then IS DISTINCT FROM
+evaluates to false. It treats any two null
+values as equivalent. So null, IS NOT DISTINCT FROM
+null, they are the same. Compare that with
+the not equals operator which evaluates to null when
+both operands are null. You can rewrite an
+expression that uses IS DISTINCT FROM to instead use a not equals comparison and one or two tests to determine if the operands
+are null or not. But it's more concise to
+use IS DISTINCT FROM. There is also a version
+of this operator that negates the result
+of the comparison, IS NOT DISTINCT FROM. This is like the equals operator, except when it compares a null value with
+a non-null value, it returns false instead of null, and when it compares
+two null values it returns true instead of null. Some SQL engines offer a shorter way to write the
+IS NOT DISTINCT operator. It's less than sign, equals sign, greater than sign. This shorthand notation does
+exactly the same thing as IS NOT DISTINCT FROM and
+it's supported by Hive, Impala, and MySQL. There is no special
+shorthand notation for IS DISTINCT FROM.

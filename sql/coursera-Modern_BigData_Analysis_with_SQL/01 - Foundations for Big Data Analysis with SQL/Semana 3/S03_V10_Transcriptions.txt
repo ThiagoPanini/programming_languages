@@ -1,0 +1,47 @@
+Remember, the term "semi-structured data"
+has two commonly used meanings: The first of these is the stricter 
+definition of the two: semi-structured records have their 
+own embedded labels on fields, like JSON objects or XML documents, but no external schema that records 
+are guaranteed to obey. Some people also accept the more 
+relaxed second definition: semi-structured data like log files 
+has some pattern, but no definite schema. While some may disagree that the second is a 
+correct definition of "semi-structured data," it does describe a kind of data that 
+you will see in the big data world. JSON and XML are both special types 
+of character strings, so you can have a database table 
+with one column that is a STRING or other character datatype 
+and containing JSON or XML. For example, look at this table: The json_record column is a STRING 
+data type in the table schema. You may well obtain JSON records from some other data source, and then 
+place them in a table like this. Because the data type of the column 
+is STRING, the table has no governance over 
+whether the column contains JSON. Many SQL dialects provide functions 
+for extracting parts of JSON strings. For instance, Apache Hive has a 
+function called get_json_object. This function provides these results 
+when applied to this table. In this example, the function extracts the "total" element from each JSON 
+object in the json_record column. The string in the third row is not 
+valid JSON, and the fourth row does not contain a 
+"total" element in the JSON object. Not finding a result, the function returns a NULL value 
+for these records. So, the table does not enforce 
+any schema on the JSON column, but the function can extract data from an assumed structure 
+if it is there. There is a term for this late 
+application of structure on data that may or may not meet 
+the form you assume. If you've read about big data, you may know the term I have in 
+mind already. I'll say it in another minute. There are different functions to extract 
+possible data elements from columns containing various types of semi-structured data: 
+JSON functions, XPath functions, and regular expressions and other string functions. Apache Hive has all these sorts of functions. Whatever SQL dialect you use, you may want to study the list of 
+functions available to work with semi-structured data, and such 
+functions will generally fall into one of these 
+three categories. In the example I've just given, the JSON is confined to a single 
+STRING column in a table. But what if your entire dataset 
+consists solely of JSON records? In Course 3 of this specialization, you'll learn how to fit 
+table definitions onto semi-structured data that 
+originated from some other source other than a relational database. Just to repeat, here are some examples 
+of semi-structured datasets that you can expect to have 
+in a big data environment. Hive provides an important feature 
+that lets you apply table definitions to datasets 
+like this: "schema on read." This is the term I was thinking of 
+a minute ago. This style of working with data 
+is an important way to gain structure on your 
+semi-structured data. Once you've added structure 
+successfully, you can deploy all your SQL skills to 
+perform analysis on these types of data. You will learn a great deal more about 
+this in Course 3 of this specialization.

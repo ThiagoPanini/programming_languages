@@ -1,0 +1,17 @@
+Do you think relational
+databases get that name because they
+contain related tables? No! Would you guess that a "denormalized table" is called
+that because it's unusual? No! Do you think acid always refers to a corrosive or
+a sour liquid like lemon juice? No. This week, I'll give
+you the concepts and special vocabulary
+that are common to all users of SQL and
+relational databases. You'll learn about the
+fundamentals of database design, and what primary keys, foreign keys, and
+database triggers are. These concepts are essential
+to your being fluent in the different uses of SQL
+on data, big and small. If you already know SQL, you'll get through
+this week very quickly, but maybe, you'll
+find the material interesting, and maybe I'll
+fill in a few gaps for you. And, I hope you'll go to
+the discussion boards and help round out the concepts I present for
+your fellow learners.

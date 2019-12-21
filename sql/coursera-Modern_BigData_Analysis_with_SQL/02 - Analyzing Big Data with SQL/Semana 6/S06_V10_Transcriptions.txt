@@ -1,0 +1,58 @@
+Some SQL engines support a less common type of join
+called the left semi-join. A left semi-join is a special type of inner join that's used
+for its efficiency. It behaves more like
+a filter than a join, because only the data from one of the tables is included
+in the result set. A left semi-join returns only
+records from the table on the left for which
+there is a match in the table on the right.
+Here's an example. Say you want to use the data in the fly database on the VM to find out which aircraft models are used for very long flights, for instance, flights
+with a distance of more than 4,000 nautical miles. There's a table named planes that has information
+about the different aircraft, including the manufacturer
+and the model. But there's no information
+about the range, the maximum flying distance of the aircraft, in that table. However, there is
+a distance column in the flights table that gives the distance of
+every flight in miles. And these two tables, aircraft
+and flights, can be joined using tailnum as
+the join key column. So it's possible to answer this question by joining
+these two tables. But a regular inner join does more than you
+need in this case. You do not need to return any values from
+the flights table; you just need to use the values
+from the flights table to filter the matching rows
+in the planes table. This is the kind of situation
+where it's possible and it's more efficient to
+use a left semi-join. Here's the syntax of
+a left semi-join. You preface the JOIN keyword with LEFT SEMI and then
+after the ON keyword, you specify both the join
+conditions and you can specify other criteria for filtering the table on
+the right side of the JOIN. This is different from
+what's included after the ON keyword in other joins. In the other kinds of joins, only the join criteria
+are included there, but in a left semi-join, you can include filtering
+criteria there as well. The expression after
+the ON keyword is the only place where
+you're allowed to refer to the columns from
+the table on the right. So in this example, if you attempted to use this filter condition
+in the WHERE clause, the SQL engine would
+throw an error. Or if you attempted to include references to any of the columns from the flights table in the SELECT list or
+in other clauses, the SQL engine would
+throw an error. The only place
+they're allowed is in an expression after
+the ON keyword. In cases where this
+limitation is acceptable, a left semi-join can give you much better performance
+than an inner join. The result of this query shows
+that the aircraft used for these long flights were all large Boeing and Airbus
+jets as you might expect, but there is one strange row
+in the result set listing a Bombardier Jet, which I don't think has
+a range this long. Maybe that plane made a refueling stop on
+those flights -- I don't know. If you wanted to return more details about
+those flights, like the carrier, origin, and destination,
+then you would need to use
+an inner join instead; you cannot return
+those columns in a left semi-join because they're from the table on the right side. Hive and Impala allow
+left semi-joins, but many other SQL
+engines do not. Some SQL engines also
+allow right semi-joins, which allows you to reverse
+the order of the tables, so they return records
+from the table on the right that have matches
+in the table on the left. And some SQL engines are
+smart enough to process regular inner joins as efficient right- or left-semi joins when it's
+possible to do so.

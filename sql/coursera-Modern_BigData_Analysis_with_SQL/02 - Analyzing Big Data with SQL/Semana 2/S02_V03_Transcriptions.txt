@@ -1,0 +1,100 @@
+In the previous video, you learned that a select list can include column references, literal values, and
+the asterisk symbol, which means all the columns. In this video, you'll
+learn how the select list can also include expressions. An expression in SQL is
+a combination of literal values, column references,
+operators, and functions. I'll demonstrate this
+with a simple example. The games table in the fun database has
+a column named list_price. Say I wanted to
+return the names of these games and
+their list prices, but with a five dollar shipping
+fee added to the price. To do this, I would use
+the query SELECT name, list_price plus five FROM games. Then in the results set, the first column is
+just the names of the games, but the second column
+gives the values in the list_price column with
+five added to each one. $19.99 plus $5 is $24.99, 17.99 plus 5 is 22.99, and so on. In this SELECT list, name is just a column reference, but list_price plus
+five is an expression. It consists of a column
+reference, list_price, an operator, the plus sign, and a literal value, five. When the SQL engine
+evaluates the expression, it returns a result column
+in which the value in each row is the value of list_price in that row plus five. Here's another example
+of an expression. This one uses a function
+instead of an operator. SELECT name, round
+list_price FROM games. The round function rounds the decimal numbers to
+the nearest whole number. So in this case, it rounds each list_price to
+the nearest dollar, 19.99 rounds to 20, 17.99 rounds to 18, and so on. The SQL engine applies
+the round function to the value of
+list_price in each row. These example expressions
+were very simple, but expressions in SQL
+can be arbitrarily complex so long as they're
+composed of literal values, column references, operators, and functions put together
+in a valid way. Round is an example of
+a built-in function. You'll learn more about
+built-in functions in the next lesson. But in this lesson, I'll talk more about operators like the plus sign in
+the first example. The plus sign is of course
+the addition operator. It adds together numeric values. This is just one of
+many operators in SQL. There are too many for me to
+cover them all right now, so in this lesson, I'll just cover the common
+arithmetic operators, and I'll cover other types of operators later in the course. In addition to the plus sign, the other common
+arithmetic operators are the minus sign
+for subtraction, the asterisk for multiplication, the front slash for division, and the percent sign which
+is the modulo operator. Plus and minus can
+both be used as unary operators or
+binary operators. Unary means having
+only one operand, or only one argument. Here's an example
+of the minus sign being used as a unary operator. The minus sign before list_price flips the sign of
+the numbers in this column, and since all these
+numbers are positive, they're all changed to
+negative in the results set. There's only one operand in
+this expression list_price, and the operator,
+the minus sign comes before it. You can also use
+the plus sign in this way as a unary operator before
+a numeric operand, but it just returns
+the numeric column with its sign unchanged. So there's no point in using it. All four of the common
+arithmetic operators can be used as binary operators, meaning that there's
+an operand on both sides of the operator: the
+left and right sides. With binary numeric operators, the operand on both sides can
+be a literal numeric value, or a reference to
+a numeric column. So for example, using
+the games table, you could use any of these
+expressions: two plus five, max_players minus min_players,
+list_price divided by 2, 1.05 times list_price,
+list_price modulo one. These are all valid expressions. You can also use an expression on one or both sides of the operand, like list_price divided
+by two times 1.05. That takes list_price
+and divides it by two, and then take that result
+and multiplies it by 1.05. But when you're using
+expressions like this that have
+multiple operations, be mindful of the rules
+of order of operations. See the reading for more
+information about that. Also, a warning about
+the division operator in SQL. In Hive, and Impala, and MySQL, and some
+other SQL engines, the division operator,
+the front slash, always performs decimal division. That means if both operands are integer numbers and
+the numerator on the left side does
+not divide evenly in whole numbers into the
+denominator on the right side, then the result will
+be a decimal number. For example, 5
+divided by 2 is 2.5. That's what Hive, and Impala, and MySQL all return, but not all SQL engines
+work this way. Some engines like
+PostgreSQL will perform integer division in
+this case and will return two instead
+of two and a half. See the reading for more
+information about that. The reading also explains what
+the modulo operator does. An easy way to try out these different operators
+is to use them with literal operands in
+a SELECT statement that has no FROM clause. As I mentioned in
+the previous video, many SQL engines do not
+require a FROM clause, and this is especially
+useful when you're trying out operators and functions. This works with Hive, Impala, MySQL, PostgreSQL, and others. There are other SQL
+engines that do not allow you to omit
+the FROM clause, and in these, there's usually some other
+technique you can use, like using a dummy table, or some other special syntax
+in the FROM clause. If you're using one of
+these other engines, search for information
+about how to select without a table with the
+specific engine you're using. The example expressions I showed in this video were very simple, but expressions in SQL can
+be arbitrarily complex, so long as they're composed
+of literal values, column references,
+operators, and functions, and they're put together
+in a valid way. Throughout the remainder
+of the course, you'll have a chance
+to practice writing progressively more
+complex expressions.

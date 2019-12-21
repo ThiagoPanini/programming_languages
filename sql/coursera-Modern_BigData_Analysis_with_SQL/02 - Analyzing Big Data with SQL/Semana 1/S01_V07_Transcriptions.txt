@@ -1,0 +1,75 @@
+In this video you'll learn how to start
+to beeline from the command line and use it interactively. I'll demonstrate this using the VM then
+you can try it yourself in the VM. With the VM running open the terminal. This is the operating system command line. To start beeline line use the command
+beeline followed by the necessary command line arguments. The one argument that's required
+when you start beeline on this VM is dash u which is short for url. This specifies the JDBC url that beeline
+should use to connect to the HiveServer. On this VM the HiveServer is
+running locally on port 10,000. So after dash u and a space. The URL is jdbc:hive2://local host: 10000. On this VM the URL is
+the only required argument. But in other environments you might
+also need to specify your credentials. For example, you can specify a username
+after -n which is short for name. Your username on this VM is training and you can specify a password after -p. You password on this VM is also training. Obviously if we wanted
+this VM to be secure we would have used a stronger password. But since there's no sensitive data here
+we configured it to use the word training, in all lower case letters,
+as both the username and password for your convenience. On the VM you can either omit or include
+these username and password arguments. It makes no difference. I'll include them this time. After entering all the arguments,
+press enter to start beeline. It prints several messages
+as it starts up and connects to the hive server,
+this might take a few seconds. You can ignore most of these messages. If you see a message like Connection
+refused, indicating that Beeline could not connect to the hive server,
+then please see troubleshooting the VM in the course resources,
+which explains ways to fix this. Once Beeline is started and
+connected to the hive server you should see a message that
+says connected to Apache Hive and you'll see a prompt to
+enter SQL statements. The prompt includes the JDBC URL
+followed by a greater than sign. I'll run some SQL utility statements. I'll enter SHOW DATABASES
+followed by a semicolon. A SQL statement in Beeline must
+be terminated with a semicolon. Unlike in hue where the semicolon
+is optional for a single statement. The semicolon signals to Beeline
+that the statement is complete. So that when you press enter,
+hive executes the statement. You can see the result containing
+the names of all the databases. Beeline renders result
+sets all in plain text in a table layout using
+characters to draw the borders. Hyphens, pipes, and plus signs. Most other command line SQL
+utilities do the same thing. Beeline also prints the number
+of rows returned and the time taken to execute the statement. Above the result you will see
+a bunch of info messages. You can usually ignore these. They are helpful for monitoring
+queries that take longer to run. When you start Beeline, the current
+database is by default the one named, can you guess? Default. This is the same as in hue. I'll enter the statement USE fun to
+change the current database to fun. If you forget to terminate a statement
+with a semi-colon and you press enter. Then beeline treats it like
+an incomplete statement and moves to the next line so you can continue
+writing the statement on multiple lines. I'll enter a semi-colon on this second
+line to terminate the statement and press enter to execute it. Now, the current database is fun. In addition to SQL statements, beeline also accepts special commands
+that begin with an exclamation mark. The only one you need to know
+about right now is the one to quit beeline which is
+exclamation mark quit. Or you can use the shorter version,
+exclamation mark Q. For special commands like this
+you do not use the semicolon to terminate the command,
+you simply press enter to execute it. I'll press enter then beeline exits and returns me to the operating
+system command line. If I press the up arrow key that
+recalls the previous command. I'll run the command to
+start beeline again but first I'll delete the username and
+password. Recall I said that these
+are not required on this VM. I'll also demonstrate one other thing, if you append the name of a database after
+a slash at the end of the hive server URL, beeline will use that as the current
+database when it connects. I'll append /fun to the URL and
+press Enter to connect. Now fun is the current database. If I run the command SHOW TABLES. With a semi-colon at the end. I can see the tables in the fun database. Now, I'll return all the columns and
+rows from the games table by running the query
+SELECT star FROM games. You can see that when the result has more
+than a few columns the text on each line wraps to the next line and
+the table layout looks wrong. You could resize the terminal to make it
+wider or you could return fewer columns. To recall previously entered statements,
+use the Up arrow key. I'll recall the select statement and I'll change the star to name name,
+list price, that result set is narrow enough
+to print without wrapping. To clear the screen in beeline
+use the key combination Ctrl + L. And finally I'll quit by again running
+the special command exclamation mark q. Recall that in the hue query editors
+if a result set has more than 100 rows only 100 are returned and displayed. But here in beeline, when you execute a query the entire result
+set is returned and printed to the screen. So if you run a query that
+returns millions of rows, beeline will attempt to display them all. It will keep writing
+results to the screen for as long as they keep streaming
+in from the hive server. Which could be minutes or longer. If this happens you can press
+control C to cancel the query. Depending on the version of
+beeline you're using, control C might just cancel the query or it might
+cancel the query and exit beeline. Later in the course you'll learn how to
+limit the number of rows in a result set to avoid this from happening.

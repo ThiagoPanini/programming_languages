@@ -1,0 +1,28 @@
+The next clause in
+a SQL statement after the Select clause and the From clause is
+the Where clause. The Where clause
+filters the rows of data based on
+one or more conditions. Typically these
+conditions are tests of the values in specified columns for all the rows of the data. In other words, the Where clause takes all the data in the table, tests which rows
+meet some criteria, and returns only those rows. The Where clause has
+no effect on which columns are returned only
+on which rows are returned. The Where clause is optional. If you run a Select
+statement that has a Select clause and a From
+clause but no Where clause, then you get
+a result set that has as many rows as the table
+specified in the From clause. The one exception to this
+that you've learned so far is if you use
+the distinct keyword, which removes the duplicate rows
+from the results set. Recall the earlier videos
+where I talked about data retrieval versus
+data analysis. The Where clause is where you really start to do data analysis, because you can use it
+to answer questions in the form in which rows are
+these conditions true. These conditions are the question you're asking about the data, and the result you
+get back contains the answer to that question
+ready for you to interpret. For example, looking at the games table in
+the fund database, you could ask, which games
+are priced at below $10? To answer that question, you would filter the rows
+to return only the games where list_price is less than 10, and the result you would
+get is Clue and Candy Land. That's a very simple example
+of the kind of logic you'll learn how to
+express in the Where clause.

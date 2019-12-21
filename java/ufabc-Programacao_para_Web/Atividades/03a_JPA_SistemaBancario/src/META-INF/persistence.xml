@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+	version="2.1">
+	<persistence-unit name="sistemabancario">
+		<!-- implementacao do JPA (provedor) -->
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<!-- entidade mapeada -->
+		<class>modelo.ContaCorrente</class>
+		<properties>
+			<!-- conexao -->
+			<property name="javax.persistence.jdbc.driver"
+				value="org.postgresql.Driver" />
+			<property name="javax.persistence.jdbc.url"
+				value="jdbc:postgresql://localhost/sistemabancariohibernate"
+/>
+			<property name="javax.persistence.jdbc.user"
+				value="thipanini" />
+			<property name="javax.persistence.jdbc.password"
+				value="coyote94" />
+			<property name="hibernate.dialect"
+				value="org.hibernate.dialect.PostgreSQLDialect" />
+			
+			<!-- conexao H2 -->
+			<!-- <property name="javax.persistence.jdbc.driver"
+value="org.h2.Driver"
+					/> <property name="javax.persistence.jdbc.url"
+value="jdbc:h2:tcp://localhost/~/sistemabancario"
+					/> <property name="javax.persistence.jdbc.user"
+value="admin" /> <property
+					name="javax.persistence.jdbc.password" value="admin" />
+<property name="hibernate.dialect"
+					value="org.hibernate.dialect.H2Dialect"/> -->
+
+					<!-- imprime as queries SQL no console -->
+					<property name="hibernate.show_sql" value="true" />
+					<property name="hibernate.format_sql" value="true" />
+					<!-- gera as tabelas se necessario -->
+					<property name="hibernate.hbm2ddl.auto" value="update" />
+			</properties>
+	</persistence-unit>
+</persistence>

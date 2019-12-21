@@ -1,0 +1,45 @@
+Stop a minute to consider the likely clutter
+of files on your phone or your computer. What are the consequences of the amount of organization or lack of organization
+in your own data? What if you had 100 times or 1,000
+times more data than you have now? What if you need to share your data with
+other people, and they need to share with you? A database management system can't solve all your data organizing problems
+but it can certainly help. If you look up the term database
+management system on the web, you'll quickly find some definition
+that says a DBMS is software that gives you a systematic way to organize and manage
+your own data in one or more databases. The DBMS should give you a way to perform
+at least four general activities. You need to design the kinds of data
+your database will hold, change what data you have in your database, get data out of it, and manage who has access to different
+parts of your data. Right there, you have four different
+activities you want to perform with data. Working with digital data, you need some way to consistently, systematically, perform those
+four activities. So, the DBMS helps you design,
+update, retrieve, and manage your data in a consistent way. I'm going to discuss each of
+these activities in turn. When you design a database, you decide what kinds of data
+you want to have and you set up different places where you want
+to put different kinds of data. Picture a kitchen; it will have
+one place for plates, another place for glasses, and another place for eating
+utensils like forks and spoons. Designing a database is similar
+to setting up those places, deciding what different kinds
+of things you'll keep, and where they'll go. For instance, a database for a restaurant
+can have records about food ingredients, and different records about
+employee hours at the restaurant, and still different records
+about customer sale receipts. Of course for data, you have not only different places
+for different types of data, but you also have different features
+for those different data records. For instance, you can have weights
+or item counts for food ingredients, or money amounts for sales receipts. The DBMS should help you set this
+up and keep your data organized. When you update a database, you add data, change data that's
+already there, or remove data. For the kitchen, suppose you buy 100
+mangoes for a special seasonal dessert, over a busy weekend you use half the mangoes, so you have 50 left. Then over the next four days, you use up the rest. You can make changes to the data in
+your database as these changes occur. Buy 100 mangoes, new record. Use half the mangoes, change the quantity. Use the rest, remove the record. When you record your purchases and
+consumption of food items in the database, it helps you to consistently keep
+track of your inventory. The next general type of activity is surely one of the main reasons
+for you to have a database: you use it to answer questions. In other words, you retrieve data. If you keep the database for
+your restaurant up-to-date, you can easily use it to find out
+the answers to many questions. How many mangoes do I have on hand right now? How much salt do I have for cooking? How much sugar? What were the total
+restaurant sales last week? Finally, the DBMS helps you manage your data. The word "manage" can mean a number of things, but here I mean, the need to control access to your data. You want to set up different user accounts with different access to different parts of the data. For the restaurant database, your kitchen staff persons need to update
+and retrieve data about the food inventory, but not your employee pay records. Your accountant needs access to the
+pay records, and so on. The initial electronic databases were
+created in the 1960s. Those were the early days of electronic
+computing systems for business. Using the best technologies at the time, engineers cobbled together ways to
+perform these four activities. And then in 1970, a man named E.F. Codd published an article that revolutionized
+the way we think about database systems, and that new way of thinking became common
+and remains incredibly useful today. More about that in the next video.

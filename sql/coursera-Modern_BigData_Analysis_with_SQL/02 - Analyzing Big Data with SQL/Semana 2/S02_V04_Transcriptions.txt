@@ -1,0 +1,80 @@
+In the previous lesson, I showed examples of
+some simple expressions. Like 2 plus five, max_players minus min_players, and list_price divided by 2. These expressions use arithmetic operators
+with numeric operands. In other words, the
+literal values and the columns in these
+expressions are all numeric. If you try to use
+arithmetic operators with other types of literal values and columns like character strings, you will have problems. For example, you
+should not try to add five to the literal
+character string "hello." You should not try to divide the name "column" in
+the games table by two, because name is
+a character string column. You should not try to take the negative of the name "column". You should not try to multiply the character string
+column inventor by the numeric column list_price. None of these
+expressions will work. Most SQL engines will throw
+an error if you try to use invalid expressions like
+this in a select statement. Some others like MySQL will
+not necessarily throw errors, but will return
+unexpected results. So using arithmetic operators
+forces us to think about the datatype of columns
+and a literal values. Datatypes in SQL is
+a very rich topic. I will not try to cover
+it in full detail here, but I will describe some
+of the fundamentals. In this course, every column and literal value
+you'll work with, will fall into
+two high-level categories of data types, numeric
+and character. I'll first talk about
+numeric data types. Within the numeric category, there are a couple
+of subcategories. First, there are datatypes
+for integer numbers. These are whole numbers, positive or negative
+with no decimal parts. For example, in the games table,
+the min_age, min_players, and max_player's columns
+are all integer columns. Also SQL engines interpret literal numeric values
+as integers, if they do not have
+any decimal part. So for example, just
+the bare number five in an expression would
+be interpreted as an integer. Within this integer subcategory, there are some specific
+integer data types that can represent
+different ranges of numbers. Roughly speaking,
+numbers up to a couple a 100 can be represented with
+the tiny int data type, into the thousands with
+the small int type, millions with
+the integer or int type, and billions in beyond
+with the big int type. It's most efficient to use the smallest datatype that will fit the range of
+numbers you have, that's why there are different integer types for efficiency. But the specifics of these different integer types are beyond the scope of this course. They're covered in
+the next course, it's part of this specialization. The other subcategory of
+numeric types is decimal types. These can represent
+numbers that have a decimal part, a
+fractional part. The list_price column in the games table is an example
+of a decimal column. Also, SQL engines interpret literal numeric values
+as decimals, if they have a decimal part. So for example,
+the literal number 2.5 in an expression would be interpreted as a decimal number. Within this decimal subcategory, there are specific types named decimal, float, and double, that can store different sizes
+of both fixed precision, decimal numbers, and
+floating point decimal numbers. But the differences
+between these are beyond the scope of this course. Some SQL engines, notably MySQL, can support both signed and
+unsigned numeric data types. Signed means that
+the datatype has a built-in plus or minus
+sign before the number. So it can represent both
+positive and negative numbers. Unsigned means it can only
+represent positive numbers. But all the major
+open-source distributed SQL engines, Hive,
+Impala, Presto, Drill, only support signed numeric types where
+all the numbers can be positive or negative. So that's all you
+need to know about the numeric category
+of data types. The other high level category
+is character data types, which can represent
+strings of characters. In the games table, the name and inventor columns are both
+character string columns. Of course you can use
+literal character strings in expressions, by enclosing
+characters in quotes. Within this character
+category of datatypes, there are some specific data
+types that can represent different lengths
+of character strings. There are types names
+string, char, and varchar. But for this course, you do not need to understand
+the differences between them. The specific type that Hive and Impala most often use
+for character strings, is the one named string. Also, be aware that
+the word string is often used in a general sense to mean
+any character string datatype, not just the specific
+datatype named string. There are some
+additional data types beyond those I mentioned here, including boolean types,
+date and time types, and complex or nested types. I'll mention some of those
+later in the course. Others are introduced in later courses that are a part
+of this specialization.

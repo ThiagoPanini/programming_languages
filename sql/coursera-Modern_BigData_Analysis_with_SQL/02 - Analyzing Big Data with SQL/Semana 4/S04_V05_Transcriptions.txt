@@ -1,0 +1,53 @@
+When you write a SQL query that uses aggregation and grouping, you need to choose
+which aggregation function to use and which column to group by. Sometimes these choices
+are straightforward, but other times they're
+not so obvious. In this video, I will pose some different questions
+and show SQL queries that answer them using different aggregate functions and different grouping columns. These examples use the inventory
+table in the [inaudible] database. Each row in the inventory
+table represents a particular game that's in
+stock at a particular shop. There is more than one copy
+of each game at each shop, and the number of
+copies is given in the QTY or quantity column. Here's the first question. How many different games does
+each shop have in stock? Since each row in the inventory table represents a different game in
+a different shop, you can answer this question by counting rows using
+the count function. Since it's asking at each shop, you need to group
+by the shop column. So to answer this question, you would use
+the query SELECT shop, count (star) FROM
+inventory GROUP BY shop. The result shows that there are two different games in stock in the dicey shop and three in
+the board 'Em shop. Now, say you wanted to answer a slightly
+different question. How many total games are
+in stock at each shop? In other words,
+how many total copies of the games are in
+stock at each shop? To answer this you need to use the aggregate function sum to add up the values in
+the quantity column, and again GROUP BY shop. So the query is SELECT shop, sum (quantity) FROM
+inventory GROUP BY shop. The result shows that
+the dicey shop has 10 total games in stock and
+the board 'Em shop has 18. With questions like these, language can be ambiguous. If someone asks how many games? Do they mean
+how many different games or how many total copies
+of the games? When you're working
+as a data analyst, if you're asked an ambiguous
+question like this, you should ask for
+clarification or make some reasonable assumptions
+and then clearly communicate the assumptions
+when you share your results. Here's another example. Say you want to answer the question, how many total copies of
+each game are in stock? In this question the grouping of interests is not
+shops, it's games. So to answer this question you would use a select
+statement like this. SELECT game, sum (quantity) as total quantity FROM
+inventory GROUP BY game. The previous examples
+used the shop column in the group by clause and also in the first position
+in the select list. But this example uses
+the game column there. The results that
+shows that there are 18 copies of monopoly, three of clue, four
+of candy land, and three of risk. But once again, questions
+like this can be ambiguous. Was the intent really to consider the combined inventory
+of both shops? That's what this query does. Maybe the intent was
+to count the copies of each game separately
+for each shop. In the inventory table, each row represents
+one particular game in one particular shop. So to count how many copies of each game are in
+stock at each shop, you actually don't need to use grouping an aggregation at all, you can just answer the question
+simply by looking at the quantity values in
+the rows of the table. So whenever you're writing
+a query to answer a question about some grouping of
+the data in a table, always consider whether
+the rows of the table already represent the grouping
+you're looking for.

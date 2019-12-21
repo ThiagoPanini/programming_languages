@@ -1,0 +1,13 @@
+"""2.1 Faça um Programa que peça dois números e imprima o maior deles. """
+
+n1 = int(input('Número 1: '))
+n2 = int(input('Número 2: '))
+
+if n1 == n2:
+    print('São iguais.')
+else:
+    if n1 > n2:
+        maior = n1
+    else:
+        maior = n2
+    print('O maior é {}.'.format(maior))

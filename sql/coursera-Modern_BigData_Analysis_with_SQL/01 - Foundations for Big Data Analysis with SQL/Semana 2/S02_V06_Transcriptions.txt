@@ -1,0 +1,39 @@
+In order to store data in
+a relational database system, you or someone else must first create
+the tables that will store your data. So, your choices about your tables 
+provide the organization you will have for your database. I've given you all the basic building
+blocks you can use to create your tables: columns, with data types and
+other column properties, and primary keys and foreign keys. I've skimmed over a few other column
+properties, like default values in case you don't supply a column
+value when you INSERT a row. However, I have explained
+the basic parts of table design. With these basic building blocks, you have a lot of flexibility in 
+how you design the tables 
+for your database. Look at this small database. We saw before that these tables
+have a design with primary keys, and the toy.maker_id column is set as a foreign key
+referencing the maker.id column. Look at this alternative table. The RDBMS does not require you to
+have a primary key on a table, so this is a possible way to store the data. But you have to wonder,
+what is this table really about? If it's about toys, then what is
+the meaning of the row with the maker but no toy? Just looking at this table, can you guess that the key is about
+the headquarters location of a maker? If you delete one toy row from the table, don't you risk deleting the maker 
+at the same time, whether you want to 
+or not? What about this design? This time you have a single
+table that emphasizes makers. It's interesting, though, that 
+the toys column combines the toy name, 
+a string, with the price, a money value, and
+there are two of these in one row. Of course, as more data gets added, you'd probably have one maker 
+that makes dozens or even hundreds of 
+different toys, so that this column alone could
+become quite large on some rows. SQL provides the simple CREATE
+statement to create a table, ALTER to change some properties of
+the table, and DROP to discard a table. These DDL statements are so easy to use that you can create
+a handful of tables in a minute or two. This is great for practice and
+learning, and may work well enough for a small database, but beware! If you create a database that will 
+get larger and will see production use, you will likely have troubles that
+you can avoid if you start instead with a conscious approach
+to your database design. With all the freedom in
+how you set up your tables, it can help if you understand 
+two general strategies 
+of database design. One strategy of design is
+database normalization and the other is database denormalization. In the next videos, I'll talk about
+normalization, denormalization, the differences, and the trade-offs
+between these two strategies.

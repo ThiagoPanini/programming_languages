@@ -1,0 +1,20 @@
+/*************************************************
+	      Semana 1 - Programa 1
+	     Primeiro Programa em SAS
+**************************************************
+   O objetivo desse programa é a familiarização
+com o SAS Studio, onde vamos:
+
+1) Ler os dados (comando data)
+2) Visualizar os dados (comando proc print)
+3) Interagir com a interface do SAS Studio
+**************************************************/
+
+*1) Lendo os dados;
+data myclass;
+	set sashelp.class;
+run;
+
+*2) Visualizando os dados;
+proc print data=myclass;
+run;

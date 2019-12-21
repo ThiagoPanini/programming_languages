@@ -1,0 +1,86 @@
+Database normalization is a strategy
+whereby you design each table so that it obeys certain
+organizational conditions or rules. The rules build to more and more
+strict forms of table organization, and are sequenced as First Normal Form,
+Second Normal Form, Third Normal Form, and so on. There are some even more strictly
+organized designs called Fourth, Fifth, and Sixth Normal Forms and
+a few other forms in between, but the business community generally
+accepts Third Normal Form as the level of organization to aim for when you adopt a strategy of database
+normalization in your design. Let me give you an informal list 
+of the conditions that meet Third Normal Form. This list is not numbered in relation to
+First, Second, or Third Normal Forms; it is a summary of Third
+Normal Form in its entirety. I'll discuss each of
+these conditions in turn. First, every table should
+have a primary key. I'll add that you should think
+about the primary key carefully. Look at this table. This table is improved with a primary
+key, which is part of Third Normal Form. Now you can have two customers
+with the same name, and still identify them as
+distinct from one another. The primary key can be used as
+a foreign key in other tables to refer to a customer. The customer can change names, 
+and it's clear: this does not change customers, it changes something about a customer -
+the name - but with the identity of that
+customer remaining unchanged. A common practice is to avoid
+using "intelligent keys" - that is, use a primary key
+that identifies a row, but does not have any meaning about
+the item represented in that row. This principle is not required 
+to put a table into Third Normal Form, but it is usually good practice. The second "rule" or condition is 
+that every column should be atomic, or indivisible into smaller parts. This doesn't really mean that you can
+never have a column with parts, but you should never have parts that appear
+separately somewhere else in the database. Look at this table. Here the city and
+state code appear together, so you might think that this is not
+a column with atomic values. Here's the real issue: Do you expect to never have or need a separate table with data
+about a state or province? If so, then you do *not* need to split
+this out from the original city column. Although it has two parts, for your purposes, neither part will
+ever need to be separated out. On the other hand,
+what if you have another table like this. Here, having another table with state or
+province codes, there is not a simple way to
+organize the two tables together, since the two-letter state codes are 
+not clearly set apart in the maker table. This problem can be solved with
+a change to the maker table. Now, the maker.state_or_province column 
+is atomic and connects directly as a foreign key 
+to the state_or_providence.code column. So "atomic columns" means atomic for
+your use in your database organization. If you want your database to include
+more information about *part* of a column, then normalization strategy is
+to make that a separate column, so that it can be used
+as a foreign key and refer to another table
+that gives more detail. Note you may have reasons of your own for keeping parts of your
+data in separate columns. For example, you may choose to
+have a customer's first name and last name in separate columns, so that you can sort by last name or
+use the person's first name in a letter. The important thing is that you think
+about how you will use your data, and organize your database
+with your use in mind. The third condition of
+normalization is similar: a single row should not have 
+multiple values for one type of data. Consider this very simple table. The items column has more than
+one element in the rows shown. When you have this one-to-many
+collection of data elements on one row, it is called a "repeating group," 
+and this table design can create 
+some difficulties. For instance, it makes it difficult to
+answer questions about whether a certain item is in the shopping list, or how
+many shopping items there are in total. This only gets worse if you have
+30 items on some rows, or 200! To avoid repeating groups, break your column into multiple items
+into a separate table, like this. Now there is one item per row
+in the shopping_item table, and one store per row in the shopping table,
+so there are no repeating groups. This kind of two-table design is common:
+orders and line items, recipes and ingredients,
+companies and departments, and so on. The next condition says that non-key
+columns should represent only information about the primary key, 
+and not other non-key columns. Consider this example. This is a table about toys, and
+the id column is its primary key. It's clear that the name, price, and
+maker columns give facts about a toy. However, the city column is not really
+about a toy, but about the maker of a toy. You've already seen a design with a more
+normalized approach: have a separate maker table, with city as a non-key column
+describing the location of the maker. Finally, Third Normal Form maintains
+there should be no derived columns. Look at this data. The total column is calculated as the
+amount, reduced by the discount percentage. Third Normal Form identifies
+the total column as redundant, since it can be derived
+from the other two columns, and so a normalized design removes
+this column from the table. The idea is that with
+the derived column present, if any of the three values - for
+amount, discount_pct, or total - is changed, this will introduce
+an inconsistency in the data - and the design gives you no way to
+prevent or resolve the inconsistency. There are more rigorous definitions
+of Third Normal Form, but just know that I've given you a 
+reasonable definition in plain language: a table in Third Normal
+Form has a primary key; all columns are atomic and
+with no repeating groups; non-primary-key columns give
+facts only about the primary key, and there are no derived columns.

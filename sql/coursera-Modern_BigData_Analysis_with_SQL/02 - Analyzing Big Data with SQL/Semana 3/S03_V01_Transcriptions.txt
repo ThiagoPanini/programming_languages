@@ -1,0 +1,58 @@
+In this course so far I've asked you to
+query only the smaller tables on the VM, which are in the defaults database and
+the toy, and fun databases. That's because I had not yet introduced the clauses that you need
+to work with very large tables. But beginning in this week of the course
+you'll start to learn about those clauses. So I'll start asking you to query
+the larger tables on the VM. First, I'll ask you to query the table in
+the wax database, which is just a little bit bigger than the tables in the fly
+database, some of which are much bigger. Even though you'll be learning
+how to work with larger tables, I'll still be using the tiny little
+tables to teach and demonstrate. With these tiny tables you can see
+the table, see the select statement, see the result all at a glance. And this is great for understanding what
+different kinds of select statements do. So we're not done with
+these tiny tables yet, but we'll add the larger tables to the mix. In this video I'll explain what's in
+these databases named wax and fly. The wax database has just one table named,
+crayons. This table describes 120
+different crayon colors. The columns give the name of the color,
+its hexadecimal code, and its red, green and blue values,
+which each range between zero and 255. The hex code and the red, green and blue values assume we're representing
+the colors using the RGB color model. There's also a column named pack, which gives the smallest pack
+that the crayon comes in. The basic colors like blue and yellow
+come in all the packs even the smallest, but some of the more exotic colors
+only come in the bigger packs. So this pack column gives the number
+of crayons that's in the smallest pack that the color comes in. The fly database has four tables named,
+flights, airlines, planes, and airports. The flights table is the biggest of these. It has more than 60 million rows
+representing passenger flights by major airlines in the United State for
+a full decade from 2008 through 2017. This table is big, but it's not really so
+big by today's standards. There are real-world tables
+stored on clusters and in cloud storage today that
+are many thousands of times bigger. But the data in the flights
+table is big enough that if you tried to use traditional tools
+to work with it, you would have trouble. It would be impossible at worst and
+slow, or inefficient at best. It's with data this large that the value
+of distributed SQL engines like Hive and Impala start to become evident. The other three tables in the fly
+database, airlines, planes and airports are all related
+to the flight's table. They have more information about
+the airlines that operated these flights, the planes that flew them, and
+the airports they departed from and arrived at. The data in this fly database is
+real-world data from the US Department of Transportation. So it might contain records
+representing airports you've been to or flights that you flew on. When you're analyzing
+the data in a table as large as some of those in the fly data base. You should almost never run a select
+statement that returns all the rows in the table. But if you use the WHERE
+clause to filter rows, or if you use some of the other clauses you
+will learn about later in the course. Then you can query a table this large and get a results that it's small enough
+to work with or to interpret. So as you learn how to
+use the WHERE clause and these other clauses,
+more of the questions and quizzes will ask you to query these
+bigger tables in the fly database. And you'll see that the remainder of
+the course will start to have a bit of an aviation theme. This will culminate with the final
+assignment in which you will write and execute some more complex queries on
+these tables in the fly database. To analyze the data and
+answer some important business questions. It will help for you to get familiar
+with the tables in the fly database. Please see the reading for
+more information about these tables and about the tables in the other databases,
+too. Including how they're structured and
+where the data comes from. The reading include descriptions
+of every column, and some of them do require
+further explanation. So see the descriptions there to
+understand what they all represent.

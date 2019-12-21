@@ -1,0 +1,23 @@
+Welcome to Week 4 of
+Analyzing Big Data with SQL. So far in this course, you have learned about three of the clauses that you can
+use in a Select statement. The Select clause,
+which specifies what columns should be
+returned in your query result. The From clause, which specifies where the data you're
+querying should come from. The Where clause, which filters the rows of data
+based on some conditions. In this week of the course, you'll learn about two
+more Select clauses. Group BY, and Having. These clauses enable
+you to answer questions about
+aggregates of the data. But before you learn how
+to use these clauses, you need to understand
+what aggregation is. So I'll begin with a brief
+introduction to this concept. Then I'll describe
+some common forms of aggregation and show how you can compute each one using a built-in function in SQL. You'll see that the syntax
+for using these functions, is mostly the same as for the built-in functions
+you learned about in previous weeks, but the way they work and what
+they return is different. We'll also return this week to the topic of missing values, and you'll see how SQL engines handle those in aggregations. When you're working
+with large scale data, grouping and aggregation are indispensable because
+they allow you to summarize
+all the rows in a table, with a result set that
+has just a few rows. So at the end of this week, you'll have the skills
+necessary to produce succinct summaries of
+enormous data sets.

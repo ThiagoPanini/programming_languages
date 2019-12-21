@@ -1,0 +1,19 @@
+In this lesson, I will survey a variety of
+database systems in the big data world. You are not likely to touch all these
+systems, at least not right away. Nevertheless, I want you to have at
+least an acquaintance with them, so that you will know where they
+stand next to the tools you will use, as a big data analyst. Then over the course of this week, I'll bring focus on to the two principle
+tools you will use in the hands on work. Apache Impala and Apache Hive. Traditional relational databases, continue
+to be extremely useful and popular. However, with the explosion in volume and
+variety of big data, it became evident that these
+traditional systems do not serve all database needs with the best cost and
+performance. Alternative systems have grown
+in popularity in the modern era, the era of the world wide web. Among the most successful
+big data systems, are big analytic systems or
+data warehouses. These includes Apache Impala, Apache Hive, Apache Drill and Presto. You will become skilled with Hive and Impala in the subsequent
+courses of this specialization. Hive and Impala each implement
+their own dialects of SQL. Hive QL for Hive, and
+Impala SQL for Impala. These dialects are similar to one another, and their uses in analytic
+systems emphasize a subset of SQL most suitable for data warehouses. Other large analytic database systems
+include Oracle data warehousing and Teradata. But these systems tend to have
+a much higher cost per terabyte of data than the others.

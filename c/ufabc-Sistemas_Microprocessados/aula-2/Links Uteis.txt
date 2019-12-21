@@ -1,0 +1,9 @@
+Projeto de Encoder com Arudino (com lcd)
+https://circuitdigest.com/microcontroller-projects/interfacing-rotary-encoder-with-arduino
+
+Detalhes do Projeto de Encoder com Arduino (sem lcd)
+https://howtomechatronics.com/tutorials/arduino/rotary-encoder-works-use-arduino/
+
+Projeto Arduino (IMPORTANTE)
+https://forum.arduino.cc/index.php?topic=355345.0
+

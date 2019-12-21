@@ -1,0 +1,14 @@
+/*********************************************************
+	     	     Semana 4 - Programa 6
+	  	Atividade 4.04 - Criando nova coluna
+**********************************************************
+1) Adicionar a coluna StormLength que representa o número de
+dias entre StartDate and EndDate
+	a) Em 1980, quantos dias a tempestadeAgatha durou?
+***********************************************************/
+
+data storm_length;
+	set pg1.storm_summary;
+	drop Hem_EW Hem_NS Lat Lon;
+	StormLength = EndDate - StartDate;
+run;

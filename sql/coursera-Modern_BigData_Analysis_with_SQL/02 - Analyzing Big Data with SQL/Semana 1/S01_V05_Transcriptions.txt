@@ -1,0 +1,49 @@
+In the previous videos in this lesson, I presented Hue as the SQL
+interface to Hive and Impala. But actually, Hue is only one of
+many interfaces to Hive and Impala. Besides Hue, there are a variety
+of other SQL query tools, sometimes called SQL clients,
+that can be set up to to work with Hive or Impala, as well as other
+SQL query engines. Like the query editors in Hue, these utilities allow you to enter SQL
+statements, run them, and see the results. Some of these are Web browser based, others can be installed on Windows or
+Mac or Linux. Some are command line applications,
+others have a graphical user interface. There are too many of these to name. But just as one example, there's an open
+source one called SQuirreL SQL Client that's been around for a long time. It can be installed on
+different platforms and can be configured to run SQL statements
+on an instance of Hive or Impala. Many data analysts today need to do more
+with the results of a query than just display it in a table. So in the last 20 years or so there
+has been enormous growth in the use of analytics and business intelligence, or
+BI software, which can create charts and graphs and maps and other data
+visualizations based on SQL query results. Again, there are far too
+many of these to name, but one of the best known ones is Tableau. Many of these applications allow the user
+to manually enter SQL statements to run on Hive or Impala or
+other SQL engines. And many of them can also automatically
+generate SQL statements as you interact with them through
+a graphical user interface. These applications can be used to create
+reports, interactive dashboards, and more. All these tools and applications
+from the most basic SQL clients, through the most sophisticated analytics
+software need some way to connect to an instance of Hive or Impala to be
+able to run SQL statements on them. There are a few standard interface
+protocols that can be used to do this. The two best known of these are ODBC and
+JDBC. These are two different interface
+standards that virtually any software can use to connect to
+virtually any SQL engine. Both Hive and
+Impala support both ODBC and JDBC. Different SQL interface
+applications typically use one or the other of these standards. For example, Tableau uses ODBC,
+and SQuirreL SQL Client uses JDBC. Also, custom code written by
+data scientists, data engineers, and developers can use ODBC or
+JDBC to connect to SQL engines. Scripts written in popular
+languages like Python and R can use either of these standard
+interfaces to run SQL queries on Hive or Impala and then process the results. So I mentioned two kinds of user
+interfaces, query tools and analytics and BI software, and two underlying
+interface standards, ODBC and JDBC. They can work with most with any SQL
+engine, including Hive and Impala. But many SQL engines also have
+specialized interface applications that are designed to work only
+with that one SQL engine. Hive and Impala also have that. Hive includes a specialized
+command line interface, or CLI, called Beeline, and Impala has
+a specialized CLI called Impala Shell. Both of these are accessed from
+the command line or the terminal. And both of these are installed on the VM, so they're available for
+you to use in this course. In the honors lesson, you can learn
+how to use Beeline and Impala Shell. But the main point here is that
+although you'll be using Hue throughout this course, the SQL statements you'll write can be
+run in numerous different applications. Hue is just an interface, and in this course you shouldn't
+focus too much on the interface. You should focus on the SQL statements.

@@ -1,0 +1,46 @@
+While I'm discussing the innovations 
+of big data, it's worthwhile to once more recognize 
+the strengths of traditional RDBMS technologies. Last week I discussed how you can 
+use normalized table designs and database triggers to codify complex 
+business rules in your database. The constraints you build into your 
+data models, together with ACID-compliant transactions 
+and stored procedures, allow you to build high-quality financial 
+applications and other online transaction processing or 
+OLTP systems, with your database at the center of your 
+total application design. The strong business constraints on allowed 
+data in your database can exert centralized control over what 
+your business will accept as "good data," no matter what user interfaces or other 
+programs you build out in your organization. The efficient enforcement of business rules, and the kinds of 
+operational databases that this affords, represent one of the great 
+successes of SQL and relational technology. Another strength of relational systems is 
+that - just by storing your data in tables - you will automatically have structured data, not counting large text or binary fields. I'll discuss a bit later the kinds of analysis 
+you can do with different kinds of data, but for now, I'll just say that a great 
+many analytic techniques rely on data first being in a tidy, 
+structured form. For a data analyst, having data in structured form to 
+begin with is a great advantage, in that you can skip over some of 
+the effort of preparing the data, and proceed more directly 
+to analysis. Relational technology has become so 
+widely adopted and mature that you can find good choices for relational database software that you can easily 
+install and run on almost any computer. These include PostgreSQL and MySQL 
+Community Edition, which are free database servers, and SQLite, a library that less 
+programmers embed an ACID-compliant database in their own programs without needing 
+a separate database server. This means that - when you stick to mostly structured data and your data 
+size is small or medium - you can readily choose an RDBMS to 
+handle your data storage, and the software will help to keep 
+your data organized and useful. When your database system implements 
+the DCL commands of GRANT and REVOKE properly, you can use these to manage security 
+on your data: Through various applications, users 
+connect to your database with different authenticated user IDs, and you can give different users access 
+to different parts of the data. The RDBMS helps you manage your access 
+in an orderly fashion. A well-designed and appropriately sized 
+RDBMS is reasonably fast. With smaller databases of a few thousand 
+rows and a few users, many queries can be reliably served in sub-second time and analytic queries 
+will often require only a few seconds. Larger businesses with more users and 
+more data will of course need to invest in bigger, more expensive solutions in order to 
+keep up runtime performance. There are literally thousands of 
+programs and tools that use SQL to store and 
+retrieve data, from visualization tools and reporting, to particular applications like manufacturing 
+support, or sales management, or healthcare. You can take advantage of this rich 
+ecosystem of software that has grown around 
+relational databases, to get you to working systems reasonably quickly. It's my belief that conventional RDBMS solutions, especially at small and modest sizes, will continue to be useful for many 
+years to come.

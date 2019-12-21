@@ -1,0 +1,10 @@
+pos	eu amo esse sanduíche
+pos	este é um lugar incrível!
+pos	eu me sinto bem com essas cervejas
+pos	este é o meu melhor trabalho
+pos	que visão incrível
+neg	eu não gosto deste restaurante
+neg	estou cansado dessas coisas
+neg	não consigo lidar com isso
+neg	ele é meu inimigo jurado!
+neg	meu chefe é horrível

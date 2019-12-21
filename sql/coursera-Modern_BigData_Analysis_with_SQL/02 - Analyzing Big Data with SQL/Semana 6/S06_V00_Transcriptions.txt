@@ -1,0 +1,20 @@
+In the previous weeks of this course,
+you learned how to use the clauses of the SELECT statement to
+query single tables. You learned how to use different
+combinations of these clauses to answer different kinds of questions. But in all the queries you saw so
+far in this course, each FROM clause referred
+to just one table, and each result set contained
+data from just one table. In this final week of the course, you'll
+learn how to use the SELECT statement to combine data from two or
+more tables into a single result set. Conceptually, there are two
+ways you can do this. You can combine data vertically, rowwise,
+stacking data on top of other data. Or you can combine data horizontally,
+columnwise, merging data side by side. In SQL, there are two different words for these two different
+ways of combining data. Vertically: that's a union. And horizontally: that's a join. So that's the high level
+conceptual way to understand it. You'll see in the upcoming videos that
+there are a couple different types of unions and
+several different types of joins. And there are some important details
+that you'll need to understand. The good news is that doing union and join operations in SQL does not
+require learning any new statements. Both of these are performed using
+the familiar SELECT statement, and there's only a little bit of
+new syntax you'll need to learn to perform them.

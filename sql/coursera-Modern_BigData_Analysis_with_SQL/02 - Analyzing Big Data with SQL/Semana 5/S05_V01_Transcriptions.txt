@@ -1,0 +1,71 @@
+When you're writing
+a select statement and you want the rows of your results set
+to be in a specific order, you use the Order By Clause. The order by clause
+takes the result from all the earlier clauses,
+select, from, where, and to group by, and it
+arranges those rows, sorts them in a specific order before returning them to you. I'll demonstrate this with
+an example but first, recall that when you run a select statement with
+a distributed SQL engine, if the statement does not
+have an order by clause, then the order of the rows in the results set is arbitrary
+and unpredictable. You could run the exact
+same query twice on the same data and you could get the rows in a different
+order each time. On the VM for this course, you will probably not experience this unpredictability of
+row order to its full extent. On the VM, the
+distributed SQL engines and the tables they're querying are not actually distributed across
+multiple computers. They're all just on one computer
+and this takes away much of the randomness that causes the rows to
+get shuffled around. Especially, when you're querying the very small tables
+like this one. So you might forget and
+start to expect that the rows will always come back in the same order each time. Don't let that happen. Remember, row order is
+arbitrary and unpredictable. Unless you explicitly tell the SQL engine to return the
+rows in a specific order, there's no way to know for sure what order
+they'll come back in. If you want the rows of your results set to be
+in a specific order, the way to tell the SQL engine that is to use
+an order by clause. For example, to
+return the rows of the games table ordered
+by the ID column, you would add the clause order by ID to the end of
+the select statement. Then the rows of
+the results that are guaranteed to be in
+this specific order, ID one, two, three, four, five from top to bottom. You can use any column
+in the order by clause. For example, you can
+order by list price. This arranges the rows of
+the result set according to the values in the list
+price column with the least expensive game
+in the top row and the most expensive game
+in the bottom row, or you can order by max players. But when you do that,
+notice that there are some rows that have
+the same max player's values. Both Scrabble and Candy Land
+have max players four and both monopoly and clue
+have max players six. When there are ties like this in the column
+that you order by, then within the sets of rows
+where those values are tied, the order of those
+rows is arbitrary. So you might get
+Scrabble first then Candy Land or Candy Land
+first then Scrabble, and the same with
+Monopoly and Clue, they could be in either order. You can include
+more than one column reference in an order by clause. Here's an example to
+demonstrate that. The order by clause in this example has
+two column references. First, max players and
+second, list price. So the results set
+is ordered first by max players then by list price. What this means is
+that when there are ties in the first sorting column, then the ties are broken using the values in
+the second column. If you look at the first two
+rows of the results that they both have the same value
+of max players, four. So the order of these heroes
+is determined by list price. So you can specify one or two or even more
+than two column references in the order by clause. If you have two or more, then you separate them
+by commas and this comma separated list in the order by clause is called
+the order by list. You can use the order
+by clause together in a select statement with other clauses where
+group by and having, but it must come
+after those clauses. Here's an example to
+demonstrate the order by clause with some of
+these other clauses. This select statement queries
+the inventory table, filters out the rows that have a null in the price column, groups by Shop and then
+returns the name of each shop and the sum of the quantity of games
+in stock at that shop. Finally, it orders
+by the shop column. The shop column is a character string column not a numeric column like
+in the other examples. So what the order by
+clause does is it arranges the rows of the results that in alphabetical order by shop. Since B comes before
+D in the alphabet, Board 'Em is first
+and Dicey is second.

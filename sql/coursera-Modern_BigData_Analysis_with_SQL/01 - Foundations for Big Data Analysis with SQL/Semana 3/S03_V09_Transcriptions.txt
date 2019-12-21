@@ -1,0 +1,28 @@
+SQL, being a language originally designed for working with relational databases, excels at querying structured data. Like most computer languages for data analysis, SQL has great facility with numerical data types. Look at this data. Simple queries can get answers
+to all the following questions: What value or values appear between 4,000 and 5,000? What are the top three values? How many different values are there?
+How often does each value appear? What is the sum of these values? What is the minimum value? The maximum? The mean? These kinds of questions can be addressed
+to any set of numeric values. You can go on to find a number of summary statistics, like standard deviation, variance,
+and different percentiles. If your records have pairs of numeric values,
+like individual heights and weights, you can compute further statistics,
+like correlation of the two columns. For more sophisticated numerical analysis, you are likely to move beyond SQL to a statistical
+language like R, Python pandas, or MATLAB. Look at this data. This column records categorical values. Each item value is really a label for a shopping item. For this data, the questions you can ask
+are more restricted: Does a particular item occur? How many values are there? How many distinct values? How many occurrences of each distinct value? What value or values occur most? Notice you can sort the words to aid lookups, but there is little meaning to questions like,
+what is the "minimum" word or the "maximum" word? Categorical values like this are common: product names, cities, street names... You may also consider personal names
+to be categorical values. Datasets often use an integer
+to represent a categorical value. For example, grocery stores have
+an integer code for each food item. Or, you may use an integer for a
+customer ID, or a store ID. It can be convenient to store these
+categories or labels as integers, and SQL will happily perform numeric
+calculations on such data, but your own judgment should tell you that it is
+not meaningful to find the sum of all store IDs, or the average employee ID. The real power of SQL is in its ability to use the
+structure of an entire table or multiple tables, to combine these in different ways for analytic queries. Look at these tables. Imagine more rows of the sort you see here. With this data, you can
+successfully answer many questions: How many stores sell Ugg brand products? What store has the lowest price for
+Women's Classic Ugg boots? What boots are available anywhere
+in a price range from 150 to 160? What is the inventory of Reebok
+sneakers across all stores? How much money in inventory is each store carrying? In this course, I refrain from going into the SQL syntax, but I can assure you that there are
+straightforward SQL SELECT statements that can answer these questions easily. With a little creativity, combining some initial
+analyses, you can dig even deeper: Is there some store that sells at a higher price
+than other stores in general? Or a lower price? What is the most widely distributed brand? With skillful use of SQL, you can gain clear insights
+into these questions from data like this. The next course in this specialization, and the courses that follow, are dedicated
+to helping you develop your skill with SQL to answer all these kinds of questions
+with structured data - especially using big data.

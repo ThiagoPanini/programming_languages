@@ -1,0 +1,36 @@
+If you guessed that "denormalization" is the opposite approach to database design 
+as "normalization," you're not too far off, but there is a little bit more to learn. The strategy of denormalization is to consciously, deliberately "break" one or more of the rules 
+of database normalization in your design. Of course, these rules are not actual laws 
+that you are compelled to obey - they are just principles of one approach. You will find advantages and disadvantages to either design approach - normalization or 
+denormalization - and I'll discuss some of the differences 
+and trade-offs between these two approaches in the videos after this one. For now, I want to illustrate some examples 
+of denormalized table designs. Consider this table of shopping items. Here the primary key is the combination 
+of date and item. You need both to identify a row uniquely. But what if you have these shopping items in a table, but you don't have any date information? Your table may look like this. You can see that there are two rows 
+with the same item and the same quantity. So, there are duplicate rows and 
+there is no primary key. Although this is not a normalized table, it may store information that you find useful: every time an item of shopping occurs, the table records that event. So this table records two occasions 
+of the purchase of apples in the same quantity, and the "duplicate rows" are not 
+really duplicates for your use. Another form of denormalization is 
+to "pre-join" normalized table data. Sometimes storing data in a denormalized 
+pre-joined table improves performance, because it saves some queries the work 
+of querying more than one table. Remember this normalized set of tables. These tables are in Third Normal Form. They provide details about individual shoe types, and stores, and the prices of 
+particular shoes that particular stores. When I talked about foreign keys before, I noted that an SQL SELECT statement 
+that combines information from related tables is called a JOIN query. This is because the SELECT includes information about how the tables combine, or join to one another. Here's a single denormalized table that pre-joins the tables. Now a query on this new table does not need to include any JOIN to find all the information 
+that was previously stored in three tables. Such a query may be faster because it doesn't have to do the work 
+of combining different tables. Another form of denormalization is 
+to store a "derived column" in a table. Look at this table. Here, the "total" column contains 
+the sum of amount and shipping, though it is derived from the other two columns. Sometimes derived columns are added 
+to make their data quickly available. Another kind of redundancy of storage is to have a table composed entirely of summary data, like this one, assuming that there is a separate table about customers, 
+and a table with individual orders. Like the derived column, this summary table can let queries 
+retrieve these count and total values quickly, without having to calculate them 
+from the other more detailed table. Now I've given you four examples 
+of denormalized table designs. These have been examples of denormalization, not an attempt at a complete list. Note that some writers argue that a summary table does not literally violate 
+Third Normal Form. Nevertheless, I think I'm justified 
+in putting the use of summary tables with the others in discussing an approach 
+to normalization or denormalization. It is a commonplace notion among 
+experienced database designers that, if you throw together a few tables without 
+regards to the principles of normalization, then you do *not* have a denormalized 
+database design: you have a mess. This is sometimes called a "non-normalized" design. A disciplined approach to denormalization is to start by defining a normalized set of tables, considering the principles of 
+good keys and column properties, and then deliberately relaxing your 
+normalized design for specific reasons. This practice can help you better understand your data. I've used these last two videos to explain 
+database normalization and denormalization. In the next two videos, I'll talk about the differences and trade-offs 
+between these two design approaches.

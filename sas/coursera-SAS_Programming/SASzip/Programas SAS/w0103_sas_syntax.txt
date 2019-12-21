@@ -1,0 +1,41 @@
+/*********************************************************
+	     	 Semana 1 - Programa 3
+	  Entendo a sintaxe da linguagem SAS
+**********************************************************
+   O passo a passo deste programa engloba:
+
+1) Execute o programa. Ele rodou com sucesso?
+2) Utilize a feature "Format Code" para a padronização
+do código:
+	* Enterprise Guide: Edit -> Format Code
+	* SAS Studio: Menu superior -> Format Code
+3) Adicionar o seguinte comentário antes do bloco "data":
+	* "Programa criado por <seu-nome>
+4) Comentar o primeiro comando TITLE e o comando WHERE no
+bloco proc print e visualizar as diferenças
+ 
+***********************************************************/
+
+data mycars;
+	set sashelp.cars;
+	*corrigida identação;
+	AvgMPG=mean(mpg_city, mpg_highway);
+run;
+
+title "Cars with Average MPG Over 35";
+
+proc print data=mycars;
+	var make model type avgmpg; *definição de variáveis;
+	*corrigida identação de todo o bloco;
+	where AvgMPG > 35; *condição;
+run;
+
+title "Average MPG by Car Type";
+
+proc means data=mycars mean min max maxdec=1;
+	*corrigida identação de todo o bloco;
+	var avgmpg; *agrupamento, média MPG por tipo, incluindo mean, min, max;
+	class type;
+RUN;
+
+TITLE;

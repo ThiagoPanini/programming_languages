@@ -1,0 +1,30 @@
+Recall that the list of column
+references that comes after the keywords ORDER BY is called the ORDER BY list. This list can have just one column
+reference, or it can have two or more column references,
+separated by commas. The ORDER BY list can
+also have expressions. Here's an example with an ORDER BY
+list that consists of one expression. This expression is a little
+bit complicated but what it does is it computes the saturation
+of the colors in the crayons table. Saturation is a decimal
+number between 0 and 1, representing how intensely
+colorful a color is. White and black have a saturation of 0, the flashiest colors have
+a saturation close to 1. So this expression computes the saturation
+of each color in the crayons table. And since the expression is
+used in the ORDER BY clause, the SQL engine arranges by rows of
+the result set according to saturation. It arranges then in descending order with
+the most saturated colors at the top. However, the result set from this
+query does not include a column showing the saturation values. That's because the expression
+that computes saturation is used only in the ORDER BY clause,
+not in the SELECT list. Fortunately, most SQL engines allow you
+to use an expression in the SELECT list, give it a column alias, and then use that
+column alias in the ORDER BY clause. So here I modified the query. I took the expression for computing
+saturation, I moved it into the SELECT list after all the other columns and
+I gave it the alias saturation. And then I specified ORDER BY
+saturation descending. The results of this query is arranged
+in descending order by saturation. And it includes the saturation
+values in the rightmost column. You can see the crayon color with the
+highest saturation value is Electric Lime. These examples used just one expression,
+or column alias, in the ORDER BY list. But you can use two or
+more, separated by commas. You can use any mix of column references,
+expressions, and column aliases. And you can specify ascending or
+descending order, separately, for each one.

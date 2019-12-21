@@ -1,0 +1,34 @@
+Two of the techniques
+you've learned about so far in this course are filtering data using the
+WHERE clause and grouping and aggregating data using the GROUP BY clause and
+aggregate expressions. Equipped with your knowledge
+of these two techniques, you might try to use
+an aggregate expression in the WHERE clause to filter the results by
+an aggregate column. However, this does not work. Here's an example to
+demonstrate this. First, this query which
+is valid, it does work., it groups the inventory table by shop and returns the name of each shop and the sum of the prices of all the copies
+of the game in each shop. That is, the sum of the price of each game times the
+quantity in stock. So the results set has two rows representing
+the two shops. The second column in
+the results set gives the sum of price times quantity for
+the games in each shop. In other words,
+the total retail value of the games in each shop. Now, say you wanted to filter
+these results to return only the shops that
+have an inventory with a total retail value
+greater than $300. You might try to do this
+by adding the clause where sum of price times
+quantity, greater than 300. But this query will fail
+in all major SQL engines. This query fails because the WHERE clause can only
+filter individual rows of data. You cannot use
+the WHERE clause to filter based on
+aggregates of the data. Also, SQL engines process the WHERE clause before
+the GROUP BY clause. So when the WHERE clause
+is processed, the SQL engine doesn't yet know what groups the data
+has been split into, because that splitting
+hasn't happened yet. So there is a strict rule
+in SQL that you cannot use aggregate expressions
+in the WHERE clause. So how can you write a select statement that
+filters based on aggregates? Since you cannot use
+the WHERE clause to do this, SQL has a different
+Clause for this. The HAVING clause. You learn how to use
+this clause next.

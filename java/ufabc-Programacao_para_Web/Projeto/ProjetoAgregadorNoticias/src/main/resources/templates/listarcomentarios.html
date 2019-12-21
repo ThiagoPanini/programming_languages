@@ -1,0 +1,12 @@
+<h2>lista teste</h2>
+<table class="table table striped">
+	<tr>
+		<th>Nome</th>
+		<th>Data</th>
+		<th>Comentario</th>
+	</tr>	
+	<tr th:each="comentario : ${comentario}">
+		<td th:text="${comentario.nome}"></td>
+		<td th:text="${comentario.data}"></td>
+		<td th:text="${comentario.mensagem}"></td>
+</table>

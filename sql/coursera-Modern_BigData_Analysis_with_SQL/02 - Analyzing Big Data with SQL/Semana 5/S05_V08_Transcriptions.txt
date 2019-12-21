@@ -1,0 +1,81 @@
+The LIMIT clause is especially
+useful when it's used together with the ORDER BY clause. Recall that the ORDER BY clause
+arranges the rows of the result set in order by some column or columns. This means that the rows at the top of
+the result set represent the greatest or the least, or the best or
+the worst of all the records, as measured by the values
+in that column or columns. In data analysis,
+it's common to want to return just a few of these most extreme cases to
+identify them and take some action. For example, who are the one
+hundred highest spending customers? So we can send them a loyalty reward? Or who are the ten lowest
+performing sales people? So we can put them on an improvement plan? Using ORDER BY together with LIMIT, lets you return a specified number
+of the most extreme records. Here's an example of this. Here's a query that returns the ten
+routes in the flights table that have the longest average air time. A route is a combination of origin and
+destination. So this query groups the flights
+table by origin and destination. And returns the avg_air_time for
+each origin destination pair. The order by clause arranges
+the results in descending order by avg_air_time with
+the nulls last at the bottom. The nulls last is important
+here if you're using Impala. Without it, you would just see a bunch
+of nulls at the top of the results set. The nulls last puts the nose at
+the bottom where they're out of the way. Finally, this query has limit 10, to return the top 10
+origin destination pairs. This kind of query that
+uses a LIMIT clause, together with an ORDER BY clause,
+is called a top-n query. Because it returns the top-n
+results where n is some number, like ten in this example. Or it might be called a bottom-N query
+depending on what row order is used. Looking at the results
+from running this query, you can see that all of these ten
+longest flights are between H and L, which is Honolulu, Hawaii and
+cities in the Eastern United States. It looks like the ones going to
+Honolulu from the east to the west, take longer on average than
+the ones going the other way. This is because the jet stream winds in
+the upper atmosphere go from west to east. And it looks like the two longest
+routes at the top of the results set are the routes from the New York City
+airports, JFK and EWR to Honolulu. These are the only ones that have average
+flight times exceeding 600 minutes or 10 hours. In the results set, noticed that I also
+included a column named count_air_time. This is computed using the expression
+count of airtime, so it shows how many flights on each route have a non
+missing value in the airtime column. It's a good idea to include
+a count column like this, when ever you're computing averages or
+other aggregates. It helps you to understand how confident
+you should be in those aggregates. For example, looking at the first two rows of this
+result set, you can see that the average in the first row was calculated using
+almost 2,000 values of air time. And the average in the second row was
+calculated using more than 3,500 values of air time. These large count values give
+me confidence in these averages. But if there were a row here where
+average_air_time was very high, but count_air_time was very low,
+then I would want to check whether that was caused by erroneous values
+in the air_time column. When you use top n queries
+you need to watch out for ties in the column or
+columns that you're sorting by. Here's an example to explain
+why this is important. Imagine you're the manager of a company's
+sales department and you want to reward your top three highest performing sales
+people with a trip to a luxury resort. The performance metric you're using is
+last year's total sales in dollars. So to find your top three performers,
+you would run a top three query like this. For each salesperson the query computes
+their name and their total sales. And the result set is returned in
+descending order by total sales, and it's limited to three rows. And here's the result. It shows that the three top
+performers are Ambrosio, Lujza and Sabahattin in that order. So they are the three sales
+people who get to go on the trip. But here's the problem,
+if you change limit three to limit five and run the query again, you
+can see that there's another sales person, Val, who has exactly the same
+total sales as Sabahattin. They both have the same value, $320,000. The query with the limit three arbitrarily
+returned Sabahattin not Val, because when there's a tie in the ordering column,
+the order of the tied rows is arbitrary. So it was purely by chance that it
+returned Sabahattin and not Val. Imagine you ran the query with the limit
+three, and based on the result of that query, you sent Sabahattin on
+the luxury trip but not Val. I think Val would be pretty angry. Believe it or not people
+actually make this type of error. Even if the values were an exact tie, say Val's total sales were a few
+hundred dollars less then Sobahattin's. It would still seem unfair to
+deny Val a reward based on that. Important distinctions should not be made
+on the basis of insignificant differences. So when you're running a top n query, if there's going to be some action taken
+based on whether a row is in the top n or not, then it's best to return
+some extra rows, and check for ties or near ties, in the values
+that are around that nth row. If there are ties or near ties there,
+then look at some of the rows above or below and try to find a threshold,
+a cutoff point that seems fair. In this example,
+by returning five rows instead of three, you're able to notice the tie
+between Sabahattin and Val. And you can also see that
+the next best performer, Virginia, has a significantly
+lower total sales number. Based on that, you might decide to send
+both Sabahattin and Val on the trip. Or to send neither of them. Or you might find some other appropriate
+metric to break the tie between them.

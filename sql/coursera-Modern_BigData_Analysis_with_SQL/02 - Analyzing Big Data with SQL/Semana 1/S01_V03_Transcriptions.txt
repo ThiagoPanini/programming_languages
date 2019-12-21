@@ -1,0 +1,88 @@
+Recall from the previous video, that Hue enables you to
+see what databases exist, switch into
+a particular database, see what tables are in it, and look at the columns
+in those tables, all through point
+and click actions. In this video, I'll show how
+for each of those tasks, you can write and run a SQL Utility Statement that does the same thing as
+the point and click action. So if you could do something
+by pointing and clicking, why would you want to write
+a SQL statement to do it? Well, for one, not all
+SQL interfaces have a graphical user
+interface like Hue does. Sometimes the only way to
+perform simple tasks like these is by entering and
+running SQL statements. Also, an interface like
+Hue enables you to perform some simple
+tasks without using SQL. But as you'll see beginning
+in the next video, you can achieve
+many more types of tasks by entering and
+running SQL statements. The first SQL Utility
+Statement I'll talk about is SHOW DATABASES. This is often the very first
+statement you would run when connecting to an instance of a SQL engine for the first time. It tells you what
+databases exist. I'll run this statement in the Impala Query Editor in Hue on the VM to show
+you what it returns. In the editor, I'll enter SHOW DATABASES and I'll terminate the statement
+with a semicolon. The convention is SQL is to use a semicolon to indicate
+the end of every statement. But here in Hue, if you're just running
+a single statement, the semicolon is optional. So you could leave it off. Then I'll click this Execute
+button to run the statement. You can also use
+the keyboard shortcut Control, Enter to do this. After the statement runs, the result appears
+directly below. Running this statement
+with Impala, you can see the first row
+of the results list a system database named,
+_Impala_builtins. You can safely ignore that. Below that, you can see
+the actual databases. Each one has a name and
+optionally a comment. You can see there are
+databases named default, fly, fun, toy, and wax. When you're using a SQL engine, there is always one particular database that
+you're connected to. This is called
+the current database or the active database. When you first log into Hue and open the Hive or
+Impala Query Editor, the current database is
+typically the one named default. Other SQL engines also have particular databases
+that they connect to by default at the start
+of a new session, but they're not
+generally named default, and they can vary
+from user to user. Usually, if you're
+going to be working with a particular table, you'll want to set
+the current database to the database that
+contains that table. To set which database is
+the current database, you can run a USE statement. The USE statement is very simple, it's just the keyword USE followed by the name
+of a database. Hue, which you'll use
+throughout this course actually does not support
+the USE statement. Instead, in Hue, you always use point and click actions to
+set the current database. Just above the editor, there is an active
+database selector. You can use that to see what
+the current database is, right now it's default, and to change
+the current database. I'll select fun, and now
+the current database is fun. Alternatively, you
+can click the name of a database in the assist panel
+on the left side, and Hue will set that as
+the current database. In the assist panel, I'll click the back arrow to go back to the list
+of all the databases, then I'll click the wax database. You can see in
+the active database selector that wax is now
+the current database. The current database
+persists for the duration of your session or until
+you change it again. I'll change it back to fun. If you're using
+a SQL interface that lacks a point and click interface for
+switching databases, then you would instead
+need to execute a USE statement, like USE fun. Also keep in mind that
+your selection of the current database only affects the particular session
+in which it is run. Other users in other sessions have their own current databases. Recall that a database in SQL is just a logical container
+for a group of tables. So after you see what databases exist and change
+the current database, often the next step is to see what tables exists in
+the current database. To do this, run
+the statement SHOW TABLES. I'll enter and run
+SHOW TABLES in Hue. The result shows the names of the four tables in
+the current database, which remember is
+the fun database. The tables are card_rank, card_suit, games, and inventory. The final utility
+statement I'll talk about is the DESCRIBE statement. You can use the
+DESCRIBE statement to see what columns are in a table. The syntax is simple, following the keyword DESCRIBE, you put the name of the table whose columns you want to see. I know that one of the tables in the fun database is named games. So in Hue, I'll enter
+and run DESCRIBE games. The result shows
+that this table has eight columns; id, name, inventor, year, min_age, min_players, max_players,
+and list_price. Each column also has a datatype
+and optionally a comment. You'll learn about data
+types later in this course. So for now, the column names and the order they're in are what you should
+pay attention to. So now you've seen how to use SQL Utility Statements to explore and navigate
+databases and tables. SHOW DATABASES shows you
+what databases exist, the USE statement changes
+the current database, SHOW TABLES shows what tables are in the current database, and the DESCRIBE statement shows what columns
+are in a table. In the next video, you'll see how to run
+SQL statements to look at the rows of
+data in a table.

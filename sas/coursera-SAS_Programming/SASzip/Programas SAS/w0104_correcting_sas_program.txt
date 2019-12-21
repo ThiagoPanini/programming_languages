@@ -1,0 +1,31 @@
+/*********************************************************
+	     	 Semana 1 - Programa 4
+	  Encontrando e corrigindo erros no programa
+**********************************************************
+   Os objetivos desse programa são:
+
+1) Identificar três erros de sintaxe, mas antes de corrigi-los,
+executar o programa
+2) Visualizar os apontamentos mostrados na aba de Log
+3) Corrigir os erros e executar novamente o programa
+ 
+***********************************************************/
+
+data mycars; *correção: daat -> data;
+	set sashelp.cars;
+	AvgMPG=mean(mpg_city, mpg_highway);
+run;
+
+title "Cars with Average MPG Over 35";
+proc print data=mycars; *correção: ponto e vírgula;
+	var make model type avgmpg;
+	where AvgMPG > 35;
+run;
+
+title "Average MPG by Car Type";
+proc means data=mycars mean min max maxdec=1; *correção: average -> mean;
+	var avgmpg;
+	class type;
+run;
+
+title;

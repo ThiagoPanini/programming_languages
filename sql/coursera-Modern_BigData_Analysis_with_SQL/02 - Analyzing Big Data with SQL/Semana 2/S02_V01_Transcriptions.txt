@@ -1,0 +1,39 @@
+In this video, you'll learn about the building blocks of a SELECT
+statement called clauses. A SELECT statement is made
+up of one or more clauses. The next several weeks
+of the course are structured around
+these different clauses. The order in which I'll
+teach them matches their correct order within
+a SELECT statement. First, you'll learn
+about the SELECT clause, which specifies what columns should be returned in
+your query result. Next, you'll learn
+about the FROM clause, which specifies where the data you are querying
+should come from. Then you'll learn about
+the WHERE clause, which filters the rows of the data based on
+one or more conditions. Next is the GROUP BY clause and the related topic
+of aggregation, which can be used to
+split the data into groups and then reduce each
+group down to a single value. Then you'll learn about
+the HAVING clause, which filters the data
+based on aggregates. Next is the ORDER BY clause, which sorts or arranges
+the results of a query. Finally, the LIMIT clause, which controls how many rows
+a query can return. As you learn about these parts
+of a SELECT statement, you'll see how the different
+clauses and combinations of them can enable you to answer different kinds
+of questions. Most of what I'll teach is
+applicable to any SQL engine; Hive and Impala,
+other big data SQL engines, and traditional relational
+database systems. But there are some differences
+in the SELECT syntax across the dialect of SQL that these
+different engines use. I'll teach you about
+these differences with a particular focus on the SELECT syntax
+for Hive and Impala. If you're new to SQL, this tour through the clauses of the SELECT statement should give you a straightforward intuitive introduction
+to the language. Each week of the course builds on the clauses taught in
+the previous week. So take your time
+and make sure you understand each clause and all the related topics before
+moving on to the next one. If you are already familiar with SQL and you're
+looking to get proficient with modern
+distributed SQL engines, then you can proceed more
+quickly through the course, and look out for the places
+where I call out the important differences
+between the SQL dialects.

@@ -1,0 +1,63 @@
+In an earlier video, I talked about how
+arithmetic operators in SQL expect their operands
+you have numeric datatypes. So for example, you
+should not try to write an expression like
+'hello' plus five. Functions in SQL also expect their arguments to
+have certain data types. Some arguments of some functions are expected to be numeric, others are expected to
+be character strings. In some cases, you might need to convert one type of
+data to another, so you can apply
+an operator or function. For example, you might have
+some numeric values and some string values
+that you want to concatenate together
+into strings, or you might have a string column whose values actually
+represent numbers. Converting one data
+type to another is called type
+conversion or casting. Some SQL engines do most type
+conversions automatically, this is called implicit casting. Other engines require you to
+do type conversion manually, this is called explicit casting. Here are some examples
+to demonstrate this. The games table in
+the fun database has information about
+five board games including, the name of the game
+in the name column, and the minimum player age
+in the min age column. Say you want to concatenate these two columns together along with some literal string values to create a sentence like, blank game is more players
+age blank or older. You can do this with
+an expression like this using the concat function. But the concat function expects all its arguments to
+have a string data type, and the min age column
+has an integer data type. Some SQL engines
+including HIV will implicitly cast min age
+as a string column. The query will run successfully and will return
+the expected results. But with other SQL
+engines including Impala, this query will fail. With engines like that, you need to modify
+the SQL statement to explicitly cast min_age
+as a string column. To do this, you use
+the cast function. Cast is a special function
+that you use in a slightly different way than the other
+built-in functions. You enclose the column or
+literal value or expression that you want to convert as the argument to
+the cast function. Then before the
+closing parenthesis, you put a space the keyword
+"AS" another space, and the name of the data type
+you want to convert to. In this example, I need to cast min_age as a string column. So it's cast min_age AS STRING. With the statement modified to include this explicit cast, it will now run successfully in Impala and return
+the expected result. Here's another example. In the games table there's
+a column named year, representing the year that
+each game was invented. The values in the year column
+are all four digit years, but it's actually
+a string of column. You can see this by looking at the column information a queue or by running the utility
+statement to describe games. It's pretty common to have numbers in string
+columns like this. Columns containing zip codes or numeric postal codes are
+a classic example of this. Say you wanted to add some number to each of the years
+in the year column. For that, the column
+would need to be converted to a numeric type. Since the years
+are whole numbers, it would be the integer type. If you're using a SQL engine like Impala that requires
+explicit casting, then you can do this by changing the column reference year
+to cast year AS INT. The explicit casting syntax
+described in this video, works in HIV, Impala, and many other SQL engines. Some other engines
+support different syntax, for instance, there's
+a function named convert in some SQL dialects. So if this cast value as type syntax doesn't work with
+a specific engineer using, search for how to convert
+datatypes with that engine. It's a good practice to use explicit type conversion even if the SQL engine you're using
+can do it implicitly. Explicit cast can
+make the queries more portable between
+different SQL engines, they can make the queries
+run more efficiently, and they can help you to
+avoid unexpected results.

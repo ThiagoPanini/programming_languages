@@ -1,0 +1,40 @@
+In the previous two lessons,
+you learned about the select list, which specifies what columns should
+be returned in your query results. The next part of a select statement that
+comes right after the select list is the FROM clause. That's the subject of this lesson. The FROM clause specifies which table
+the data you're querying should come from. You'll see later in this course that
+the FROM clause can do some other things, like combine two tables together. But for
+now we'll consider only the case where the FROM clause refers to a single table. Earlier in the course, I described how the FROM clause is
+optional in many sequel dialects. But you can't do much without it aside
+from testing out different functions and operators. So from here on, I'll mostly treat the FROM clause like
+a required part of the select statement. As you already saw in previous lessons, the basic syntax of the form
+clause is very simple. It's just from table reference. Table reference is often simply the name
+of the table in the current database. So if the current database is fun,
+then to query data from the games table,
+you just use the FROM clause from games. Recall that a database is just a logical
+container for a group of tables. It's sometimes called a schema. And recall that the current database or the active database is the particular one
+that you're in, that you're connected to. When you use just a table
+name in the from clause, this makes your query dependent on
+which database is the current database. The current database needs to be the one
+that contains the table you're querying. So if you're querying a table in
+one of the non defaults databases, you need to remember first
+to connect to that database. Or to switch into that database by using
+the active database selector in ue or by running a ue's statement if you’re
+in a command line sequel interface. It's easy to forget to do this. You might have already stumbled on this
+when attempting to run queries in the VM. I do this all the time. You get an error like table not found or
+could not resolve table reference. Or worse than that, you might forget
+to switch into the intended database, and the current database might have
+a table with the same name as the one you intended to be in. In that case, you might get a more cryptic
+error, or your query might succeed, but you'd be querying a completely different
+table than the one you thought you were querying. This has happened to me and
+caused me a lot of confusion. Also, if you're sending a SQL statement
+to someone else for them to execute, it could be ambiguous which database
+you intended for them to use. Fortunately there is a way to avoid this. Instead of using just the table
+name in the FROM clause, you can qualify the table
+name with the database name. The syntax for
+this is FROM databasename.tablename. For example, FROM fun.games. If you use this qualified form
+of a table reference, and it doesn't matter what
+the current database is, the statement will always query
+the table in the specified database. In this course, I will often just use
+unqualified table names in the FROM clause to keep things concise. But it's generally a good practice to
+qualify table names when you're running SQL statements in the real world.

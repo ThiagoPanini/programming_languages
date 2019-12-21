@@ -1,0 +1,92 @@
+The UNION operator in SQL combines two result
+sets into one. It takes the rows returned by one SELECT statement and the rows returned by
+another SELECT statement, and it stacks them together. It combines them vertically. There are two variations of the UNION operator: UNION
+ALL and UNION DISTINCT. I'll first demonstrate
+UNION ALL. Here is a simple
+SELECT statement that returns the id and name columns from the games
+table in the fun database. You can see it returns five rows. And here's a simple SELECT statement
+that returns the id and name columns from the toys
+table in the toy database. You can see that this
+one returns three rows. To return one result set
+containing the five rows from the games table
+and the three rows from the toys table,
+for a total of eight rows, you can combine these two queries into one using UNION ALL. The result set shown here
+has the games on the top, and the toys on the bottom, but in general, the order
+of the rows in a result set of
+a UNION is arbitrary, just like with
+any unordered result set. So you will not necessarily
+see the rows from the first query on the top and the second query
+on the bottom; they could be the other way or they could be shuffled together. Here's another example
+of UNION ALL. Say you wanted to return the country codes for the countries in
+the customers table, and for the countries
+in the offices table. Both of these tables are
+in the default database. To do that, you could run
+the query SELECT country FROM customers UNION ALL SELECT
+country FROM offices. This is a query that
+you might run in the real world to see all the countries where
+you're doing business. In the results that you can
+see this returns eight rows. But notice that
+one country code appears twice in the result set: "us". Because there's a customer
+in the United States and an office in the United
+States, "us" shows up twice. To eliminate this
+duplicate result row, you could use UNION DISTINCT instead of UNION ALL. When you use UNION DISTINCT, then after the SQL engine combines the results
+of the two queries, it also omits any duplicate rows
+from the result set. So every row in the result
+set will be unique. Most SQL engines support both UNION ALL and
+UNION DISTINCT. This includes Impala, MySQL, PostgreSQL, and
+newer versions of Hive. However, older versions of Hive do not support UNION DISTINCT; they only support UNION ALL. Check the documentation or
+run a simple test to see whether the SQL engine you're using supports UNION DISTINCT. So these keywords
+ALL and DISTINCT are used to modify the behavior
+of the UNION operator. You might be curious
+what happens if you use the UNION operator alone
+without one of these keywords. Oddly, UNION by itself is
+the same as UNION DISTINCT. This might make sense if you understand set theory
+in mathematics, but otherwise it probably
+seems backwards. I recommend including
+the DISTINCT keyword whenever you want
+the duplicate rows removed from the result set. Including the DISTINCT
+keyword makes the purpose of the query
+more explicit. Unfortunately, there
+are some SQL engines that will perform
+a UNION DISTINCT if you use the UNION
+operator alone, but that will not allow you to explicitly use
+the DISTINCT keyword. So again, if you're using
+some other SQL engine, check the documentation or run a test to see whether
+the UNION operator alone, with no modifiers, returns the distinct rows of
+the combined result set. The SELECT statements
+on both sides of the UNION operator should
+have the same schema. In other words they should have the same number of columns and the pairs of corresponding columns
+should have the same names and the same data types, or at
+least the same high-level categories of
+data types, like both numeric or both character string. When you write a query
+that includes a UNION, you should use explicit
+type conversion and column aliases
+to make this happen. Here are a couple of examples
+to demonstrate this. Say you wanted to UNION together the name and list_price columns
+from the games table in the fun database
+with the name and price columns from the toys
+table in the toy database. Both of these pairs
+of columns (name and name, list_price and price) have
+the same data types. But list_price and price
+are different names. So to avoid any problems, you should use a column
+alias in one or both of the SELECT statements to give these two columns the same name. In this example, I
+added AS price to the first SELECT statement
+so they're both named price. And say you wanted to return the distinct values
+of year that occur in either the flights table in the fly database or in the games table in
+the fun database. Both of these tables
+have columns named year. But in the flights table, year is an integer column, whereas in the games table,
+it's a string column. So in this example, I explicitly casted
+that string column to an integer column, and I also added AS year
+to keep it named year. Some SQL engines will tolerate the names or data types
+being different, but to make your queries
+safe and portable, I recommend making the names and data types the same using explicit casting and the AS keyword, like in
+these examples. Don't rely on the SQL engine
+to do it for you. You might notice
+if you're browsing the documentation
+or searching for help that UNION is sometimes
+referred to as a clause. I think it's better to
+think of it as an operator whose operands on the two sides
+are SELECT statements. Also, the examples I showed in this video were all very simple; the SELECT statements on
+the two sides of the union had only SELECT and FROM clauses. But you can use more complex SELECT
+statements with UNION. They can include some
+of the other clauses.

@@ -1,0 +1,1 @@
+"""Exercício já realizado. Referência: ex46_salto - Lista de Repetição"""

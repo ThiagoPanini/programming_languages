@@ -1,0 +1,107 @@
+When you're working
+with large scale data, grouping and aggregation
+are indispensable, because they allow
+you to summarize a table that has many many rows, with a result set that
+has just a few rows. It is typically much
+more efficient to perform the grouping and
+aggregation in the SQL engine, than it is to fetch all the data and perform them using
+some other tool. For example, imagine
+you were using a BI or analytics application, like Tableau for instance, to make a report about the flights table in
+the fly database. That table has
+tens of millions of rows, representing 10 years of flights. Say you needed to make
+a summary table showing the average departure delay
+for each year. There are two ways
+you could do this. You could fetch the year
+and departure delay values for all the rows in the table, all the tens of millions of rows, and bring them all into
+your BI application, then use the BI application
+to group the rows by year and calculate the average
+departure delay for each year. Or you could have the SQL engine performed
+the grouping and aggregation. The SQL engine would
+return just 10 rows, and you could use
+those ten rows to create the summary in
+your BI application. The latter approach is much more efficient
+with big data sets, and many BI and
+analytics applications are designed to use
+this latter approach. This approach is often called pushing down a calculation
+to the database. Or just pushdown for short. Instead of pulling
+all the data into the application and doing
+the calculation there, the application pushes
+the calculation down to the SQL engine
+for it to perform. This avoids saturating
+the network connection between you and the SQL engine, and it avoids using
+lots of memory to hold all those millions of rows
+in the BI application. Even without the cost
+of the data transfer, most query systems have their own optimizations
+that can perform such operations far
+more efficiently in the SQL engine than
+in the BI application, so pushdown often gets you the result you're
+looking for much faster. However, for this approach to be faster and more efficient, you need to be sure that you
+are grouped and aggregated result is much smaller than
+the data in the table. So it's important
+to be careful about which columns or expressions
+you're grouping by. Grouping columns are usually
+categorical columns. A categorical column
+is a column that contains a limited number
+of possible values. The values in a column like this typically
+represent categories, hence the name categorical. A categorical column
+can have any datatype, including numeric and
+character string types, but the number of unique
+values in it must be limited. So for example, in the flights
+table the integer columns, year, month, and day are
+all categorical columns. There is a limited number
+of days per month, and months per year, and are only 10 years
+represented in the data. So each of those columns has a limited number of
+possible values. These columns would
+be suitable for use as grouping columns. The string columns,
+carrier, origin, and dest, are also
+categorical columns. There are only 22 carriers, and only a few 100 origin
+and destination airports represented in the data. So the number of values in
+those columns is limited. These columns would be
+suitable as grouping columns. Here's an example using three of these categorical columns as
+grouping columns in a query. The group by clause
+here is GROUP By year, month, day, and the results
+set has 3,653 rows. One row for each unique
+combination of year, month, and day that
+exists in the data. If you want to know how many rows a GROUP By query will
+return before you run it, you can check that by running
+a count distinct query. For example, SELECT
+COUNT(DISTINCT year, month, day) FROM
+flights returns 3,653. But keep in mind
+that if there were null values in these columns, count distinct would ignore them, and return a smaller number, so don't rely on this method to give you exactly
+the number of rows. If you're grouping
+columns have no values. Examples of non
+categorical columns in the flight table
+include the dep_ time, arr_ time, dep_ delay, and arr_ delay columns. These are numerical columns representing
+continuous quantities, times of day or
+numbers of minutes, and the possible values
+they could have is not inherently limited
+to a small number. These columns would probably be poor choices for grouping
+the flights table. Another example of
+a non categorical column is a character string
+column containing arbitrary text values,
+like customer comments. There is no inherent limit
+and the number of different values that could
+exist in a column like that, so it would be a poor choice
+for a grouping column. If you use a non-categorical
+column in a group by clause, you can get a result set with an arbitrarily large
+number of rows. For example, if you GROUP
+BY dep_ time and arr_ time, then the results set would have more than three quarters
+of a million rows, a results set with that
+many roads could saturate your network connection
+and use up lots of memory. If you need to group a table
+by a non-categorical column, there are some ways to limit the number of rows
+in the results. One way is to use a where clause to filter
+the data before grouping it. For example, this query
+adds a where clause to filter the table down to
+just a single day of flights, then instead of returning
+750,000 some rows, the query returns about 17,000, that's still a lot of rows
+but much less than before. Another way is to use binning. Binning is when you take a column of continuous
+numerical values, and divide it up into a limited
+number of groups or bins. You can do this using
+a conditional function or a case expression like
+in the example here. In this example,
+the case expression bins the departure times in the dep_
+time column into morning, afternoon, evening, and
+night departures with a fifth bin four flights
+with missing departure time. So the result will
+only have five rows.

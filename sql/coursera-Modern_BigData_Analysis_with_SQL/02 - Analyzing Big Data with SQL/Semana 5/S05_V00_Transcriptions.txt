@@ -1,0 +1,15 @@
+Welcome to week 5 of
+analyzing big data with SQL. So far in this course, you have learned about five of the clauses
+that you can use in a select statement. The SELECT clause, which specifies what columns should
+be returned to your query result. The FROM clause, which specifies where
+the data you're querying should come from. The WHERE clause, which filters the individual rows
+of data based on some conditions. The GROUP BY clause,
+which splits data into groups. And the related topic of aggregation, which reduces each group
+down to a single value. And the HAVING clause, which filters
+the data based on aggregates. In this week of the course, you'll learn about two more clauses,
+ORDER BY and LIMIT. These clauses enable you to
+control the arrangement and number of the rows in a result set. These two clauses, ORDER BY and LIMIT, are the final two clauses you
+will learn about in this course. So at the end of this week, you'll
+know all of the basic techniques for querying data from single tables. Then looking ahead in week six
+of the course the final week, you'll learn how to use SELECT statements
+to combine data from multiple tables.

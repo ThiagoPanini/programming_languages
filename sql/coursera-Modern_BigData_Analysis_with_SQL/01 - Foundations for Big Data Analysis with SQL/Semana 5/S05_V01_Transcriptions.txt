@@ -1,0 +1,64 @@
+I've heard it said that HiveQL, the SQL dialect of Apache
+Hive is not really SQL, but is MapReduce for
+people who know SQL. The statement is a little
+harsh and provocative, but it does make a point. Hive was first developed
+for clusters that at the time primarily ran the core components
+of Apache Hadoop, HDFS for files and MapReduce
+for data processing. Here's a quick review. MapReduce programs read
+and process data using multiple distributed tasks that run in parallel
+across minicomputers. A MapReduce program can, if needed shuffle
+intermediate results into some new grouping for another
+stage of distributed tasks. This illustration shows three distributive processing
+stages with two shuffles. But a Map Reduce
+program can contain one stage or
+any number of stages, which shuffles interpose
+between the stages. Finally, a Map Reduce
+program may write a potentially massive result
+back to storage, using multiple parallel write
+operations as shown here. Or, it may deliver a modest result to a display
+for you to examine. Hive adds a meta store describing some groups of
+files stored in the cluster as tables and describing fills in the file records
+as table columns. With this enhancement to the cluster data with
+table definitions, analysts familiar with SQL
+can write select statements. Hive automatically
+translates a select into a suitable
+MapReduce program. Hive can translate
+any SQL select statement you can write into MapReduce. Using Hive, you cannot
+process all possible data, but you can process all data
+that has suitable structure. You cannot write
+all analytic programs, just those that can
+be expressed in SQL. However, that capability, SQL statements
+against big data with structure enables
+analysts to cover a great portion of all big
+data processing needs. At one time, Facebook
+even publicly stated that fully 80 percent of all their big data processing
+jobs were Hive queries. From its beginning,
+Hive has translated SQL statements into
+MapReduce programs. Since late 2015, Hive
+has had the option to produce Apache Spark programs
+instead of MapReduce. Spark programs
+operate essentially in just the same way as I've
+described for MapReduce. In fact, I'm using
+the terms stage and shuffle from spark to properly describe
+both Map Reduce and spark. There are differences, in
+that Spark programs use more memory and reduce the use of disk drive
+for temporary storage, and so can improve
+response times for long running programs compared to the equivalent
+MapReduce programs. Hive remains an excellent choice
+when you want to process large amounts of
+data in a cluster using SQL, and especially when the data you produce will be large as well, and you want to store the result
+back in your cluster. For instance, you may
+have a table with a few billion rows
+and you want to produce a new scrubs copy
+of the table, with names converted
+to uppercase, and date and time formats
+made consistent, and rows with invalid foreign
+key references removed. This kind of data transformation
+is a common step in regular ETL pipelines
+for data warehouses. You can write a command
+for this in HiveQL easily and the cluster will run the resulting
+program reliably, whether it takes minutes, hours or even days to complete. Hive distributed programs
+are fault tolerant. Even if a worker machine
+in the cluster fails during the program run, the cluster will
+automatically redo any work lost using
+the remaining workers.

@@ -1,0 +1,125 @@
+In this video, I'll describe a different class of
+joins called outer joins. To demonstrate outer joins, I'll use the employee table and the offices table, both
+in the default database. These tables represent
+five different employees and four different offices. The relationship between
+these two tables represents which employees work
+at which offices. The columns with
+the corresponding values that can be matched
+to join the tables together are named office_id
+in both of the tables. So in this example, I'll refer to office_id as the join column. There are two important things
+to notice in these tables. First, there is
+one employee, Val, who has an office_id that does not exist in
+the offices table. Val has office_id e, but there is no office
+with office_id e. And second, there is one office, the Singapore office,
+that has no employees. The Singapore office
+has office_id d, but none of the employees have office_id d. Aside
+from these two rows, all the other rows in
+both of these tables have office_id values that do
+exist in the other table. It helps to use a Venn diagram
+to visualize this. You can see that
+the office_ids a, b, and c are in the inner region. They exist in both tables. But office_id e, that's Val's office_id, is found only in the employees table,
+the one on the left. And office_id d, for the
+Singapore office, that's found only in
+the offices table, the one on the right. Before I talk about outer joins, first recall what
+an inner join does. It returns only the rows with join column values
+in the inner region. In this example, office_ids a, b, and c are in this inner region; those values exist
+in both tables. So when the SQL engine
+combines these two tables, it identifies their
+corresponding rows by matching their
+office_id values, and it merges the rows
+according to these matches. And if it's an inner join, it returns only the rows that have matches. The rows that don't have matches, that's Val with office_id e and the Singapore office
+with office_id d, those are not returned
+by an inner join. Outer joins handle
+non-matching rows differently. There are three types
+of outer joins, and each one handles non-matching rows in
+a particular way. In a left outer join, if there are rows in
+the left table with a join column value that does not exist in
+the right table, it returns them anyway. So in this example, a left outer join will include the employee
+Val in the result even though Val's
+office_id, e, does not match any of the office_ids
+in the offices table. In a right outer join, if there are rows in
+the right table with a join column value that does not exist in the left table, it returns them anyway. So a right outer join will include the Singapore
+office in the result, even though its
+office_id, d, does not match any of the office_ids
+in the employees table. And finally, in a full outer join, if there are rows in
+either of the tables with join column values that don't
+exist in the other table, it returns them anyway. Now let's look at
+the SQL syntax for these three types of outer joins and see what exactly they return. The syntax is the same
+as for an inner join, except that you replace
+INNER with LEFT OUTER, RIGHT OUTER, or FULL OUTER. Here's a left outer join query, combining these two tables,
+employees and offices. Notice in the FROM clause that employees is the table on the left side of the keywords
+LEFT OUTER JOIN, and offices is
+the table on the right. And notice that the result 
+set that includes Val, even though there's
+no match between Val and any of the offices. In a left outer join, non-matching rows from
+the left table are returned. In the result row
+representing Val, notice how the city
+value is NULL. The city column comes from the offices table, but since
+there's no office for Val, all the values that
+would have come from the offices table are
+NULL in this row. The office_id for Val also shows up as
+NULL in the result. That's because I used
+o.office_id in the SELECT list. If I change this to e.office_id, then that value will come from the employees table,
+so it's not NULL. In outer joins, you should
+always consider which table the join key columns in
+the result set are coming from. Forgetting about this
+can cause confusion. Next is the right outer join. The syntax is the same, except it's RIGHT
+instead of LEFT. Notice this time that
+the Singapore office is included in the result set even though none of
+the employees work there. In a right outer join, non-matching rows from
+the right table are returned. In the result row
+representing Singapore, the columns that come from the employees table, like
+empl_id and first_name, are NULL since there's no employee that
+matches this office. And office_id is also NULL
+because I used e.office_id in
+the SELECT list. If I change this to o.office_id, then it's not NULL; It shows the value from
+the offices table. In left and right outer joins, the order of the table references in the FROM clause does matter, because the one and only difference between
+these two types of outer joins is which table has its non-matching rows
+included in the result. Is it the one on the left side or the one
+on the right side? That's the only difference. In fact, right outer joins
+are very rarely used. Most people prefer to always use left outer joins, and
+just list the table with the non-matching rows
+that you want to return on the left side in
+the FROM clause. The third and final type of outer join is
+the full outer join. Again, the syntax is the same except you use the keyword FULL. And notice how the rows
+representing the employee Val and the office in Singapore are included
+in the result set. In a full outer join, non-matching rows from
+both tables are returned. By far the most common
+type of outer join you'll see in the real world
+is the left outer join. When you're joining
+two tables together, typically one of them
+is the main table, the one that represents the items or the units
+that you're analyzing. Often, you'll want all the rows from that main table
+to be included in the result, irrespective
+of whether they have matches in the other table. The most common thing to
+do in that case is specify the main table on
+the left side of the join and use
+a left outer join. For example, here's
+a join query that answers the question:
+How many employees work in each city? The main table in this join
+is the offices table because the unit of analysis
+in this question is city, and the city values are
+found in the offices table. So the offices table is on
+the left side of the join. If you used an inner join here, the row representing Singapore would be excluded
+from the result. Using a left outer
+join includes it, and the aggregate expression COUNT(e.empl_id)
+returns 0 in the row for Singapore. Depending on how a result
+set like this was used, it could be really important to include the non-matching row even though its count is zero. Excluding it could cause an oversight or
+a misinterpretation. Another common use of
+outer joins is to identify and return only the
+non-matching or unmatched rows. You can do this by adding a WHERE clause to filter
+the joined result set to include only the rows that have a NULL value indicating
+that there was no match. Depending on how you write the Boolean expression
+in the WHERE clause, you can return
+the unmatched rows from the left table or from the right table or
+from both tables. This is useful for identifying inconsistencies or anomalies
+in related tables. Like in the examples
+I showed here, maybe Val actually works
+in the Singapore office. So Val's office_id is
+really supposed to be d not e. Identifying that inconsistency could enable you to get it fixed. Some SQL engines do not support all three types
+of outer joins. MySQL supports left and
+right but not full. Some others only support left. Hive, Impala, and PostgreSQL
+do support all three. Also, many SQL engines
+allow you to leave off the OUTER keywords. So you can just write LEFT JOIN, or RIGHT JOIN, or FULL JOIN. I prefer to include
+the OUTER keyword just to be fully explicit about
+what kind of join it is.

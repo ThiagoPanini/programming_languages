@@ -1,0 +1,5 @@
+Score: 0.8672887086868286	 Topic: 0.117*"broccoli" + 0.116*"banana" + 0.076*"cute" + 0.072*"look" + 0.071*"hamster"
+Score: 0.8909890651702881	 Topic: 0.117*"broccoli" + 0.116*"banana" + 0.076*"cute" + 0.072*"look" + 0.071*"hamster"
+Score: 0.8592591285705566	 Topic: 0.158*"kitten" + 0.095*"sister" + 0.095*"yesterday" + 0.095*"adopt" + 0.094*"chinchilla"
+Score: 0.8966621160507202	 Topic: 0.158*"kitten" + 0.095*"sister" + 0.095*"yesterday" + 0.095*"adopt" + 0.094*"chinchilla"
+Score: 0.918662965297699	 Topic: 0.117*"broccoli" + 0.116*"banana" + 0.076*"cute" + 0.072*"look" + 0.071*"hamster"

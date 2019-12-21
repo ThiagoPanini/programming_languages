@@ -1,0 +1,48 @@
+When you're using comparison
+operators in a boolean expression, it's important to pay attention to
+the data types of the operands. The left and right operands don't need
+to have exactly the same data type, but both operands should have the same
+high level category of data type, like both numeric or
+both character string. For example, it's okay to have an integer
+on one side, and a decimal number on the other, like this, 1=1.0. Integer and
+decimal are compatible data types and this expression will return true. When the operators do not have
+the same high-level data type, different SQL engines do different things. For example, the digit 1, in a coded
+string, equals the integer value 1. Comparing these two values requires
+converting them to a common data type to enable an apples to apples comparison. Some SQL engines, like Impala, will not automatically
+perform this type conversion. So a query with an expression
+like this in it will fail. To get the query to succeed
+you would need to explicitly cast the left operand to a numeric type,
+or the right operand to a character string
+type, as described in an earlier video. But other sequel engines including Hive
+will perform and implicit cast and the query with an expression
+like this will run successfully. But it's hard to understand exactly what
+is happening in implicit casts like this. Is the left operand being
+converted to a number for comparison purposes or
+the right operand to a string? Unexpected things can happen
+with automatic type conversion. And it's better not to
+leave anything to chance. So you should explicitly cast
+operands to the same high level category of data type before using
+comparison operators to compare them. Refer back to the video about data type
+conversion in week two of this course, if you need a refresher on how to do this. Also, when you're working with
+decimal data types in SQL, and in particular with floating point numbers, some strange things can happen
+when you use comparison operators. For example,
+one-third represented as a decimal number is 0.3333, infinitely repeating. But of course, you can't write infinitely
+many digits after the decimal, you need to stop somewhere. Nor can a computer store infinitely
+many digits after the decimal. So how many digits do you need? How many threes do I need for a SQL engine to say that 0.3333 and
+so on is equal to one third. With Impala the expression one
+third equals 0.3333 with four threes after the decimal,
+that evaluates to false. But if you put 20 threes after
+the decimal then it evaluates to true. Somewhere on the far
+right side of a number like 0.3333 with arbitrarily many threes. Somewhere in the smallest decimal places, SQL engines will start to ignore
+differences when comparing numbers. This is necessary because values like
+one third can never be represented with perfect precision regardless of
+how many decimal places you have. But it's hard to know exactly how far into
+the less significant digits where a SQL engine will start to
+ignore the differences. One solution is to use rounding to make
+comparisons like this less ambiguous. One-third rounded to the fourth
+decimal place is equal to 0.3333, with four 3s after the decimal. An upcoming video shows another
+possible work around for this. And the next course in this
+specialization goes into more detail about the unexpected behaviors that
+can happen with floating point values. But for
+now just keep in mind that weird stuff can happen in the least significant digits. And use rounding to avoid
+ambiguous comparisons.

@@ -1,0 +1,34 @@
+When a table has a "foreign key," it means that 
+a column refers to some other "primary key." Look at these two tables. Now the toy table has a new column, maker_id. Looking at the data, I hope you can guess that the maker_id column 
+refers to the id column in the maker table. You can read the two tables together to see 
+the name and city of the maker of each toy. When you have multiple tables, you can always single out a specific column by writing its table name, then a period, then the column name. Since both tables have a column named id, you can use their long names, toy.id, and maker.id to be clear. You can always use these longer names if you like, 
+not just when it would be unclear. So here the maker table has primary key maker.id, and the toy table has foreign key toy.maker_id, which refers to maker.id. The design of the two tables 
+can be presented like this. The note for the maker_id column 
+of the toy table states that this column is a foreign key, 
+and that it refers to the id column in the maker table. Or in other words
+toy.maker_id refers to maker.id. Foreign key columns are always NOT NULL, and what this foreign key property means is that any value in the maker_id column of the toy table *must* appear 
+in the id column of the maker table. Whenever you attempt to INSERT a row in the toy table, the value you supply for the maker_id is checked against the maker table, and your row 
+will be accepted *only* if the value is found. So, by this design, your system implements a rule: every toy in the database 
+must have a maker in the database. In the last video I said that 
+a primary key uniquely identifies a row in a table, and that it can be 
+a single column or a "set of columns." Here's an example of a multiple-column key, 
+called a "compound primary key." The unique identifier of a row 
+in the shoe_at_store table is not one column, but the combination of shoe_id and store_id. These two columns together comprise a "compound key." They are both NOT NULL columns, and the combination of the two must always be unique for each row in the table. Notice that each column of this compound key 
+is itself a foreign key: the columns refer to the primary keys 
+in the other two tables. You can see that the price column of the 
+shoe_at_store table tells you not the generic price of a shoe, but the price 
+of a shoe at a particular store. Looking at all three tables, you can see that the Women's Classic Ugg boot sells for one price at Boot Place and another price at Bear Foot. The shoe and store tables have designs 
+similar to the ones you've seen before: The design of the shoe_at_store table has a compound primary key, containing two foreign keys. Remember, I said in the last video 
+the table can have at most one primary key. So the note PK for the shoe_id and the store_id columns tells you that these form a 
+compound primary key. They are both NOT NULL and the 
+combination of shoe_id and store_id values must always be unique in the table. The overall design across these three tables 
+might be visualized like this. This gives you a big picture look, above your table designs, to your overall database design. You can see at a glance that the 
+shoe_at_store table uses a compound key to represent the combination 
+of shoes and stores in your data. You can expect to find data about shoes at a store, like the price or available inventory, or you can go to the shoe table to find out more about a particular shoe style, or go to the store table 
+to find out about store details. A SELECT statement that uses these tables 
+in combination is called a JOIN query, and you'll see in the next course 
+how easy SQL makes it for you to write JOINs and work with 
+these table combinations. This use of compound keys to place a table 
+"between" other tables is easy to do. It's not always the best way to set up your database, but it can sometimes be suitable, giving you a clear organization and 
+predictable ways to find information. Here's an illustration of another example. I'm not going to discuss this database in detail here, but I think you can see what it represents, 
+and this kind of design is called, nicely enough, a star schema.

@@ -1,0 +1,131 @@
+So the WHERE Clause takes
+all the rows in a table, checks each row against
+some conditions and returns only the rows in which the conditions are true. The way that you specify
+these conditions in the WHERE clause is
+with an expression. Recall what you learned about expressions in the previous
+week of the course. When you learned how to use
+them in the SELECT list. An expression is a combination
+of literal values, column references,
+operators and functions. When a SQL engine
+evaluates an expression, it produces a column of values. When you use an expression
+in the SELECT list, that column of values is returned as a column in the results set. You can use one or
+more expressions in the SELECT list
+separated by commas. These expressions can produce columns with different data types including numeric columns and
+character string columns. When you use an expression in the WHERE clause it is not
+returned in the results set, instead it is used to determine
+which rows are returned. You can use
+only one expression in the WHERE clause not to multiple expressions
+separated by commas. The expression must evaluate
+to a single column of Boolean values also
+called logical values. These are true and false values. Only the rows in which the
+expression evaluates to true, are returned in the results set. I will demonstrate this
+with some examples. First recall the question
+from the previous video. Which games are
+priced at under $10? Looking at the columns in the games table you can see that the column with price
+information is named list_price. Once you know that, it's straightforward to express this question in the form of an expression that returns true or false for each row
+in the games table. The expression is simply
+list_price less than 10. To make this Boolean
+expression into a WHERE clause you simply put the keyword
+WHERE before it, WHERE list_price less than 10. But you can't execute
+a WHERE clause by itself. It needs to be part of
+a complete SELECT statement. So, first I'll add
+the FROM clause, to specify which table
+the data should come from, FROM fun.games. Then I'll add the SELECT
+clause to specify what columns should be
+returned in the results set. The only column I really want to return is the name column. So I'll make it SELECT name, and now have a complete
+SELECT statement including a WHERE clause. When I execute this statement, the results set
+contains one column, name and two rows with
+the values Clue and Candy Land. So those are the only games in this table priced below $10. It would be nice to see what the list prices are
+for these two games. We know they're
+both less than $10, but we don't know
+exactly what the prices are. So I'll add the list price column to the SELECT list
+after the name column. That's also returned
+in the SELECT list. The choice of which columns you include in the SELECT list is totally separate
+from the choice of which columns you evaluate
+in the WHERE clause. You can select star or
+select whatever you want independent of what columns are in the expression
+in the WHERE clause. Here's another example, which games were invented
+by Elizabeth Magie? The expression to test this is, inventor equals
+'Elizabeth Magie'. In a WHERE clause inside
+a complete SELECT statement its, SELECT name FROM fun.games WHERE inventor equals
+'Elizabeth Magie'. The result shows that it's
+the one game monopoly. A third example, which games are suitable for
+a seven-year-old? The games table
+has a column named min_age which represents
+the minimum age for a player. So for a game to be suitable for a player age seven the value in this min age column must be less than or equal to seven. Making this into
+a complete SELECT statement, its SELECT name, min_age FROM Fun.games WHERE min_age less than
+or equal to seven. The result shows it's
+just one game Candy land, that's suitable for
+players as young as three. You'll learn more about these comparison operators
+like less than and less than or equal to you in another video later in
+this week of the course. The questions I posed at
+the start of these examples, were all very simple. It didn't take a lot of hard thinking to figure
+out how to write an expression in the WHERE clause to answer each of
+these questions. But in the real world things
+are rarely so simple. Often, the hardest
+part of writing a WHERE clause is translating
+human language with its frequent ambiguities and possibility for
+misunderstanding into an unambiguous Boolean expression that answers the
+question as intended. As a data analyst
+the questions you're asked to translate into
+SELECT statements, will often lack
+sufficient detail and clarity. You'll often need to ask
+for clarification or make some reasonable assumptions
+and then clearly communicate those assumptions
+when you share your result. You'll also need to
+be sure you're using the right columns in the right tables to
+answer the question. Here are some ways that my attempts to answer
+the questions in the examples I just showed
+could have been confounded. The first question was, which games are
+priced at under $10? I answered this question
+by querying the Fun.games table and filtering
+on the column list_price. But what if the person
+who asked this question intended for me to answer
+it using a different table? There's a table named inventory
+in the fund database that has information about
+the board games that are in stock at
+a couple of shops. There's a column named
+price in this table, representing
+the price the game is being sold for at each shop. Maybe the person who
+asked me the question intended for me to query
+this inventory table. This would give a
+different result set. Only the game Clue, in the shop named Dicey, is for sale at a price
+less than $10. The second question was, which games were invented
+by Elizabeth Magie? I was lucky with
+this question because the inventor's name
+in the question, perfectly matched the value in the inventor column
+in the games table. But all kinds of things
+could have gone wrong. Elizabeth Magie also
+went by Lizzy Maggie and Elizabeth J. Maggie, and
+later she got married and changed her name to
+Elizabeth J. Philips. If I heard the question
+verbally maybe I would have thought the last name
+was spelled MCGEE. Circumstances like this
+could have prevented me for writing a select statement that returned to the intended result. Obviously, since I'm working with a table that has only five rows, errors like this
+seem easy to avoid. I can just glance at
+the table and figure it out. But that would not be the case if the table had
+millions of rows. The third question was, which games are suitable
+for a seven year old? To answer this question, I evaluated the min age column
+in the games table. What if there was also a max age column and I had
+neglected to notice it? Candy Land is
+a pretty juvenile game. Some retailers describe
+it as a game for players age three to six. If there were a max age column with the value six
+for Candy Land, then the SELECT
+statement I wrote, would incorrectly
+identify Candy Land as suitable for a seven-year-old. To get the correct answer
+in that case, I would need to modify the expression in
+the WHERE clause, to evaluate both the min
+age and max age columns. Then the result would
+indicate that none of these games are suitable
+for a seven-year-old. You'll learn about
+logical operators like the 'and' in this example in
+another video later this week. These allows you to combine multiple conditions into
+a single Boolean expression. As if these examples
+weren't enough, you'll also need to consider the possibility of
+missing values in the data and all the
+misinterpretations that can arise from that. You'll learn more
+about that in one of the lessons this week. So in this week of the course, as you learn how to write
+expressions to specify different kinds of
+filtering conditions in the WHERE clause, don't forget to always carefully interpret
+the questions you're asked, and watch out for possible ambiguities
+and misinterpretations.

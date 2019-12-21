@@ -1,0 +1,116 @@
+In this video, you'll
+learn how to use the HAVING clause in
+a SELECT statement. The purpose of the HAVING clause
+is to filter groups in the data using criteria that are based on aggregates
+of the groups. The HAVING clause
+is intended to be used with the GROUP BY clause. It must come after the GROUP BY clause in
+a SELECT statement, and it's processed after
+the GROUP BY clause. So the rows that it
+filters represent groups. I'll demonstrate this
+with an example. This query, groups
+the inventory table by shop. For each shop it
+returns one row with the name in the first column and the sum of
+the prices times quantity, the total retail value
+of the games in that shop in the second column. Say you want to filter
+these results to return only the shops that
+have an inventory with a total retail value
+greater than $300. This filtering condition, sum of price times quantity
+greater than $300, is not a condition on the
+individual rows of the table, it's a condition based on
+an aggregate for each group. To filter based on aggregates, you use the HAVING clause. The syntax of
+the HAVING clause is just like the syntax
+of the WHERE clause. After the keyword HAVING, you use a Boolean expression. In this example,
+the expression is sum of price times quantity
+greater than 300. The result shows that
+only the Board 'Em shop has some of price times quantity
+greater than 300. In other words,
+only the Board 'Em shop has an inventory with the
+total retail value greater than $300. The Boolean expression
+in the HAVING clause can be more complex than
+the simple one in this example. Just like in the WHERE clause, you can use
+logical operators like NOT to negate the truth
+of a Boolean expression, and AND or OR to combine multiple expressions into
+a single Boolean expression. For example, if
+you wanted to know which shops have
+an inventory with the total retail value
+greater than $300 and have at least
+three different games in stock, then you could modify
+the Boolean expression to add AND COUNT * greater
+than or equal to 3. In this example, this returns
+the same results because the Board 'EM shop has
+three different games in stock. If you need a refresher on the syntax of
+Boolean expressions, you should review what you've learned about the WHERE clause. The only major difference
+here is that you can use aggregate functions
+in the HAVING clause whereas you cannot use
+them in the WHERE clause. You can use both a WHERE clause and a HAVING clause in
+a SELECT statement. Entering some types
+of questions about the data requires using both. For example, you might want
+to answer the question, which shops have at least
+two different games and stock that costs
+less than $20? To answer this question, you first need to filter
+the individual rows to get only the rows representing games with a price under 20. To do this, you use
+the WHERE clause, WHERE price is less than 20. The WHERE clause comes
+before the GROUP BY clause. Then you need to
+filter the groups to get only the groups that
+have two or more rows. To do this, you use
+the HAVING clause, HAVING COUNT * greater
+than or equal to 2. That must come after
+the GROUP BY clause. The result shows that only the Dicey shop has
+two different games under $20. The Board "Em shop has zero
+or possibly one because we don't know the price of Candy Land in the Board
+'Em shop. It's null. When you're working
+with the HAVING clause, remember what you
+learned about how the WHERE clause
+handles null values, and how aggregate functions
+handle null values. Those same points
+about NULL values apply when you're using
+the HAVING clause. Remembering them will help you to avoid misinterpreting
+your results. One important point to
+remember about NULL values, is that if the
+Boolean expression in the HAVING clause evaluates to NULL for a particular group, then the row representing
+that group will not be included in
+the results set. Only the rows for which
+the expression in the HAVING clause evaluates to true are included in the results. Rows for which it evaluates to false or to NULL are omitted. Recall that this is the same way that the WHERE clause works. Often when you write a SELECT statement
+with a HAVING clause, you will use the same
+aggregate expression in both the select list and
+in the having clause. That was the case with
+the first SELECT statement I showed in the video. The aggregate expression, sum of price times quantity is used
+in both of these places. But you're not required to use the same aggregate expressions
+in these two places. You could use
+no aggregate expression at all in the SELECT list, like in this example,
+that works fine. Or you can use different aggregate
+expressions in the SELECT list than you
+do in the HAVING clause. In this example, there's
+a COUNT * in the SELECT list, but the HAVING clause still uses some of
+price times quantity. This also works just fine. You can use as many different
+aggregate expressions as you want in the SELECT list, like in this example, that uses four different ones. Aggregate expressions in
+these two different places have two different purposes. Their purpose in
+the SELECT list is to control what's in the columns
+of the result set. Their purpose in
+the HAVING clause is to control which of the rows is
+returned in the results set. There is no reason that
+the expressions need to be the same in these two places. But the aggregate expressions
+in these two places both use the groups defined
+in the GROUP BY clause. The GROUP BY clause controls all the groups that all the aggregate expressions
+aggregate over. Often you'll want to include the aggregate
+expression that you use in the HAVING clause in
+the SELECT list as well. So you can see the values in
+the column you filtered by. In this example,
+the query filters by sum of price times quantity. It's good to see those sum of price times quantity values for the rows that are
+included in the result set. So some of price
+times quantity is also used in the SELECT list. But it's inconvenient
+to have to repeat the same expression in
+these two different places. So some SQL engines provide a shortcut that you can use
+to avoid this repetition. With some SQL engines, you can specify the aggregate expression
+in the SELECT list, give it an alias, and then use that alias
+in the HAVING clause. That way you do not need to repeat the aggregate
+expression twice. In this example,
+the aggregate expression, sum of price times
+quantity is given the alias trv for total retail value. That alias is used in the HAVING clause as an operand in
+the Boolean expression, trv greater than 300. In this example, the aggregate
+expression is so short that using the HAVING clause doesn't really make
+the query any shorter. But if the aggregate
+expression were long and complex, then it would. This shortcut works
+with Impala, Hive, and MySQL but not with PostgreSQL and not with
+some other SQL engines. If you're using
+a different SQL engine, trying to see if it works.

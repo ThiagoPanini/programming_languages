@@ -1,0 +1,72 @@
+The Select statement is the most important part
+of the SQL language. The options for what
+you can do with a Select statement
+are so extensive, that Select forms it's own category of SQL statements
+called queries. In this video, I'll
+show you how to run some very simple Select
+statements and view the results. The purpose here
+is not for you to understand what's possible
+with the select statement. We have the whole rest of
+the course to do that. In this video, you
+should just focus on the mechanics of running select statements and
+viewing the results. On the VM we're using
+for this course, you will write and run
+select statements in Hue, using the Hive or
+Impala Query Editor. These queries will execute
+on Hive or Impala, and you'll view
+the results in Hue. In the Impala Query
+Editor in Hue, I'll enter and run a simple query to return
+all the data in a table. The current database is Fun. I know there's a table named
+games in this database. To return all the columns and all the rows from this table, I'll enter the query, "Select star from game." The star means all the columns. Notice the editor has
+some auto-complete features that suggest available database
+table and column names, and other query syntax. I'll press the "Execute" button, to run this query. The data that's returned
+by a SQL statement is called the result set
+or just the result. This result set has all five rows and eight columns
+from the games table. You can see that
+this table contains some information about
+five different board games, Monopoly, Scrabble, Clue,
+Candy Land, and Risk. You can see the columns ID, name, inventor, year, min age, min players, max players,
+and list price. It's important to pause here
+for a minute to talk about the order of the columns
+and rows in the result set. The order of
+the columns in a result set is determined by your query, or by the structure of
+the table you're querying. There's nothing random about
+the order of the column. In the example I just showed, the query returned
+all the columns. So the result set
+showed them all. Their order from
+left to right was determined by the structure
+of the games table, ID, name, inventor and so on. Recall that in
+the previous video, when I ran the statement, "Describe games" to see what columns were
+in the games table, that returned the names
+of the same column, in the same order
+from top to bottom, ID, name, inventor, and so on. I also have the option to specify in the select statement
+which columns to return, and what order I want them in. I'll change, "Select star" to "Select name, year, inventor". Then, when I run this query, the results set has just these three columns
+in the order I specify, name, year, and inventor, from left to right. So the order of the columns in a result set is deterministic, but the order of the rows is not. When you run
+a select statement using a distributed SQL engine, the order of the rows
+in the results set is arbitrary and unpredictable. You could run
+the exact same query twice on data that
+has not changed, and get the rows in
+a different order each time. The result overall
+will be the same, but the order of
+the rows might vary. So if you run this query, don't be surprised
+if the rows you see are in a different order
+than when I ran it. This is normal and expected when you're using
+a distributed SQL engine. But you also shouldn't be
+surprised if the order of the rows in your results
+are the same as mine. On the VM for this course, these distributed
+SQL engines, Hives, and Impala, are not actually distributed across
+multiple computers or multiple processors. We configured the VM to use just one processor
+on your computer, and this takes away
+much of the randomness that causes the rows to
+get shuffled around. I'll talk more about row order
+later in the course. But for now, you should
+just remember that the order of the rows
+is arbitrary. So at this point in the course, you should have a basic sense
+of how to enter and run a simple SQL statement using
+Hive or Impala through Hue. In the next lesson, we'll talk about how Hue is
+not the only application that provides a SQL interface to Hive and Impala. There
+are many others. Of course, there are
+many other SQL engines too. Then in next week's lessons, we'll go beyond
+the very simple SQL statements I showed in this lesson, and we'll begin to reveal
+the full extent of what's possible with
+the select statement.

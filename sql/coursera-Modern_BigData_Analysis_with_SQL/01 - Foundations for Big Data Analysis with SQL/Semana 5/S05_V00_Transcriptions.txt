@@ -1,0 +1,18 @@
+I hope you feel you've
+benefited from the work on database concepts you've
+done in this course. As long as you work
+in the areas of Databases and Data Analysis, you'll find these concepts
+and terminology useful, even as new technologies arise and overcome
+limitations present today. This week, my focus is on the two technologies you will use hands-on throughout the rest
+of this specialization. Apache Hive and Apache Impala. These tools have been in widespread production use
+for a few years now enabling SQL approaches
+to analytic work in big data. I'll talk a little bit about their background
+and design concepts especially how they fit
+onto big data stores. But I expect you're more than ready for some hands on activity. This week you'll
+install and begin to use the Hands-on Environment. You'll interact with
+data using Hue, a web-based interface to
+Hive Impala and all your data. You'll begin to explore
+new datasets in just the way you would do
+on any new job or project and you'll finish by
+creating a report of the sort you should find useful in any new
+data environment

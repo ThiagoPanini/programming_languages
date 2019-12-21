@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+</head>
+
+<title>Salvando ContaCorrente</title>
+<h1>Salvando Conta Corrente</h1>
+<br />
+
+<form id="contacorrente" action="inserir" method="POST">
+
+<div class="form-group">
+<label for="numero">Número</label>
+<input type="text" class="form-control" id="numero" name="numero" placeholder="Digite o número da Conta"/>
+</div>
+<br />
+
+<div class="form-group">
+<label for="agencia">Agência</label>
+<input type="text" class="form-control" id="agencia" name="agencia" placeholder="Digite a agência da Conta"/>
+</div>
+<br />
+
+<div class="form-group">
+<label for="descricao">Descrição</label>
+<input type="text" class="form-control" id="descricao" name="descricao" placeholder="Breve descrição da Conta"/>
+</div>
+<br />
+
+<div class="form-group">
+<label for="ativa">Situação</label><br />
+<input type="radio" name="ativa" value="true">Ativa<br />
+<input type="radio" name="ativa" value="false">Desativa<br />
+</div>
+<br />
+
+<div class="form-group">
+<label for="variacao">Variação</label>
+<input type="range" class="form-control" id="variacao" name="variacao" min="0" max="10" step="1"/>
+</div>
+<br />
+
+<input type="reset" value="Limpar"/>
+<button type="submit" class="btn btn-success">Salvar</button>
+</form>
+
+
+
+
+

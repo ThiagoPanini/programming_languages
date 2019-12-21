@@ -1,0 +1,25 @@
+/*****************************************************
+	     	 Semana 1 - Programa 2 (PDF)
+	  	Praticando SAS no SAS Studio
+******************************************************
+   Continuando a familiarização com o SAS no SAS
+Studio, neste segundo programa vamos:
+
+1) Ler os dados (data)
+2) Visualizar e agrupar os dados (proc means)
+3) Definir agrupamento (mean, sum, maxdec, var, class)
+******************************************************/
+
+* 1) Lendo os dados;
+data work.shoes;
+	set sashelp.shoes;
+	NetSales = Sales - Returns; *Criando nova coluna;
+run;
+
+* 2) Agregando dados em uma visão de média e soma;
+proc means data=work.shoes mean sum maxdec=2; 
+	*Acima, a definição de agregração por média e soma (2 casas decimais);
+	*Abaixo, a definição das variáveis;
+	var NetSales; 
+	class region;
+run;

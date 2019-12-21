@@ -1,0 +1,67 @@
+
+/* Estilos Gerais */
+
+.header { 
+  width: 100%;
+  height: 80px;
+  background: #B22222;
+  z-index: 10;
+  position: fixed;
+  top: 0;
+}
+
+.header_black {
+  width: 100%;
+  height: 5px;
+  background: #000;
+  z-index: 1px;
+  top:0;
+  position: fixed;
+  
+}
+
+.header_menu { 
+  text-align:  right;
+}
+
+.header_menu ul li {
+  display: inline-block;
+  margin-top: 30px;
+  margin-left: 20px;
+  
+}
+
+.header_menu ul li a {
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: bold;
+  letter-spacing: .1em;
+  font-size: 14px;
+  padding: 10px 0;
+}
+
+.header_menu ul li a:hover {
+	color: #000;
+}
+
+/*Slide*/
+
+.slide { 
+  width: 100%;
+  margin-top: 60px;
+  background: url("../img/teste.jpg");
+  height: 360px;
+  background-size: cover;
+  text-align: center;
+  padding-top: 160px;
+	
+  
+}
+
+.slide h1 {
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  
+}
