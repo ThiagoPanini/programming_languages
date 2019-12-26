@@ -1,0 +1,55 @@
+Welcome to this course, Managing Big Data in
+Clusters and Cloud Storage. I'm Ian Cook. I'm Glynn Durham. This course is the third in
+the specialization, Modern Big Data Analysis
+with SQL from Cloudera. In the first course, I teach the key concept
+behind relational databases, SQL or SQL, and big data. In the second course, I teach the fundamentals of
+the SELECT statement in SQL. The statement you
+use to query data. In both of those courses, we emphasize open-source
+distributed SQL engines that can query extremely large
+datasets, Hive and Impala. But before you can run SQL
+queries using Hive or Impala, you need to have
+some data to query. The data needs to be loaded onto a cluster or in cloud storage, and it needs to be structured in tables with rows and columns. Data doesn't usually load
+and structure itself, somebody needs to do
+the work to get it that way. If you have someone else
+that does that work for you, congratulations.
+That's great. Maybe you don't need
+to take this course. But if you'd like to gain the
+skills to do it yourself, then you're in the right place. That's what we'll teach
+you in this course. Knowing how to manage big data in clusters
+and cloud storage, is a valuable and
+marketable skill. If you're working
+as a data analyst, knowing how to move data around and create
+your own tables, gives you a lot more power, more autonomy, and
+more career opportunities. These are essential skills
+for data engineers, data scientists, and
+database administrators today. Managing large-scale data in
+a modern data warehouse is very different than
+it was in the age of traditional relational
+database systems. The information and the
+skills we'll teach you, are in growing demand today. The skills we teach
+in this course and in the other courses
+in this specialization, are also designed to provide
+excellent preparation for the Cloudera Certified Associate Data Analyst Certification Exam. Earning this credential
+is a great way to stand out and be recognized
+by potential employers. You can earn it by taking
+a hands-on practical exam using the same SQL engines
+that we use throughout this specialization,
+Hive and Impala. If you're interested
+in this certification, you should take the Honors
+track of this course. In the Honors lessons, you'll learn some advanced skills for overcoming obstacles, like when your data
+has complex structure, or your queries take
+too long to run. These are skills you'll need to practice data management
+in the real world. If you have not already taken the first two courses
+in this specialization, we strongly encourage
+you to take them, unless you already have a solid grasp of
+the material they cover. Please go ahead now and
+read the next lesson item, review and preparation,
+which gives a whirlwind review of
+those two courses. That should help you
+decide whether to take them if you
+have not already. Maybe you're looking to elevate yourself from just querying data to loading and structuring data in
+clusters and cloud storage. Or maybe you're eager to update your database
+administration skills, and establish your credentials as a modern large-scale
+analytic database manager. This course and
+this specialization is part of will
+help you get there.

@@ -1,0 +1,70 @@
+In this course you'll learn
+to create tables for Hive and Impala and load data into them. But before you can create new tables, you'll need to see what
+tables already exists. The easiest way to do
+this is by using Hue. Hue is a web browser based
+analytics workbench that provides a user interface to Hive,
+Impala, and other tools. It's widely used in the real world and it's installed on the VM that
+we use in this specialization. If you completed the first and
+second courses in this specialization, you already learned how to use Hue,
+so some of this should be familiar. With the VM set up and running, you can
+access Hue by opening the web browser in the VM, and clicking the link for
+Hue in the Bookmarks toolbar. Hue includes a number of
+different interfaces. Many of which,
+you will not use in this course. There are just a few
+interfaces that you will use. Recall from the earlier courses
+in this special edition that one of the ones you do need
+to use is the table browser. Click the Menu icon in the upper left
+corner, then under browsers click Tables. Here in the table browser, you can click
+Databases to see what databases exist. You can see there are databases named default, fly, fun, toy, and wax. You can click the name of a database
+to see what tables are in it. I'll click fun. You can see that the fun database
+has tables named card_rank, card_suit, games, and inventory. Then you can click on
+the name of the table to see more details about that table. I'll click games. If you go to the Columns tab, you can
+see that this games table has 8 columns, id, name, inventor, year, mean age, mean players, max players,
+and least price. You can also click the sample tab to
+see a sample of the data in this table. So the table browser in Hue
+provides a convenient interface for browsing tables through simple point and
+click actions. And if you completed the first and
+second course in this specialization, you should recall it as well. In a big data environment
+where you're running Hive or Impala, the information about what
+databases and tables exist, and what columns are defined in them, is
+stored in something called the metastore. This is sometimes called
+the Hive metastore because of its origin as a part of Hive. So when you use Hue to browse the
+databases and tables that are available to Hive and Impala, Hue gets that information
+from the metastore and presents it to you. Recall that Hue also has an interface for
+running SQL queries on tables. Notice the BigQuery button
+in the top bar in Hue. When you click the right side of
+this button, a drop down menu opens. Under Editor, in the drop down menu,
+you'll see options for Impala and Hive. There are some other options below that. You can ignore those for now. I'll click Impala. And this opens up the query editor for
+Impala. The query editor for
+Hive is nearly identical. It says Hive at the top instead of Impala. But besides that, it looks the same. All the features I'll describe here are
+also available in the Hive query editor. When you're in the query editor, you can use this assist panel on the left
+side to browse the databases and tables. If the assist panel is hidden,
+you can click to show it. And you should make sure that the SQL mode
+is active at the top of the assist panel. Click this database icon to make
+sure that's the active mode. You can use the assist panel
+to see what databases exist. If you're already in one of the databases, you'll have to click this back arrow to
+go back to the list of all the databases. You can click the name of the database
+to see what tables are in it. If you click the name of a table,
+you'll see the columns in it. And you can click the letter i
+icon to the right of a table name to see more details about the table. This is all very similar to what you can
+do through the table browser I showed earlier in this video. Recall that Hive and
+Impala both access the same tables. These are two different engines operating
+on one set of underlying tables and data. So on the VM when you choose to
+use the Hive query editor or the Impala query editor,
+you’re simply choosing which SQL engine will run the queries on
+that shared set of tables. Sometimes people call these
+shared tables Hive tables because the information about them
+is stored in Hive’s metastore. But if you hear this terminology,
+Hive tables, it does not mean that those tables
+are available only to Hive. They're also available to Impala and
+to some other engines like Apache Spark. So if you're using a Hadoop cluster or a big data platform that's based on
+Hadoop, multiple engines and other tools can all access the shared tables
+that are defined in the metastore. However, there are other SQL engines
+that do not run in Hadoop environments. They do not use the metastore,
+they maintain their table structures and store their data in other places. For example on the VM, you might
+notice that we have two other SQL engines installed, MySQL and PostgreSQL. And you can run queries using these
+engines in Hue, but the tables and data that these engines
+use is totally separate. And in this course we will
+not use MySQL or PostgreSQL. We'll only be using Hive and Impala. In the upcoming weeks of this course,
+you'll learn how to create new databases and tables in Hue and how to modify or
+remove existing ones.
