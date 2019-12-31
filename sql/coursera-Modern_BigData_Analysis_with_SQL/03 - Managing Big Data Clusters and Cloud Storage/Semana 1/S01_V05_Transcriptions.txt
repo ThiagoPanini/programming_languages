@@ -1,0 +1,68 @@
+In addition to using
+HDFS for storage, you can store your data using cloud services such as
+Amazon web services, Microsoft Azure, or
+Google Cloud platform. Today, some companies store
+big data on-premises in HDFS, some store it in Cloud Storage, and some use
+a hybrid approach using both HDFS and cloud storage. The major reasons
+why companies use cloud storage are
+cost and scalability. Usually, it costs less to
+store some amount of data in cloud storage than it
+would to store it in HDFS. As the amount of data you need to store grows larger and larger, it's often easier to pay incrementally larger amounts of money to a cloud storage provider than it is to purchase new hard disks and new servers and install
+them in a data center. Amazon has many cloud services
+but their storage service is called S3 which is short
+for Simple Storage Service. S3 is the most popular
+cloud storage platform, and it's the one you
+will use in this course when you're using
+something other than HDFS. Hybrid Impala can use S3 very
+much like they use HDFS. So most of the time when
+you're querying a table, you won't even notice if
+the data is in S3 or in HDFS. S3 organizes data into buckets. Buckets are like the folders at the top or highest level
+of a file system. Buckets in S3 must have
+globally unique names. So if anyone else in the world is using a specific name
+for a bucket, you must pick a different name. Within a bucket, you can
+store files and folders. Technically, S3
+stores all the files in your bucket in
+a flat file system, and it simulates
+folder structures by using slashes
+in the filenames. But that's not something
+you need to be concerned with for this course. S3 is connected to the internet. The data you store in S3 can
+be accessed from anywhere. S3 provides ways to
+control who has access to the data though you
+can make it public or restrict access to
+certain users or networks. There is only one instance
+of S3 and it's operated by Amazon and runs across Amazon's
+data centers globally. HDFS, on the other hand, is a file system that
+exists on a Hadoop cluster. There are many
+incidences of HDFS. There's one on
+every Hadoop cluster. Data stored in HDFS is generally not accessible
+from everywhere. Access is usually restricted to specific private networks. The major way that S3 is
+different from HDFS is that S3 provides storage
+and nothing more. S3 cannot process your data. It can only store it and
+provide it when requested. HDFS, on the other hand, typically stores files on
+the same computers that also provide processing power
+to your big data system. So if you're using
+HDFS to store files, then the files on HDFS reside on the same computers where data processing engines
+like Hive and Impala run. When you run a query
+in Hive or Impala, if the data for the table you're querying is stored in HDFS, then Hive or Impala can
+routinely read that data off the hard disk on the computer
+where it's running. This is called data locality
+or just locality for short. The processing happens on the same location where
+the data is stored. If you store your data
+in cloud service like S3 and there is no data locality, Hive or Impala must
+fetch the data from S3 over the network
+before it can process it. This makes queries run
+a little bit slower, but nowadays the networks that connect
+data centers together are so fast that the difference
+is often insignificant. The readings in this course
+we'll show how to access S3 from the VM. But I want to point out to you now that when you're
+working on the VM, HDFS is local
+because we stimulate an entire HDFS cluster
+within the single VM. So you do not need
+internet access while using HDFS in this course. If you using S3 though, you will need
+a network connection. You also won't be able to browse S3 files using the
+Hue file browser. It currently requires you
+to have right access to a bucket if you want
+to browse it directly, and we are not able to provide write access to
+all Coursera learners. You have read access only to the S3 bucket you'll
+use for this course, but you can use Hue to work with Hive and Impala tables that
+use S3 for their storage.

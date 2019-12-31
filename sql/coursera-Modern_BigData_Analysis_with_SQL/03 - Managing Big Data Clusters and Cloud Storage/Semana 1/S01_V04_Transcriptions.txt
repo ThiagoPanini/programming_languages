@@ -1,0 +1,115 @@
+In the previous video, you learned how to use
+Hue to browse HDFS. Hue provides a web browser-based graphical user interface to HDFS. In this video, you'll
+learn how you can also browse HDFS from
+the command line. So if it's possible to use an easy graphical user
+interface to browse HDFS, why would you want to
+use the command line? Well, there are several reasons. Maybe you're just an old
+school computer nerd and you love the command line. If so, that's cool. But there are some other
+good reasons to use the command line to
+interact with HDFS. Entering commands is
+a more systematic way of accomplishing a task. If you can perform a task
+on the command line, that means you can
+also script it, automate it, schedule
+it, and more. By saving your
+commands in a file, you can effectively
+document the steps you performed and make
+the task reproducible. To interact with HDFS
+on the command line, you use the command hdfs dfs, followed by various commands
+and options and arguments. These are called
+HDFS shell commands or Hadoop file system
+shell commands. I'll demonstrate a
+few of these now. With the VM running,
+open the terminal. This is the command line for the Linux operating
+system on the VM. At the command line, enter hdfs dfs, followed by a command indicating
+what action to perform. For example, to list the
+contents of a directory in HDFS, You can use dash ls. This command ls derives
+from the word list. After dash ls, specify
+the directory path. For example, I'd like to see the contents of
+the Hive warehouse directory. So I'll specify
+/user/hive/warehouse/. The trailing slash is optional
+but I like to include it. It makes it clearer that this
+is a path to a directory. When I press Enter, you can see that the listing
+of the contents of that HDFS directory is
+printed to the screen. Besides the paths to the items in this directory shown in
+the rightmost column, this listing also shows whether the item is a directory represented by the letter d, or a file represented by a dash. The permissions, read,
+write and execute on the item for the owner,
+group and world. You'll learn more
+about HDFS permissions later in the course. This column, which
+you can ignore, it's related to symbolic links which are outside
+the scope of this course. The owner of the item, the group owner of the item, the size of the item in bytes which is zero if
+it's a subdirectory, and the date and time when
+the item was last modified. You can see there's a
+subdirectory here named orders. Recall that that's
+where the data for the orders table in
+the default database is stored. I'd like to list the contents
+of that subdirectory. So at the command line, I'll press the up arrow to recall the previous command and I'll add orders/ to
+the end of the path. I'll press Enter, and then you can see the listing
+of this directory. There's just one file
+in it, orders.txt. To print the contents of
+this file to the screen, you can use a different
+command after hdfs dfs. It's dash cat. This command cat derives
+from the word concatenate. After a dash cat, you specify the full path
+to a file in HDFS. For example, I want to look
+at that orders.txt file. So I'll specify /user/ hive/
+warehouse/orders/orders.txt. When I press Enter, the contents of that file
+are printed to the screen. The final hdfs dfs command I'll demonstrate in
+this video is dash get. You use this command
+to download or copy a file from HDFS to
+your local file system. I'll press the up arrow to
+recall the previous command. I'll replace dash
+cat with dash get. At the end of the command
+after a space, I'll add dot, indicating that I want
+to download this file to the current working directory
+in my local file system. Then after I press Enter, this file orders.txt
+is downloaded. If you have any experience
+with Linux shell commands, you'll recognize that some of
+these HDFS shell commands, ls and cat, are named after the analogous
+Linux shell commands. For example, I can
+use the ls command to list the contents of the working directory in
+the local file system. If I use the dash l option, which stands for long format, then it formats
+the listing similarly to the way the corresponding HDFS
+command formats it. In this listing, you
+can see the file orders.txt which I just
+downloaded here from HDFS. You can print the contents
+of this local file to the screen using
+the command, cat orders.txt. The output of this
+is identical to the output from the
+corresponding HDFS command. So many of these
+HDFS shell commands are directly analogous to
+Linux shell commands. But there are also
+many differences. For example, the hdfs dfs dash get command has
+no direct analog. Also, when you use
+an ls command to list the contents of a directory in your local file system, if you do not specify
+a directory path, then it lists the contents of the current working directory. But on HDFS, there is no concept of a current
+working directory. So what happens if you run hdfs dfs dash ls and leave
+off the directory path? Is it lists the contents of
+your Home directory in HDFS. Recall that on the VM, that's the
+directory/user/training. There's nothing in
+that directory at this time, so the command prints nothing. You should be aware that there is an alternate syntax for
+calling HDFS shell commands. Instead of hdfs dfs, you can use hadoop fs. These commands are synonymous. They do exactly the same thing. In this course, we'll
+be using hdfs dfs. So in this video, I showed a few ways
+to interact with HDFS from the command line
+using HDFS shell commands. Later in this course, you'll see how to use HDFS shell commands to
+perform other tasks like creating directories
+and copying data into HDFS. But in the meantime,
+please do not run any HDFS shell commands besides the ones I demonstrated
+in this video, the ls, cat and get commands. Running some of
+the other commands could cause the VM to behave in
+unexpected ways. As I showed, you can run these HDFS shell commands
+on the VM for this course. That's because
+the HDFS shell application is installed on the VM, and it's connected
+to the instance of HDFS that's running on the VM. But if you try to run
+these commands on your own computer
+outside of this VM, they probably will not work. You need to run
+these commands on a computer that's connected to
+a Hadoop Cluster. Often, this will
+be a gateway node, also called an edge node. A gateway node is
+a computer that provides an interface between
+the Hadoop cluster and the outside network. A gateway node
+typically does have the HDFS shell application
+installed on it, and it usually has tools like Beeline and Impala shell
+installed also. So you can run Hive and Impala queries from
+the command line. So if you're using
+a real-world Hadoop cluster, ask your cluster
+administrator how you can access the command line
+on a gateway node.

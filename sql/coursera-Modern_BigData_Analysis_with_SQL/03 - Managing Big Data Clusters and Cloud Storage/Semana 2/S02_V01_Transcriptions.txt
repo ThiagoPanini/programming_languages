@@ -1,0 +1,66 @@
+The create table
+statement creates a new table and specifies
+its characteristics. When you execute a
+create table command, Hive or Impala adds the table to the
+metastore and creates a new subdirectory in the warehouse directory in
+HDFS to store the table data. The location of
+this new subdirectory depends on the database in
+which the table is created. Tables created in
+a default database are stored in subdirectories directly
+under the warehouse directory. Tables created in
+other databases are stored in subdirectories under
+those database directories. The basic syntax of the
+create table statement, should be familiar
+to anyone who has created tables in
+a relational database. After create table, you optionally specify
+the database name. Then give the name
+of the new table, and a list of the columns, and their data types. If you omit the database name, then the new table will be created in the current database. If you're using Q, recall that the current database
+is the one that's selected in the active
+database selector. If you're using the command line,the current
+database is the one you specified when you launch to be aligned
+or Impala shell, or the one you specified in the most recent use command
+in the session. If you did not specify a current database in
+one of those ways, then the current database
+is the default database. The list of column names and data types is enclosed
+in parentheses, with each name type pair given as column name, space, data type. The name type pairs are
+separated by commas. You can optionally include
+line breaks after the commas, and spaces to indent the lines to break up the list
+across the multiple lines. This makes it more readable
+when there are many columns. Column names, and also
+table names should contain only alphanumeric characters
+and underscores. If any uppercase characters are used in column names
+or table names, they will be converted
+to lowercase. Regarding data types,
+you'll learn more about those in the next week
+of this course. For this week don't worry about the specifics of the data types. By default Hive and Impala, create what are called managed or internally managed tables. When you drop a managed to table, the tables storage directory in the file system is deleted, and any data files within
+that directory are deleted. In some cases, you may want
+to avoid this behavior. You can do this by creating an unmanaged or
+externally managed table. To do that, use the keyword external as shown in
+the example here. When you drop an
+externally managed table, the table metadata is
+removed from the metastore, but the table data
+remains in HDFS. An externally managed table in Hive and Impala is different from what's sometimes called an external table in
+relational database systems. So if you have
+some notion of what an external table is from
+the relational database world, set that aside and remember
+that with Hive and Impala, externally managed, just means
+that Hive and Impala will leave the data files in
+place if you drop the table. Hive has an option to create what's called a temporary table. This is a table that's
+visible only to you, and only in the current session. The table and any data
+stored in it are deleted at the end of
+your current session. You can create
+a temporary table with Hive by adding
+the keyword temporary, as shown in the example here. This can be useful if you're using a real-world environment, and you want to test a create table statement
+before running it for real. However, temporary tables
+are not supported by Impala and they have
+some other limitations. So in this course we will not
+be using temporary tables. So that's the basic syntax of the create table statement
+for Hive and Impala. Again, if you've ever created tables in
+a relational database, it should look familiar to you. However there are
+three optional clauses that you can use in
+a create table statement. They are unique to distributed SQL engines
+like Hive and Impala. These are: the row format clause, the stored as clause and
+the location clause. You'll learn about those clauses in the remainder of this lesson. You'll also learn
+a few other options for creating tables. You'll have a chance to practice creating tables in the VM, and you will see
+a full demonstration of a create table example that
+uses all these clauses.

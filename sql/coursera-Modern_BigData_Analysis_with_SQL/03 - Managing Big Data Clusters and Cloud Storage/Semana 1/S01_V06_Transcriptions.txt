@@ -1,0 +1,69 @@
+Although you can't use Hue to
+browse s3 buckets on the course VM, you can use the command line. In this demo, I'll show you a few commands
+you can use on the VM to do this. Open a terminal window as you did to
+browse HDFS from the command line. I'm going to stretch this window a bit so that my longer commands will appear
+on one line for easy reading. Most of the commands you used to
+browse HDFS will also work for S3. If you specify the path as an s3
+URL using the s3a protocol. For example,
+recall that you can use hdfs dfs-ls to list the contents of
+a directory in HDFS. You can use the same command
+to list the contents of an s3 bucket by
+specifying the path as s3a colon slash slash and
+then the bucket name. With this course, we created a bucket
+named training dash coursera one. So, to list the contents of this bucket,
+you would specify the path as s3a://training.coursera1, with
+a slash at the end. With S3 this trailing slash is required. And the result shows that
+there are two directories in this S3 bucket named employees and
+jobs. To see the contents of
+the employees directory, I’ll press the up arrow key to
+recall the previous command, and I’ll add employees/ at
+the end of the path. The results shows that there is
+a file named employees.csv in this employees directory. To copy a file from an s3 bucket
+to the local file system, you can use hdfs dfs -get. And again,
+you must specify the path beginning s3a:// followed by the bucket name. I'll copy the file employees.csv
+to the current working directory in the local file system on this
+VM using a dot to indicate that. You can run an ls command to see
+the file employees.csv here in the current working directory. I'll run an rm command
+to remove it from here. Of course this file still
+exists in the s3 bucket. I've just removed it from
+the local file system. To print the contents of
+a file in s3 to the screen, you can use hdfs dfs -cat
+with a qualified s3 path. These hdfs shell commands
+work with s3 buckets because the Hadoop software includes
+a connector to s3, it's called s3a. In the real world, you might encounter
+some environments where there's an older version of
+the connector installed. In that case,
+you might need to use s3 or s3n. Instead of s3a but in most environments
+and on SVM, you'll use s3a. To run these HDFS shell commands,
+you need the HDFS shell application to be installed
+on the computer you're using. That's true regardless of whether you are
+interacting with files in HDFS or in s3. But it can be impractical to install and
+configure the HDFS shell application. So I'll also teach you another way, to work with files in s3
+from the command line. Amazon provides a tool called the AWS command line interface or the AWS CLI. This tool provides commands for
+interacting with s3 and some of Amazon's other AWS services. In most cases, this tool is easier to
+install than the HDFS shell application. There are instructions for installing it at aws.amazon.com/cli. The AWS CLI is pre-installed
+on the course VM. And you can use it to do the same
+things I just showed how to do with HDFS shell commands. AWS CLI commands begin with AWS,
+and the commands for interacting with s3 begin with aws s3. After that, you specify a command to run. One of these commands is ls. To list the commands of an s3 bucket or
+directory in an s3 bucket. After ls you specify an s3 URL, beginning with s3://. For example, to list the contents of
+the bucket named training-coursera1, you would run this command. A few things to notice,
+I did not use as dash before the ls. And I used s3, not as s3a or the protocol. Notice also, that the results
+are different in this case than they were when using the hdfs dfs command. Less information is given. The PRE or P-R-E values in the output
+indicate these items are directories. This is because s3 does not
+actually store directories, instead it simulates directory
+structures by prepending directory names to the beginning of file
+names separated by slashes. For our purposes,
+you can understand these as directories. So, the output shows that
+this s3 bucket contains two directories named employees and jobs. To use the aws cli to copy or download a file from s3
+to the local file system, use the command aws s3 cp, followed the source and destination. For example, for
+the source I'll specify the s3 URL or the file employees.csv,
+in the employees directory in this bucket. And for the destination,
+I'll specify a dot to indicate the current working directory
+in the local file system. I'll run an ls command to show this file, employees.csv was copied here to
+the current working directory. The aws cli does not provide a separate
+command to print the contents of a file in s3 to the screen, but
+there is a trick you can use to do it. I'll press the up arrow key to
+recall the previous command, and instead of using a dot as the destination,
+I'll use a dash. This causes the contents of the file
+to be printed to the screen. When you use a dash as this destination, the file is not stored in
+the local file system.

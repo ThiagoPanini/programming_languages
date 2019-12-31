@@ -1,0 +1,33 @@
+Welcome to week 2 of managing big data in clusters
+and cloud storage. In this week of the course, you learn how to create
+databases and tables. Recall that with Hive and Impala, each table has two components. One is its metadata which
+is stored in the metastore, and two its data which could be stored say in HDFS or in S3. This week of the course is
+all about the metadata. The metadata for a table includes the column names and
+their data type, and also things like where the data is stored and
+what format it's in. So to create a table, you need to specify that metadata and store
+it in the metastore. It's possible to do this
+using the point and click actions in
+the table browser in Hue, so you'll learn how to do that. But in many cases, it's better to use SQL commands to create
+databases and tables. So you'll learn how to use the CREATE DATABASE and CREATE
+TABLE statements in SQL. If you took the first course
+in this specialization, you should recall that these statements are
+in a category of SQL statements called
+Data Definition Language or DDL. Every major SQL engine
+supports DDL commands, but there are big differences in DDL across different SQL engines. What you'll learn in this course applies only to Hive and Impala. The CREATE DATABASE
+statement is very simple and there's not
+much to learn about it. So you'll spend most of
+this week learning about the CREATE TABLE statement which has many clauses
+and options. As part of to
+CREATE TABLE statement, you'll learn the default
+formatting and location of data files
+for a table, and how to specify when you want something other
+than the default. You'll learn about
+some advanced table attributes including the use of Serializer
+Deserializers or SerDes. Sometimes you might make
+mistake when you create a table or change your mind
+about some of the specific. So you'll learn how to
+make changes to table schemas and what that
+means for the data itself. Finally, you'll learn a bit more about how Hive
+and Impala work, including how to move
+between the two engines when you're managing or working with the tables in the metastore. Be sure to download and install the VM if you haven't already. You'll have lots of
+opportunities to try these things in the VM yourself.

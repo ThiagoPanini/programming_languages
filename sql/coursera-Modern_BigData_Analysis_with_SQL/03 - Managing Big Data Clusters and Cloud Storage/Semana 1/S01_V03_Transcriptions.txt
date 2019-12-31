@@ -1,0 +1,150 @@
+Recall that Hive and Impala
+are SQL engines that run on clusters or big data platforms that
+are based on Hadoop. Hadoop based clusters or platforms include a system
+for files storage. It's called the Hadoop
+Distributed File System or HDFS. The first course in
+this specialization introduces HDFS and describes how it's different from other file systems like the File System on
+your local computer. The VM that you use throughout this specialization has
+HDFS installed on it and all the data in
+the tables on the VM is stored in files in HDFS. Each Hive and Impala table
+has two components. One, its metadata which is stored in the metastore as I described in a previous video. Two, its data which is
+typically stored in HDFS. If you took the first course
+in this specialization, you should be familiar with this. You should recall that metadata
+and data are stored in this separate places
+and are loosely coupled. When Hive or Impala
+receives a query, it needs to use both the
+metadata from the metastore and the data typically from HDFS to generate
+the query results. So here's what
+happens when you run a query with Hive or Impala. First, it accesses
+the metastore to determine the structure of
+the table that you specified in your query. The metastore tells Hive or Impala what columns
+are in the table. It also says where to find
+the data for that table. Typically, this is a path
+to a directory in HDFS. Then Hive or Impala retrieves the table data from the files
+in that directory in HDFS. It processes those files to
+generate the query results. So that's the background you need to remember about how Hive and Impala use
+the metastore and HDFS. In the previous lesson, you learned how to browse
+tables in the metastore. In this lesson, you learn
+how to browse files in HDFS. The easiest way to browse
+files in HDFS is through Hue. In Hue, click the menu icon
+in the upper left corner. Then under browsers click files. This takes you to
+Hue's file browser. This interface lets you browse the directories
+and files in HDFS. When you first open
+the file browser, it takes you to the directory
+slash-user slash-training. On the VM, this is
+your home directory in HDFS. You can see the directory path slash-users slash- training here. In a real-world environment, your HDFS home directory
+is typically slash, user, slash, your username. In a real-world environment that is shared with other users, your home directory
+is the place where you can experiment with
+creating subdirectories, uploading files and so on. It's like your own
+personal workspace. So what you do there will not interfere with other users files. You should have full permissions on your own home
+directory so you can experiment there on your own without any help from
+an administrator. On the VM at your home
+directory should be empty at first like you see here. The file listing here
+shows a dot representing this directory and an upper arrow representing
+the parent directory. I'll click the upper
+arrow and this takes me to the parent
+directory slash-user. I can return to
+my home directory by clicking training or by clicking
+the home icon here. Now, I'm back in
+slash-user slash-training. You can also use the path editor here to navigate directories. If you click the slash at
+the beginning of the path, that takes you to
+the root directory of HDFS. If you click a blank area
+of the path editor, it changes to a text field where you can enter the path
+you want to navigate to. I'll enter slash-user
+slash- training and press enter to return
+to my home directory. You can also click
+a directory name in this path editor to
+navigate to that directory. I'll click user to go to
+the slash user directory. Here in this
+slash-user directory, you can see your own home
+subdirectory training and some other subdirectories. One of these is named hive. I'll click to navigate there and in it there is
+a subdirectory named warehouse. I'll click to navigate into that. This directory in HDFS at the path slash-user
+slash-hive slash-warehouse is a special directory known as the Hive Warehouse directory. The Hive Warehouse directory
+is the place where Hive and Impala store
+table data by default. In this directory, you'll
+see some subdirectories with names that are familiar
+if you've been through Course 2, in
+this specialization. Customers, employees, offices,
+orders and salary grades, these are the names of tables
+in the default database. For each table in
+the default database, there is a subdirectory of the same name here in
+the Hive warehouse directory. Let's see what's in one
+of these subdirectories. I'll navigate into
+the one named orders, in it there's a file
+named orders.txt. I'll click that file to view it. This is a tab
+separated text file. You can see there are
+five lines in the file and each line has four values,
+separated by tabs. This is the data in
+the Orders table. Recall from looking at
+the Orders table in the table browser that
+that table has four columns. Order id, cast id, ample id and total. The values in those columns are the values you see in these four columns
+in this text file. The column names
+and data types are not stored here in HDFS. They are stored in the metastore. Only the values are
+stored here in this file. I'll click to return to
+the Hive warehouse directory. Notice that there are
+two subdirectories here named investors and investors parquet. Those both contain data
+but we have not yet created tables to query
+that data from Hive or Impala. We'll come back to
+those subdirectories later in this course. Notice that there are
+some other subdirectories here with names ending in .DB; fly.DB, fun.DB,
+toy.DB, and wax.DB. These represent the databases. Recall that there are
+databases named fly, fun, toy, and wax. For each database, except
+the one named default. There's a corresponding
+subdirectory in the Hive warehouse directory
+named database name.DB. Let's see what's in one of those. I'll click to go into fun.DB. There you can see four
+subdirectories named card rank, card suit, games and inventory. These contain the data for the four tables with
+the same names. I'll click to go into
+the games subdirectory and in it there's
+a file named games.csv. I'll click to view that. This is a comma
+separated text file. It has five lines and each line has eight values
+separated by commas. This is the data in
+the games table, in the fun database. You can download
+a file from HDFS to your local file system by clicking this download
+button in Hue. To open a file with most applications that run
+on your local computer, you need to download
+the file from HDFS to your local file system. For example, after
+downloading this file to the local file system in this VM. I can open it in
+the text editor on the VM. Besides using hue's file browser, you can also use the assist panel on the left side to browse HDFS. If the assist panel is hidden, you can click to show it. Then switch the assist
+panel from SQL mode to HDFS mode by clicking
+this pages icon. This interface lists
+the files and directories in HDFS and lets you
+navigate through them. For example, I can go into
+the Hive warehouse directory at slash-user, slash-hive,
+slash-warehouse. This is similar to what you can do through the file browser. I'll click the database
+icon to switch the assist panel
+back into SQL mode. For most of this course,
+you'll find it most useful in SQL mode. So I showed the file containing the data for the Orders table in the default database
+and the file containing data for the games table
+in the fun database. One was a tab
+separated text file. The other was a comma
+separated text file. This demonstrates
+an important point about Hive and Impala. There is not
+just one fixed format for storing table data. Hive and Impala support storing table data in a variety
+of different formats. These two files I showed
+both had their data stored in plain text files but
+with different delimiters. Data can also be stored in other file formats
+like Avro and Parquet. You'll learn about those
+later in this course. For now, just know that
+if you see any files in table directories in HDFS that do not look like plain text, it's because they're in one
+of these other file formats. Also, these files I showed were both under the Hive
+warehouse directory. That's the place where Hive and Impala store
+table data by default. But it is possible to specify
+some other location in HDFS as the place where the data for a particular
+table is stored. For example, for
+all the tables in the fly database the data is not stored under the Hive
+warehouse directory. Instead, it's stored
+in the directory named fly under the root
+directory of HDFS. Later in the course, you'll
+learn more about this. For now just don't be
+surprised if you noticed that some tables do not have data within the Hive
+warehouse directory. Finally, as you browse
+these directories in HDFS please do not move, copy, modify, or
+delete anything and don't upload
+any new files to HDFS. You'll learn how to do all
+of that later in the course. But in the meantime, please
+don't because that could cause the VM to behave
+in unexpected ways. A quick note for anyone who's using an older version of Hue, the link to access the file browser might
+be in a different place. If you don't see a menu like this with a files link in it, then you're probably using
+an older version of Hue. If so, look for
+a file browser button at the top right with a page icon that will take
+you to the file browser.
