@@ -1,0 +1,27 @@
+In the previous lesson,
+you learned about the structure of the CREATE TABLES statement and
+about three important clauses that you can use to specify how and
+where the table data is stored. The ROW FORMAT clause, the STORED AS
+clause and the LOCATION clause. These three clauses are optional,
+and so is the EXTERNAL keyword. But you'll use them often
+to override Hive and Impala's default behaviors
+when creating a new table. There is another optional clause that
+you probably won't use as often, but you should still know about it. It's the TBLPROPERTIES clause. The keyword that begin this
+clause is spelled T-B-L, PROPERTIES, but
+I'll pronounce it as table property. This clause allows you to set some special
+properties for the table you're creating. For example, if the data for the table is in files that include
+a column header in the first line, then you can set the
+TBLEPROPERTIES('skip.header.line.count'='- 1'), as shown here. So we'll skip the first line. Be warned, though, that this will
+skip the first line in every file in the table's data directory,
+not just in the first file. So if your data is in multiple files,
+as it often is with big data, then you need every file to
+have the header line in it. Otherwise, Hive and Impala will not read in the data in
+the first line of those other files. Also, some systems,
+such as Apache Spark, will ignore this skip.header.line.count property
+when querying a table. If you want to learn more about this, you can read the entry in the Apache Spark
+issue tracking system that describes it. See that in the links for this video. So you can specify TBLPROPERTIES in
+a CREATE TABLE statement, as shown here. You can now also specify TBLPROPERTIES
+in an ALTER TABLE command. You'll learn more about that and about other situations when you might need
+to use table properties in later lessons. For the remainder of this lesson,
+you'll learn about a different and more advanced way to use
+the ROW FORMAT clause.

@@ -1,0 +1,118 @@
+If this topic of creating Hive and
+Impala tables is new to you, you might not immediately understand
+some of the implications around it. One implication that's especially tricky
+to grasp is how the loose coupling of table definitions and
+the underlying data makes Hive and Impala radically different form
+traditional relational database systems. A good way to highlight
+this radical difference is to demonstrate that you can
+create two or more tables. That query the same underline data files. I will demonstrate that now. In this example, I will use a data
+set stored in a text file in S3, it's in the bucket named
+training dash Coursera one, in a subdirectory named months. I'll the command, hdfs dfs -ls s3a://training-coursera1/months/ to list the files in that directory. The result shows that there is just
+one file there named months.txt. I'll run an hdfs dfs -cat command
+to print the contents of that file. This data describes the 12
+months of the year and it looks like each record
+represents three values. First, the number of the month,
+second the three letter abbreviated name and third,
+the number of days in that month. But this file does not use delimiters or
+field separators in the usual way. It has a greater than sign,
+separating the first and second fields. And a comma, separating the second and
+third fields, so I would like to create a table to query this data but
+I'm not sure which delimiter to specify. So, to demonstrate that it is
+possible to create more than one table on top of the same data files,
+I will create two tables, one using the greater than sign as the
+delimiter and the other using the comma. In the Impala query editor in Hue, I'll run a create table statement
+to create the first of these. The data is being managed externally, so I'll use the external keyword,
+CREATE EXTERNAL TABLE. I'll name it months_a. For this first one, I'm going to use
+the greater than sign as the delimiter. So the columns will be the number
+of the month, which is an integer, that's what's on the left side of the
+greater than sign and on the right side there's a concatenation of name and days,
+which we can represent in a string. To specify the delimiter,
+I'll use Row, Format, Delimited. Fields Terminated by ">". The data is stored in a text file, so
+I'll specify, stored as text file. Since text file is
+the default file format, I don't need to specify this,
+but I'll include it. And finally, I'll include the location
+clause to specify the directory in S3, where the data is stored. I'll run this statement
+to create the table. Now I'll modify this statement
+to create the second table. I'll make the table name months_b. For this table I'm going to
+use a comma as the delimiter. So the columns will be a concatenation
+of the month number and the three letter month name,
+which we can represent in a string. That's what's to the left of the comma,
+and on the right is the number of days
+in the month, which is an integer. In the row format clause,
+I'll change the delimiter to a comma and I'll leave everything else as it is. I'll run this statement to
+create the second table. Now we have two tables named months_a and
+months_b, which query the same underlying data
+files but which have different schemas. So when you query these two tables,
+you get different result columns, even though the data behind
+the two tables is identical. The column with the concatenated together
+values is not very useful in this form. But you could use Hive or Impalas' built in string functions
+to extract the parts from it. For example, in Impala,
+you could run a query that uses the split_part function to return
+the two parts of each name and days value, on the left and
+right sides of the comma, as two separate columns named name and
+days. The function split_part is
+not available in Hive, but there are two similar built-in functions
+in Hive named split and substring_index. You could use one of those instead. I'll drop these two tables,
+we won't need them anymore. Here's an example of a different
+situation in which it might be useful to create tables with
+different schemas on the same data. In the training-coursera2 bucket in S3, there is a file named company_email.txt
+under the directory company_email. I'll run an hdfs dfs- cat command
+to show the contents of this file. As you can see,
+this is a comma separated text file. It has three fields, representing an ID,
+name and email address. But look at the second and third lines. They contain quote characters and,
+even worse, the third line includes a comma, the field separator,
+as a part of the second field. In the Impala query editor in Hue, I'll
+write and run a CREATE TABLE statement that creates a table named company_email. I'll treat this like a normal comma
+separated test file with three columns. Then I'll query this table. But look what happens. Those quotation marks
+appear in the results, and Impala splits the third record on
+the comma inside the quoted company name. So, the email address value
+in this third row is missing. And instead, it shows the part of the quoted company
+name that came after the comma. So, it's clear that specifying a comma as
+the field separator is not going to work. One alternative is to create
+a table with just one column. A string column. Instead of attempting to split up each
+line of the file into separate columns, Hive or Impala will just return
+the whole line as a string value. I'll modify the previous
+CREATE TABLE statement to create a second table that works this way. I'll name it company_email_raw and I'll specify just a single column,
+named line of type STRING. For the field separator, I need to choose some character that
+does not occur anywhere in the data. That way, Hive and Impala will not find
+any instances of the field separator, so they will not split up
+the lines into separate fields. One character that does not occur anywhere
+in this table's data file is Hive and Impala's default field separator,
+the ASCII control A character. To use this default field separator for this table, I can simply remove
+the whole row format clause. I'll run the statement to create
+the table, then I'll query this table. And as you can see,
+the result has just a single column, a character string column named line. Each result row consists
+of a single field. This table schema is not really useful but
+you can work with it. You can use the built in character string
+functions to parse each row value and break it up into the fields
+you're looking for. For example, the function regex_extract allows you to use regular expression
+matching to extract text from the field. Regular expressions
+are extremely powerful, but getting the right pattern can be tricky. If you're not familiar
+with regular expressions, this might be a little hard to follow. That's okay. Don't worry about the details. Here I'll query the table and
+have it extract the three fields. First, the regular expression
+looks at the start of the line for any number of digits up to a comma and
+extracts just the digits. That's the ID field. Next is the second field. The company name. Here, if there are quotes in the line, the
+regular expression will capture everything after the first quote and
+up until the second one. If there are no quotes then it
+will skip the first digits and the first comma, but then capture
+everything until it reaches another comma. That yields the name field. Finally, for the third field, the regular
+expression will skip over the ID and name fields and capture whatever is left. That's the e-mail field. In the from clause I'll put
+the name of this table, company_e-mail_raw. Then, when I run this query,
+I get the result I was looking for. Again, don't worry about
+the details of these expressions. The point is that even when the data files
+are formatted in a way that Hive and Impala cannot easily handle,
+there are work arounds like this, that enable you to get
+the results you need. Later in this course, you'll learn
+about several possibilities for what you could do next. You could store the results of this
+query in another table, you could use this query to create what's called
+a view, or you could use an alternative approach to avoid writing complex regular
+expressions like this in the first place. You'll learn about that alternative
+approach using what are called SerDes in the next lesson. But for now I will drop these two tables. We won't need them anymore. The examples I showed in this video
+all used data files stored in S3. But these files could have been in HDFS. This technique of multiple tables on
+one set of data files works regardless of the file system. Whenever you create more than one
+table on the same underlying data, you should use the external keyword to
+make these tables externally managed. That way, you can drop the tables
+without losing the data. You might, in some cases, have one table
+that's internally managed, then have any other tables that query the same
+underlying data be externally managed. The important thing is just to avoid
+the possibility of inadvertently deleting the data when you drop the table.
