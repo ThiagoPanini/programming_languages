@@ -1,0 +1,21 @@
+In the previous few lessons, you learned how to create
+databases and tables. But what if you make
+a mistake when doing this? For example, what if you
+realize after creating a table, that you created it in
+the wrong database, or that one of
+the columns needs to be renamed or needs to have
+a different data type? Or what if at a later date, you need to add new columns
+to an existing table, or perhaps completely
+drop an existing table? These are just a few examples of cases when you'll need to modify or remove
+a database or table. In this lesson, you'll learn how, using alter and drop statements. In fact, you've already seen some incidental examples of
+alter and drop statements, in some of the earlier lessons
+in this course. In this lesson, we'll introduce
+these statements more systematically and describe all the implications
+of using them. For example, what happens to a table's data files when
+you drop that table? What changes must you make to the data files if you add
+a new column to a table? Often, before you modify a table, you want to examine it to see its existing schema
+and other properties. So in this lesson, we'll also review how to do that using the
+describe statement. We'll introduce a variation
+on the described statement, and we'll introduce
+another statement that's useful for seeing how
+a table was created.
