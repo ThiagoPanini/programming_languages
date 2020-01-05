@@ -1,0 +1,33 @@
+In general, Hive and
+Impala work well together. If you create a table using Hive, you can query it in
+both Hive and Impala. If you create a table on Impala, you can also use
+both engines to query it. That's in general. By now you should have
+read about some techniques that work in Hive,
+but not Impala. Like the ALTER TABLE command for changing
+the order of columns. There are also
+some commands that work in Impala, but not Hive. Like the command for
+dropping a column. There are also a few parts
+of the CREATE TABLE syntax, that one or the other
+might not support. For example, in Impala, you can use the LIKE PARQUET
+clause to create a table using this schema
+information that's embedded inside a parquet file. You'll learn more about this
+in next week's materials. But Hive does not support
+this LIKE PARQUET clause. It's also possible that
+a table created with one of these engines cannot
+be queried by the other. For example, if you
+use some SERDE like this one in a CREATE
+TABLE statement in Hive, then Impala will not be
+able to query that table. So while you mostly can rely on tables being
+available in both engines, remember that there
+are some things that require a specific engine. If you get error messages
+from one engine, check whether that engine supports what you're
+trying to do. Remember that Hive is
+typically slower than Impala, but Hive is more
+general than Impala in the types of file formats
+it supports for tables. Impala is designed to be
+much faster and so it specializes in the use of the best file formats for
+fast running queries, formats like Apache Parquet. When you're on the job,
+you will often find yourself using Hive and its wide variety of available SERDEs to read data
+in many different formats. Then Hive can put that data
+into new tables in a format like Parquet for fast
+querying using Impala.

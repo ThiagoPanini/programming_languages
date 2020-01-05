@@ -1,0 +1,39 @@
+While you can usually
+use either Hive or Impala to create
+end-query tables, there's an important difference
+between how Hive and Impala access the metastore. Hive retrieves metadata from the metastore every
+time it builds a query, but Impala does not. Impala caches metadata in
+memory to reduce query latency. This Impala cache
+metadata consists of the structure and locations of tables retrieved
+from the metastore, and also additional information
+about table data files retrieved from the data storage
+system like HTFS or S3. Impala's metadata cache helps it return query results as
+quickly as possible. But the cached metadata can get out of sync with
+the metadata in the metastore, and with the stored data files. This happens when changes
+are made outside of Impala. For example, when new tables
+are created using hive, when table data is imported
+using Hughes table browser, or when table data is
+added using HTFS command. When changes like this
+occur outside of Impala, it's necessary to refresh
+Impala's metadata cache. There are different ways
+to do this depending on what changes were made
+outside of the Impala. The refresh command updates
+the information that Impala caches about the schema
+of a particular table, and the locations and files for that table in
+the data storage system. Use this command if
+you have altered a table schema such as renaming a column or
+added data to the table. The syntax is refresh
+and the table name. But if you've added a new table to the database from
+outside of Impala, then you'll need to use
+a different command to update Impala's
+metadata cache. The command is invalidate
+metadata and the table name. This command causes Impala to add all the information about this new table to
+its metadata cache. Finally ,you can also use invalidate metadata without
+specifying a table. But be careful when you use this, it will mark the metadata
+for all tables as tail, and will reload all the metadata when a new query is issued. For a large production
+environment with many tables, this can be a very
+expensive operation and it can take a long time. Note that when Impala itself modifies the metastore
+or any stored files, it can automatically
+update the cache metadata. So it's only changes
+from outside of Impala that require you to
+use any of these commands.
