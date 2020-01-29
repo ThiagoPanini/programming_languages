@@ -1,0 +1,97 @@
+Recall from the earlier weeks of this course that Hue includes a table browser that you can use to browse the tables
+defined in the Metastore, and a file browser
+that you can use to browse the directories
+and files in HDFS. You can also use
+these two interfaces to load data files into a table
+storage directory in HDFS. In this video, I'll
+demonstrate how to do this using Hue's table browser. To get to the table browser, click the menu icon in
+the upper left corner, then under browsers,
+click tables. Recall that the table browser allows you to create a new table, you start this process by
+clicking this plus icon. In this type drop-down menu, if you select
+the manually option, then in the next step, Hue gives you the option
+to create an empty table with no data in it yet or to create an externally
+managed to table to query some existing data
+that's already in HDFS. In those cases, no data
+is loaded into HDFS. But if you select
+the file option, then Hue will create a table and move data into it all
+in one operation. When I click this path selector, Hue opens this choose
+a file dialog. Here you have two options. One, you can choose an existing file from
+somewhere in HDFS. If you do that, you will move that file out of its current location and into the storage directory
+for this new table. Two, you can upload a file into this new table storage directory from your local file system. I'll demonstrate
+this upload option. I'll click upload a file. In my local file system, I'll navigate to slash training, slash training
+underscore materials, slash analyst, slash data. Here I'll select the file
+castles.csv, and click open. Hue then upload this file to a temporary location in HDFS. In the format section below, you can specify
+the field separator. In other words, the delimiter. The record separator, that's the character that
+marks the end of a record, and to the quote character. It's common to need to
+change the field separator. For the other two, you can usually keep the default values. This file castles.csv does have a header row giving
+the column names. So I'll check this
+has header checkbox. You can see a preview of the data as it will look
+when you query this table. You can use this preview to
+confirm that the settings in the format section
+are correct. It looks correct to me, so I'll click next. In this step, I can give
+a name to the table and specify what database
+it should be in. This name field is already pre-populated
+with default.castles, meaning that the table
+will be named castles, and it will be in
+the default database. I'll keep this as is. Next, I can specify
+some more properties. If the data was in some other format
+like Parquet or Avro, I could use this format to
+drop down to specify that. I'll keep it set to text. I'll keep this checkbox selected. That way, this table storage
+directory will be a subdirectory named castles in the Hive warehouse directory, slash users, slash
+Hive, slash warehouse. The uploaded data will go
+into that directory in HDFS. I'll leave these other
+properties untouched. In the fields section below, you can specify the name and the data type for
+each column in this table. These fields are
+pre-populated using the names from the header row
+in the file I uploaded, and Hue's best guesses about the data types
+of the columns. You should take a careful look
+at these to make sure Hue has guessed correctly. Take into account what
+you know about the data, and what you learned about the different datatypes in the previous week of this course. In this case, it looks good. So I'll click submit. Hue then creates an entry for this table in the Metastore, creates the storage directory
+for the table in HDFS, and moves the file that I uploaded into
+this storage directory. You can see this file in the storage directory by
+clicking this location link. Here in the HDFS directory, slash users, slash Hive, slash warehouses, slash
+castles is the uploaded file. In the query editor, I can update
+Impala's metadata cache. In this case, I need to use
+invalidate metadata castles rather than refreshed castles because castles is a new table. Then, I can query this table. So you can use the table browser in Hue to load data files into the HDFS storage directory of a new table at the time when
+you create the new table. You can also use
+the table browser to load data files into
+the storage directory of an existing table. I'll demonstrate that now. In the table browser, I'll browse to an existing table. I'll go into the fun database, and in that, the games table. This table is used extensively in the second course in
+this specialization, it has five rows describing
+five popular board games. I'll click the location link to browse this table's storage
+directory in HDFS. You can see there's
+just one file there, games.csv containing the data
+for these five games. I'll click the back
+button several times to return to
+the table browser. There is another file in the local file system on the VM
+named ancient_games.csv. I'd like to add the data
+in that file to this table without losing the data that's
+already in this table. To do that, I'll click
+this import data button. Hue opens this
+import data dialog. Here like in
+the previous example, you have two options. One, you can choose an existing file or directory
+from somewhere in HDFS. If you do that, you will move the file
+or directory out of its current location and into the storage
+directory for this table. Two, you can upload a file into this table storage directory
+from your local file system. I will again demonstrate
+this upload option. This time, I'll upload
+the file ancient_games.csv. After uploading this file, I'll select it here. I will not check this overwrite
+existing data checkbox. Checking that box would cause
+Hue to remove everything in this table directory deleting the existing file games.csv, and that's not what I
+want to do in this case. I'll click submit and wait
+for the task to finish. When it's finished, I'll
+click the location link to browse again to this table
+storage directory in HDFS. Now, you can see there
+are two files there; games.csv which was there before, and ancient_games.csv
+which is new. This file ancient_games.csv
+contains two records, representing checkers and chess. The columns are exactly the same as in the file games.csv, and notice there are
+two instances of \N indicating missing values
+in the third column. In the query editor, I can select the funded database, then update Impala's metadata
+for the game's table. The refresh command is
+sufficient in this case, because the game's table is not a new table but there
+is new data in it. So this command will cause Impala to notice that new data. Then, I can query this table. In the query results, you can see two new rows
+representing checkers and chess along
+with the five old rows. Notice the null values
+in the third column, the inventor column,
+for checkers and chess. No one knows who
+invented these games. So using Hue's table browser, you can load data files into the storage directory for a new table or an existing table. In the next video, I'll show how you can
+also load files in HDFS through Hue's file browser.

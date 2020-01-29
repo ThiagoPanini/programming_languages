@@ -1,0 +1,18 @@
+Welcome to week three of managing big data in
+clusters and cloud storage. In this week of the course, you'll learn about
+data types and file type. At this point you already have some knowledge
+of data types. Remember that every column in a table has a specific data type. You've used a few data
+types already like strings and int in create table statements
+earlier in the course. In this week of the course, we'll describe more details
+about these and about the other data types that you can use with Hive and Impala. You'll learn about the limits of the different data types, what they're intended for, and how to choose the right ones
+when you create a table. Then in the second half
+of this week, you'll learn about file types. These are the different
+file formats that you can use to store the data in
+Hive and Impala tables. You've already
+learned a little bit about file formats and you've seen some examples of files
+in delimited text format. So in this week, we'll quickly cover and review
+the text file format and then go into
+more detail about three other popular file formats, Avro, Hark, and NRC. You'll learn what's different
+about these file formats, when you choose one of them
+versus text files and how to efficiently create tables with files in different formats. We'll also give a quick review of some other file formats
+that are less often used.

@@ -1,0 +1,36 @@
+Recall that the data in Hive
+and Impala tables is stored in files in a directory
+in HDFS or S3. There is not just one
+fixed file format for this table data. Hive and Impala support a number of different
+file formats. When you create a table
+with Hive and Impala, you specify which format to use in the stored as Clause of
+the create table statement. In this lesson, I'll describe some different file formats
+that Hive and Impala support. I'll focus on the four
+that are used most often; Textfiles, Avro files,
+Parquet files and ORC files. I'll describe the advantages and disadvantages of
+using each of these. Mostly in terms of trade-offs, between human readability
+and performance and also interoperability with other tools you might work with. Different patterns for storage, ingest or querying can make one format a better choice
+than another format. With big data,
+the differences can have significant impact
+on performance. The choice of format depends partly on which query
+engine you're using. Textfiles, Avro files, and Parquet files are compatible
+with both Hive and Impala. But ORC files are
+compatible only with Hive. I'll also give
+a quick overview of some other file formats
+that are used less often. The SequenceFile
+and RCFile formats. Sometimes the choice of which file format to use
+when you create a table, is based simply on which file format the
+data is already in. For example, if you have
+an HDFS directory or an S3 bucket with
+Parquet files already in it, then you can just create a Parquet base table
+to query that existing data with Hive and Impala without moving
+it or copying it. But in other
+situations you'll have the flexibility to choose
+which file format to use and you'll convert data into that format as you load it into the table
+storage directory. You'll learn more about that in the next week of the course. For now, just remember
+that it is possible to convert data between
+these different file formats. So you won't get trapped in a dead end by your choice
+of file format. However, making the right choice
+when you first create a table can save you from needing to convert
+the files later, which can be
+an expensive operation if the data has grown very large.

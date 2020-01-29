@@ -1,0 +1,90 @@
+In the previous two videos, you learned how to use Hue
+to load files into HDFS. In this video, you'll learn
+how you can also load files into HDFS from
+the command line. Recall from earlier in
+this course, some of the reasons
+why you might want to use the command line
+instead of Hue. Entering commands is
+a more systematic way of accomplishing a task. If you can perform a task
+on the command line, that means that you
+can also script it, automate it, schedule
+it, and more. By saving your
+commands in a file, you can effectively
+document the steps you performed and make
+a task reproducible. In the first week of this course, you learned that to interact with HDFS on the command line, you used the command hdfs dfs followed by various commands, and options, and arguments. These are called
+HDFS shell commands or Hadoop file
+system shell commands. You learned how to use a
+few of these commands to browse files in HDFS. There's ls to list
+the contents of a directory in HDFS, cat, to print the contents of
+a file to the screen, and get, to download a file from HDFS
+to your local file system. However, we did not yet introduced the commands
+to load files into HDFS or to
+manage files in HDFS. I'll demonstrate those now. Recall that in the first video
+in this lesson, I used Hue to add
+a data file named ancient_games.csv to
+the storage directory for the games table
+in the fun database. Let's use an HDFS shell command to list the contents of
+that table storage directory. I'll enter the command
+hdfs dfs dash ls, followed by the path to the storage directory for the games table in
+the fun database. That directory is in the usual place under the
+Hive warehouse directory. So the path is slash
+user, slash hive, slash warehouse, slash
+fun.db, slash games. From the results, you
+can see that the file ancient_games.csv is still there, and so is the file games.csv
+that was originally there. I want to demonstrate how to load the file ancient_games.csv
+there again, this time using an
+HDFS shell command. But I can't do that if
+there's already a copy there. So I'll first run a command
+to delete this file. The delete command
+is hdfs dfs dash rm, for remove, followed by
+the path to the file to delete. In this case, that's slash user, slash hive, slash warehouse, slash fun.db, slash games,
+slash ancient_games.csv. After I press enter, HDFS deletes that file. Just to check this, I'll press the up arrow key twice and press enter to run
+the ls command again, and the listing shows that
+the file is no longer there. So now I can run a command to
+load this file here again. There is actually a
+copy of this file ancient_games.csv already in HDFS in a different directory. So I'll first show
+you how you can copy a file from one directory
+to another in HDFS. The command to do this is
+hdfs dfs dash cp for copy. You first specify the source path then the destination path. I know there's a
+copy of this file in slash old, slash games. So for the source, I'll specify slash old, slash games, slash
+ancient_games.csv. For the destination, I'll specify the directory slash user, slash hive, slash warehouse, slash fun.db, slash games. The directory path is sufficient, there's no need to specify the destination file name unless you want it to be different than
+the source file name. After I press enter, HDFS copies these file from the source to the destination. I'll run the ls command
+again to see it. If you want to move the file
+instead of copying it, you can use mv instead of cp. When you run an mv command, the file will no longer exist in the source directory after
+the command is executed. These three HDFS shell
+commands rm, cp, and mv are named after the analogous
+Linux shell commands. Like their Linux analogs, these commands support
+wildcard characters in paths, which enables them to operate
+on multiple files at once. For example, I can
+delete all the files in the storage directory for
+the games table by running an hdfs dfs dash rm
+command with slash star. That's an asterisk, after
+the directory path. Now, all the files in
+that directory are deleted. I'll run an ls command
+again to see this. The last command I'll describe in this video is the put command, which uploads files from
+your local file system to HDFS. The syntax is hdfs dfs dash put, then the source path and
+the destination path. You can use wildcard characters in the source path
+with this command too. For example, I know that
+in the folder slash home, slash training, slash
+training_materials, slash analyst, slash data, there are
+copies of both of the files containing games data, games.csv
+and ancient_games.csv. So I'll use the filename
+star games.csv. In this case, the star
+or the asterisk represents zero or
+more of any character. So this will match both
+of those filenames. For the destination path, I'll specify the storage
+directory for the games table. When I run this command, both of these files
+are uploaded to HDFS. Once again, I'll run an ls command and you can see
+them both in the listing. Remember that anytime you change the files in a table
+storage directory, you should refresh
+Impala's metadata cache. I'll do that now in Hue. In the Impala query editor, I'll run the command
+refresh games, then I can run queries
+on the games table. So to review, in this video
+you learned about four HDFS shell commands that you can use to manage files; rm, to delete files in HDFS, put to upload files from
+your local file system to HDFS, cp to copy files from one directory to
+another within HDFS, and mv to move files from one directory
+to another within HDFS. With these commands
+plus knowledge of which HDFS directories contain
+the data files for which tables, you'll be able to
+manage the data in Hive and Impala tables from
+the command line.

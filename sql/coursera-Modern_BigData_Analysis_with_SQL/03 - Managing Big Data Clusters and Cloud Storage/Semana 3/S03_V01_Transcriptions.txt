@@ -1,0 +1,14 @@
+Every column in a table
+has a data type. When you create a table
+with Hive or Impala, you specify those data types along with the names
+of the columns. In this lesson,
+you'll learn about the data types that Hive
+and Impala support. These break down into three main categories:
+integer data types, which represent whole numbers, decimal data types, which can represent numbers with
+fractional parts, and character string data types
+which represent text. Hive and Impala also support some various
+other data types that do not fall into
+these three categories. You'll learn about those as well. You should already have a basic working understanding of some of these data types
+because we've used some of them like string and int in creating table statements
+earlier in this course. In this lesson, you'll learn the specific details of
+these and other data types, and what limitations they have.

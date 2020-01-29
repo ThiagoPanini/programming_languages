@@ -1,0 +1,39 @@
+If you're familiar with traditional relational
+Database Systems, this week of the course
+might have been disorienting for you so far. Because in a traditional RDBMS, the way you load
+data into a table is usually by running
+SQL statements, in particular Insert Statements, and Load Data Statements. But in this week so far, we have not used
+any SQL statements to load data. Instead we've used Hue, and we've used
+some Shell Commands. To understand why, remember, that in a traditional RDBMS, or a Traditional Data Warehouse, Data Storage is encapsulated
+by the database software. This means that the only way to access the data in the tables, is by going through
+the database software. So if you want to get
+data out of a table, the only way to do that is by running an SQL
+select statement, and if you want to put
+data into a table, the only way to do that is also by running an SQL statement, for statement like
+Insert, or Load Data. But with a Modern Data Warehouse, using an engine like
+Hive or Impala, there are a variety of
+ways to access the data. Hive and Impala do not
+encapsulate the data. They don't even store the data. It's stored in a separate system
+like HDFS, or S3. So to load data into a table, you do not need to go
+through Hive or Impala. Anytime you'd like you
+can load the data files directly into the HDFS directory, or the S3 bucket for that table. With a Hive and
+Impala you often do not need to load the data
+into a table at all. If the data is already
+somewhere in HDFS, or S3, or one of the other
+supported file systems, you can create a table to
+query the data from there. No data needs to move. Even so, sometimes it is useful to have Hive or Impala load
+the data into a table. Maybe you're familiar with
+the traditional SQL syntax, for Insert, and Load
+Data Statements, and it's just easier for
+you to load data that way, or maybe you're building
+a data process where every other step is implemented
+as an SQL statement. So it's just easier to use an SQL statement to
+load the data too. Or maybe you want Hive, or Impala to perform
+some processing on the data as it's loading it into the table
+storage directory. Well, the good news is
+that Hive and Impala do support the Insert Statement, and the Load Data Statement. However, there are
+some important differences in how you use these statements
+with Hive and Impala, compared to traditional RDBMS's. In this week of the course, we'll show you how to use these, and some other
+related statements, and we'll describe
+what's different about them when you're using
+Hive and Impala.

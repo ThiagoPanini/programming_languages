@@ -1,0 +1,76 @@
+Another way to load files into HDFS is through
+Hue's File Browser. The file browser lets you load files into any directory in HDFS, not just the storage
+directories for tables. When you use the file browser, it's up to you to make
+sure you're loading data into the right
+place in HDFS. For example, if you want to load some additional data
+into a table, then you must find out what the storage directory
+for the table is and browse into that directory and then load the data there. I'll demonstrate how to do this. I'll start first in
+the table browser since I want to work with the directory
+for a particular table. Say, I'd like to add
+some additional data to the airlines table
+in the fly database. I'll browse to that table, then click the location link to go to the storage directory
+for that table. After clicking that link, now I'm in the file browser. You can see the storage
+directory is /fly/airlines. The data for the tables
+in the fly database is not stored under the Hive
+warehouse directory. To load the data file
+into this directory, I'll click the Upload button, then choose the files option. I'll click Select files then in the directory /training
+/training_materials/analyst/data, I'll select the file
+defunct_airlines.CSV and click open. Then this file is immediately uploaded into
+this HDFS directory, you can see it here. You can also use the file
+browser to move or copy files from one directory
+to another within HDFS. I'll demonstrate this,
+but first I'll delete this copy of
+defunct_airlines.CSV. I'll check the checkbox
+next to it then click move to trash and click
+Yes to confirm. I know there is already
+a copy of this same file in another HDFS directory,
+it's in /old/airlines. I'll navigate there
+and here's the file, I'll check the box next
+to it then under Actions, I'll click Copy, I'll select the destination
+folder /fly/airlines and click the Copy button. Now, if I go back
+to /fly/airlines, I can see that the file
+has been copied here. Let's see how the addition
+of this file affects the results of queries
+on the airlines table. In the query editor, I'll select the fly database, update in Impala's metadata
+for the airlines table, then query the table. But there's a problem, it appears that the file we added had a header
+line containing the column names because a row containing these column names is showing up in
+the query results. The existing data file
+that was already in this table storage
+directory does not have a header line and this table is not configured to
+skip header lines. I'll use the Assist panel on the left side to navigate
+to the storage directory for this table and open
+the file defunct_airlines.CSV. Sure enough, it
+has a header line. Using Hue, I can edit
+the file to remove this, I'll save the edited file then I'll return to
+the query editor, refresh the metadata again and query the table
+again and now, the problem is resolved. The Assist panel on
+the left side which is also called
+the Data Source panel, can also be used to
+load files into HDFS. Notice the plus icon
+in the upper right, you can click this to upload a file into this
+directory in HDFS. There are fewer options
+available here, so for most tasks you'll want to use the file browser instead. So to summarize this video
+and the one before it, there are four ways to use
+Hue to load data into HDFS. One, you can use the table
+browser to load data into the storage directory
+of a new table at the time when you
+create the new table. Two, you can also use
+the table browser to load data into
+the storage directory of an existing table. Three, you can use the file
+browser to load data into any HDFS directory and four, you can also load data into
+any HDFS directory through the Assist panel on the left side but your options
+there are more limited. Of these four options,
+the third one, using the file browser, is the most flexible. But it's up to you
+to make sure you're loading data into
+the right directory. Also, whenever
+you're loading data into a table storage directory, you must ensure that the data files match
+the table metadata. They should have
+the same number of columns with values that match the tables datatypes and the files should use
+the correct delimiter, the correct file format so on. Differences will not necessarily cause Hive or Impala to throw errors but they will cause unexpected and probably
+unwanted results. Additionally, within
+one table storage directory, you generally must ensure that
+all the files are uniform. They should all have
+the same file type, they should either all have header rows or none
+of them should and they should all
+have the same number of columns separated by
+the same delimiters.

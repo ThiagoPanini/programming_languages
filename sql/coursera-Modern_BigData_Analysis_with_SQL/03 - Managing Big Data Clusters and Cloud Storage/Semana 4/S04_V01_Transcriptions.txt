@@ -1,0 +1,33 @@
+Recall that Impala's fast
+query performance comes in part from using a Metadata
+Cache in computer memory. So it doesn't have to go to
+the Metastore to look up the metadata for a table every
+time a query is executed. Impala automatically
+updates or refreshes its Metadata Cache when you
+make changes with Impala. But you have to
+tell it to refresh the metadata when you make
+changes outside of Impala. For example, if you want to
+alter the order of columns using an Alter Table statement
+with after or first., you have to do this
+using Hive because Impala does not support these
+after our first key word. If you immediately try to
+sub-query the table in Impala, it will still use the old schema. So in this case, you need to tell Impala to update
+its Metadata Cache. To do this, run
+a refreshed command with Impala specifying the name
+of the table you've changed. Then, Impala's
+Metadata Cache will be updated and it will use
+the new table schema. Now in this week's materials, you won't be changing
+a table's column information. You will be loading
+data into the tables, which involves working with
+the files that hold the data. Impala's Metadata Cache, also stores information
+about these files, such as where they are located
+and how many they are. There are different ways
+to load the data into a table directory and you don't have to use
+Impala to do it. If you load data into a table directory from
+outside of Impala, Impala will not be
+aware of this new data. You might query a table
+and get a result with no data or with
+incomplete data. To avoid this, you need to run this same refreshed
+command in Impala, whenever you load new data into a table from
+outside of Impala. That way, Impala's Metadata Cache will know that
+the new data is there.

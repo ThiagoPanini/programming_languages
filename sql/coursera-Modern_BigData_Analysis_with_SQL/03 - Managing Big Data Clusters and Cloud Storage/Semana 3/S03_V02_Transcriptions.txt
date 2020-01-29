@@ -1,0 +1,54 @@
+At this point in the course, you should know what datatypes
+Hive and Impala support, and you should have
+a sense of how to choose the appropriate data types
+for the columns in your data. A few important points
+to remember are, Impala does not currently support the date type but Hive does. With integers, choosing
+a larger integer type allows you to represent
+a larger range of numbers, but storing and processing the larger integer types
+uses more resources, so you should generally choose the smallest integer type that accommodates the full range of values in each integer column. With character
+strings, you should generally choose the STRING type, not CHAR or VARCHAR
+unless you have some specific reason
+to be using those. The STRING type offers greater flexibility
+and ease of use, and in some cases
+better performance. To avoid loss of precision, you should not use the FLOAT or DOUBLE type to
+represent currency or other quantities that
+need to be exact to a specific number of places
+after the decimal point. For those, you should
+use decimal and specify the appropriate values
+of precision and scale. So when will you need to apply this knowledge
+about datatypes? Well, there are really
+only two situations when you'll need to manually specify the names and data types of the columns
+in a Hive and Impala table. One when you're creating
+a table to query data that's stored in
+delimited text files. Delimited text files
+do not contain any information
+about the data types of the columns in them. They sometimes do have
+a header row but that gives only the column names,
+not their datatypes. In this situation,
+you are constrained, you need to choose
+column names and data types that match the columns in
+the delimited text files. If you mess up and for example, you choose a numeric datatype for a column that contains
+character strings, then when you query that table, you'll get unexpected null
+values in your query results. Situation two is
+when you're creating a new empty table that you're
+going to fill with data. In this situation,
+you have freedom, you can choose the names
+and data types you want, and the constraints come later when you're
+filling in the table, then you'll need to ensure
+that the data you're putting in matches the table schema. Remember that Hive and Impala will generally not
+prevent you from creating or filling a table with
+columns whose datatypes are mismatched where the schema does not match the data files. Typically you'll
+only find out about a mismatch later when
+you query the table. So those are the two situations
+when you will need to manually specify
+the column names and data types. There are some other
+situations when you will not necessarily
+need to do this. One is when you're
+creating a new table by cloning the structure of an existing Hive
+and Impala table. Recall that in that situation, you can use the like keyword in the create table
+statement to points to the table who schema
+you want to clone. The other is when
+the table data is stored in existing Avro or Parquet files. As you'll see in a later lesson, Hive or Impala have
+ways of automatically determining the schema
+in those situations. For the remainder of this lesson, I'll provide a few more tips
+for working with data types.

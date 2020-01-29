@@ -1,0 +1,116 @@
+In the previous lesson, you learned how to
+load files into HDFS. In this lesson,
+you'll learn how to load files into Amazon S3. The most popular cloud
+storage platform. Of course, loading files into an S3 bucket requires having
+right access to that bucket. Unfortunately, we cannot
+give all Coursera learners right access to the S3 buckets we're
+using for this course. We can only imagine
+what some of you might do if we gave you right access. So although this is
+an important topic, you will not be able to
+practice it on the Course VM. One way to load files into
+S3 buckets is through Hue. If you have right
+access to an S3 bucket, then you can use the
+file browser and other interfaces in Hue to
+interact with S3, both reading and writing. You can load files in the same way you would
+load them into HDFS, but you would choose
+the S3 bucket as the destination rather
+than an HDFS directory. Another way is to use
+the command line, that's what I'll describe
+in the rest of this video. Recall from earlier in
+the course that many of the Hadoop file system shell
+commands that you can use to interact with HDFS also
+work for S3 if you specify the path as an S3 URL
+using the s3a protocol. We demonstrated that you can
+use commands including ls, cat, and the get with S3 just the same way
+you can with HDFS. The same thing is true of the HDFS shell commands for
+loading and managing files. Here are some examples. You should recall all of these
+from the previous lesson, the only difference here
+is that the paths are S3 paths specified
+with the s3a protocol. To delete a file in S3, use hdfs dfs -rm followed by the path
+to the file to delete. This and the other commands I'll describe work with
+any type of file, I'm using the file extension.ext just as
+a generic placeholder. It could be a text file, a parquet file, or
+any other type of file. To copy a file from one location
+to another within S3, use hdfs dfs -cp followed by the source path
+then the destination path. You must include the s3a protocol at the start of both paths. You can use this command
+to copy files within the same bucket or from one
+bucket to a different bucket. If you omit the filename
+from the destination path, then the copied file will have the same name as the source file. You can also use this
+cp command to copy a file from HDFS to S3 or
+from S3 to HDFS. To do this, use
+the HDFS protocol in one path and the s3a
+protocol in the other. The example shown here copies
+of file from HDFS to S3. Notice the three
+slashes after hdfs:. The first two slashes are part
+of the protocol, hdfs://. The third slash is
+the start of the HDFS path. If you want to move a file
+instead of copying it, you can use mv. This works exactly like cp
+except the file will no longer exist in
+the source directory after the command is executed. As with cp, you can use this
+to move a file within S3 or between HDFS and S3
+in either direction. To upload a file from
+your local file system to S3, you can use hdfs dfs -put. For example,
+the command shown here. For the source file, you can specify an absolute
+local file path as in this example or a relative path relative to your current
+working directory in the local file system. Once again, if you omit the file name from
+the destination path, then the uploaded file will have the same name as the source file. With all these commands, it's possible to use
+wildcard characters like the asterisk in the source paths to operate on
+multiple files at once. The last HDFS shell command
+I'll describe is mkdir, you can use this to create a subdirectory
+within an S3 bucket. You can optionally specify
+two or more directory paths separated with spaces to create multiple directories
+with one command. To run these HDFS shell commands, you need the HDFS
+shell application to be installed on
+the computer you're using. That's true regardless of
+whether you're interacting with files in HDFS or in S3, but it can be impractical
+to install and configure the HDFS shell
+application. So there is another way. Recall from earlier in
+the course that Amazon provides a tool called the AWS
+Command Line Interface or the AWS CLI. As we demonstrated earlier, you can use this tool to list the contents
+of an S3 bucket, download a file
+from S3, and so on. You can also use
+this tool to load files into S3 and to
+manage files in S3. To you use this tool
+to interact with S3, you run commands that
+begin with aws s3. For most of the hdfs dfs commands I described earlier
+in this video, there is an equivalent
+aws s3 command. To delete a file in S3, use aws s3 rm followed by
+the path to the file to delete. There is no dash before rm. Notice that the protocol before
+the bucketname is s3://. With these aws s3 commands, the protocol is S3 not s3a. To copy a file from one location
+to another within S3, use aws s3 cp followed by the source path
+then the destination path. You must include the S3 protocol at the start of both paths, and this works to
+copy files within a bucket or between two buckets. To upload a file from
+your local file system to S3, you also use this cp command. You specify a local file path for the source and an S3 path
+for the destination. This is different from
+the HDFS shell which requires a separate command
+"put" to upload files. You might recall from
+an earlier video that you can also use this aws
+s3 cp command to download files from S3 to your local file system instead of using the HDFS shells
+"get" command. Finally, you can use mv
+instead of cp to move a file, so the file will
+no longer exist in the source directory after
+the command is executed. This works for moving
+files within S3 and between S3 and
+your local file system. Note that there is
+no AWS CLI command that's equivalent to the mkdir command
+in the HDFS shell, so it's not directly
+possible to create a subdirectory in an S3
+bucket using the AWS CLI. However, when you use
+the cp or mv commands, any necessary subdirectories
+will be created for you. You simply run the command
+to copy or move files to the S3 destination path
+you want and all the necessary subdirectories are automatically created. The technical reason for this
+is that in an S3 bucket, there really are
+no subdirectories. Everything in
+a bucket is stored in a flat file structure and subdirectories are simulated by using slashes in the filenames. Some tools like the HDFS shell are designed to hide
+this technical detail from you. Others like the AWS CLI, do not try to hide it. It is important to note
+that these AWS CLI commands cannot move files
+between HDFS and S3. It does not provide
+access to HDFS only to S3 and to
+your local file system. Remember that these commands will not work on the Course VM because the VM is not
+configured to provide right access to any S3 buckets, but these commands will work
+in a real-world environment where you do have right
+access to S3 buckets. There are some other AWS S3
+commands that I did not introduce in this video but that you might find useful. To see a full listing of
+all the available commands, run the command aws s3 help. When you're done, press "Q"
+to exit the help interface.

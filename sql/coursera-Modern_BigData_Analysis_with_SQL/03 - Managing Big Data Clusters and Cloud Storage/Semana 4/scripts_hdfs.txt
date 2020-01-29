@@ -1,0 +1,19 @@
+-- 01. Listando itens em um diretório
+$ hdfs dfs -ls /user/hive/warehouse/fun.db/games
+
+-- 02. Removendo arquivo de um diretório
+$ hdfs dfs -rm /user/hive/warehouse/fun.db/games/ancient_games.csv
+
+-- 03. Copiando arquivos de um diretório para outro
+$ hdfs dfs -cp /old/games/ancient_games.csv /user/hive/warehouse/fun.db/games
+
+-- 04. Movendo arquivo de um diretório para outro (removendo existente/movendo/copiando de volta)
+$ hdfs dfs -rm /user/hive/warehouse/fun.db/games/ancient_games.csv
+$ hdfs dfs -mv /old/games/ancient_games.csv /user/hive/warehouse/fun.db/games
+$ hdfs dfs -cp /user/hive/warehouse/fun.db/games/ancient_games.csv /old/games
+
+-- 05. Deletando arquivos de um diretório utilizando wildcards
+$ hdfs dfs -rm /user/hive/warehouse/fun.db/games/*
+
+-- 06. Copiando arquivos de um diretório utilizando wildcards
+$ hdfs dfs -cp /home/training/training_materials/*games.csv /user/hive/warehouse/fun.db/games/

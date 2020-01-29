@@ -1,0 +1,36 @@
+With so many different file formats, you might wonder which one will work
+best for your data and use case. There are several factors to consider
+when choosing a file format. For example, what's the ingest pattern? In other words, how is the data loaded? Will the data set be loaded all at once,
+or will new records be added continually? If the data is loaded all at once,
+a columnar file format like Parquet might be able to take advantage
+of repeated patterns in the data, to store it more efficiently. But if it's being loaded
+in very small batches, Parquet can be less efficient
+than other file formats. Another factor is what tools
+you'll use to work with the data. This defines how much
+interoperability you'll need. For example, will you be using MapReduce,
+Hive, Impala, Spark or any other tools? What formats do those tools support? In general, text files and Parquet
+files offer the best interoperability. When you use these file formats, you'll have more flexibility in
+how you can process the data. However, if you're using only Hive,
+not Impala, then the ORC file format might
+be a better choice because there are some features of Hive that
+require the data to be in ORC files. Another question is,
+what's the expected lifetime of the data? Is it temporary, such as an input to a job that will
+be deleted after the job completes? Or will you need to retain the data and
+be able to read it years from now? If the data is being stored for a long time then you should choose a file
+format with good interoperability. Because years from now you might not
+be using the same tools that you're using today. Also for long-term data storage,
+consider choosing a file format that stores the schema
+information in the data files. That way you'll always be able
+to determine the names and data types of the columns
+in the data files. And consider choosing a file format
+that supports schema evolution so you can add, remove or
+modify columns in a Hive or Impala table without needing to make
+changes to the data files themselves. Generally, Avro and
+Parquet are good choices for long-term data storage. Somewhat related is the question,
+what are your requirements for data size and query performance? If you're planning to store
+a huge amount of data and you need to correlate efficiently, then
+you should choose a compressed file format that's optimized for query performances. Parquet files are typically
+a good choice for this. The bottom line is there was no single
+file format that is best in all cases. The best format depends on your data and
+what you're doing with it. Use these considerations along with how
+each format works to inform your decision.

@@ -1,0 +1,35 @@
+Welcome to week 4 of managing big data in clusters
+and Cloud storage. This week of the course is
+all about managing data sets. Remember that in Hadoop-based
+clusters are platforms, table data is stored separately
+from table metadata. The metadata for a table, which includes the
+tables structure or schema is stored
+in the metastore. You can create and manage
+the metadata part of a table by using SQL statements like
+CREATE TABLE and ALTER TABLE. You learned all about
+those statements in the previous two weeks
+of this course. The data for a table
+is stored separately in a file system like HDFS or S3. In most of the examples in the earlier weeks of this course, the data was already loaded into the file system for you
+and the task at hand was to define the metadata
+so that you could query those data files with
+Hive and Impala. But in the real world, the data will not always
+be preloaded for you. So in this week of the course, you'll learn how to
+load data into HDFS and S3. There is more than
+one way to do this. So the content in this week is broken into four main lessons. First, we'll show how to
+load data files into HDFS, the Hadoop Distributed
+File System. HDSF is where Hive and Impala
+store table data by default. You can load data into HDFS using Hue or using the command line. We'll show you how to do both. Next, we'll show how to
+load data files into Amazon S3, the most popular cloud
+storage platform. You can also do this using Hue but we'll focus
+on the command line. We'll show two different ways to do it from the command line. Sometimes the source
+data you want to load is not in files, instead it's in a table in a relational database system
+like MySQL or PostgreSQL. There is a tool called Sqoop. They can move data between relational database systems
+and HDFS or S3, we'll show you how to use that. Finally, we'll show how Hive
+and Impala themselves can be used to move data into
+tables by running SQL commands. We'll introduce
+several SQL statements that you can use to
+do this and we'll describe how Hive and
+Impala typically require a different approach to loading data than relational
+database systems. After this week of the course, you'll have all the
+fundamental skills you need to create
+Hive and Impala tables, load data into them, and manage those tables and data making changes as needed.
