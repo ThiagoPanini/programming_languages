@@ -1,0 +1,16 @@
+When you work with
+large-scale data, you'll often come
+across the problem of queries that take too
+long to complete. While they're running,
+these queries might use an enormous amount of the shared compute resources
+on your cluster. Part of the issue is just the
+sheer size of the data-set, but the specifics of a particular query and
+the different stages that the SQL engine must
+go through to provide the results can have a significant effect
+on query performance. In this lesson, you'll learn a few general strategies for
+improving query performance, darting with choosing
+which query engine to use. You'll also see how to view the execution plan for
+processing a query to see where the problem areas might be and you'll learn a few common ways to
+address these problems. Then in the next two lessons
+after this one, you'll learn about some more specific strategies for improving query performance in
+two particular types of cases.

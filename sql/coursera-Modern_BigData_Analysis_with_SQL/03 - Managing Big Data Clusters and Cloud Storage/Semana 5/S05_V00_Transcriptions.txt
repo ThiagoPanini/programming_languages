@@ -1,0 +1,22 @@
+Welcome to week 5 of managing Big Data in clusters
+and Cloud storage. All the lessons in this week of the course are Honors lessons. They're all optional, so you can complete the course
+without taking them. But we believe these lessons
+are valuable to anyone working with Hive or Impala in a real-world setting. In the real-world,
+when you're managing large-scale data in clusters
+in the Cloud storage, you'll sometimes encounter
+problems and inefficiencies. For example, your queries
+might take too long, or it might be that
+specific types of queries, like joins or filtering queries, take an unexpectedly
+long time to finish. Or your queries might be
+too complicated to write, taking up too much time and reducing
+analysts productivity. Or the process that
+you use to load data into tables might
+take too long to finish, or it might be
+overly complicated. Perhaps it's difficult for
+you or your colleagues to understand how exactly the data is flowing into Hive
+and Impala tables, and what other systems the data
+is flowing to and from. You might find that
+the whole process fails to meet some of
+the needs of your business. The good news is that
+Hive and Impala offer a variety of solutions that can help you address these problems. In this week's lessons, we'll give you an overview
+of some common ones.

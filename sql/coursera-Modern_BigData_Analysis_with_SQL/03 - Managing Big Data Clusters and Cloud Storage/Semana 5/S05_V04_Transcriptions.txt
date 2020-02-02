@@ -1,0 +1,56 @@
+Throughout this course, we've talked about
+how the data for Hive and Impala
+tables is stored in a file system like HDFS or S3. However, that is not
+the whole truth. The vast majority
+of the time, yes, the data is stored
+in a file system. However, Hive and Impala can also work with data stored
+in some other systems. These include Apache
+HBase and Apache Kudu. These are not file systems. They do not store data in files that you can
+list and access. Instead, these systems
+encapsulate the data storage. They manage the data
+for you and they abstract away the details of how it's stored and accessed. They provide a higher level
+interface to the data. The name we use
+for these systems, systems like HBase and
+Kudu is storage engines. Hive and Impala have
+what are called storage handlers that allow them to interact with
+these storage engines. What you can do with
+these storage engines varies depending on whether you're
+using Hive or Impala. Hive can create tables
+with data stored in HBase and it can
+query those tables. Hive also offers
+some limited options for managing the data
+that's in these tables, but mostly, you would
+manage the data in HBase tables from
+outside of Hive. Impala can query HBase tables
+but it cannot create them. You need to create them in Hive. Impala can create
+tables with data stored in Kudu and it
+can query those tables. Impala also has a rich set
+of options for loading data into Kudu tables and
+managing Kudu tables. Hive currently does not
+support Kudu tables. Also, besides HBase, there are a few other storage engines that it's possible
+to use with Hive, but they're not as widely used and I will not
+discuss them here. In general, there are two main
+reasons why you would use a storage engine instead of a file system with
+Hive and Impala. One reason is that
+the data you need to query is already stored in
+one of these storage engines, and using Hive or Impala is
+an easy way to query it. This is a common reason for using HBase with Hive or Impala. The other reason is that you
+need to overcome some of the limitations of
+distributed file systems like HDFS and S3. This is a common reason for
+using Kudu with Impala. So what limitations
+am I talking about? Well, typically
+the biggest limitation is that files in HDFS and in
+S3 are immutable. They cannot be directly modified. You can delete a file or completely overwrite a file to replace it with a new version, but you cannot modify
+a file in place. You cannot directly modify
+some part of a file. This makes file systems
+like HDFS and S3 a poor choice for applications in which data needs to be updated frequently. If you took the first course
+in this specialization, you might recall that this is one of the trade-offs between RDBMSs and engines
+like Hive and Impala. RDBMSs are typically a better fit for rapidly changing data. However, by using
+a storage engine like HBase or Kudu
+to store the data, you can overcome this limitation, and you can have
+frequent updates like in RDBMS and the scalability and lower cost of open
+source Big Data systems. Kudu in particular, is an attractive choice
+when you need to enable real-time analytics
+on rapidly changing data. It's designed specifically to enable this and you can query Kudu tables with Impala the same way you query
+other Impala tables. The remainder of this lesson provides some further
+details about Kudu.

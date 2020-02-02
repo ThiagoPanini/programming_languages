@@ -1,0 +1,97 @@
+Table partitioning,
+is one approach for improving Hive and
+Impala query performance. Recall that the data for Hive and Impala tables typically is stored in a file system
+like HDFS or S3. Breach table, there is
+a single directory in the file system containing the files that store
+that tables data. Typically, there are
+no sub-directories within a table storage directory and all the data files are stored directly in
+the storage directory. But this poses a problem. If the table contains
+a huge amount of data, stored across many files, then it can take the query
+engine an awfully long time to scan
+through all those files. Hive and Impala are pretty good at scanning files quickly, especially if they're in an optimized file format
+like Parquet. But still, when the
+data gets very large, queries can become
+slow and inefficient. Table partitioning offers
+help with this problem. It divides a table's data into multiple subdirectories
+within the tables directory. The data is divided into these subdirectories
+when it is loaded. Each record is stored in
+a partition subdirectory, based on the values of one or more columns
+called partition columns. Then when you run a query that filters on a partition column, the query does not need to
+scan all the tables data, it only needs to scan the relevant partition
+subdirectories. This allows the query
+to run faster. A query that does not filter
+on a partition column, will still need to
+scan all the data, so it will not be any faster. But to be clear, partitioning does not
+prevent you from running any query that you could run
+on a non-partitioned table. When used appropriately,
+table partitioning can greatly improve
+the performance of commonly used queries. But in some cases, partitioning may
+not be worthwhile. In other cases, it may actually
+worsen query performance. So it's important to understand when table partitioning
+is appropriate. Typically, partitioning
+is a good idea under the following criteria. If the table is very large, an Hive and Impala will necessarily take
+a long time to scan all the data in the tables directory
+for all your queries. Table partitioning can allow Hive and Impala to scan
+only parts of the data, resulting in
+improved performance. Your table partitioning
+will favor certain queries. You want to know that
+these are queries that you will tend to run frequently. The queries that will be
+helped by table partitioning, are those in which you filter two specific values on
+a certain column or columns. This is how you'll choose
+to organize your table into partitions by
+that column or columns. Don't worry if this is not
+perfectly clear right now. You will see working
+examples in the lesson. Third, the partition
+column should have a reasonable number
+of different values, and not to make
+partitioning worthwhile, but not so many that
+queries become inefficient. For example, you would not
+want a customer table to be partitioned on different
+values of say customer ID, because then you would have many partitions each
+with very little data. This huge number of
+partition directories would greatly penalize the performance
+of all your queries. Under these criteria,
+partitioning can be appropriate. If the criteria I've
+given here do not apply, you should think twice about
+whether to use partitioning. In a partition table, files are stored in different directories based
+on different values of some categorical variable like transaction date,
+or customer region. Since a partition table will
+organize data this way, it can be especially sensible to use table partitioning
+if your data processes already generate files that are divided by category. For example, maybe you receive log records
+from a log web server, with a different set of
+files for each new date. It's easy to place
+these files into a table partitioned by date. Having this kind of organization, can help provide
+great performance benefits for many of
+your analytic queries. Another aspect of
+the organization of partition tables is that one, or perhaps more than one
+column in your table, will not be stored in
+the data files at all. But instead will be the tag for different subdirectories
+where your files are stored. For example, if you
+receive a set of files for sales transactions
+in your northeast region, and a second set of files
+for your northwest region, you can easily place
+these files into partitions, where one subdirectory
+has data for your table column region
+equal to northeast. There was a different
+subdirectory for the column region,
+equal to northwest. You can set up these directories, and then easily run queries
+for distinct regions and their partition table will help with your query performance. If you choose partition tables, you will transform your data
+so that it will be organized to meet these two
+criteria I've just given, whether or not the data comes to you organized
+that way originally, though it can make
+your table setup simpler if these
+criteria are met, but it is not critical
+that these criteria are met by your data
+to begin with. It's important to avoid
+partitioning data into numerous small files because this will worsen query performance
+instead of improving it. This small files
+problem occurs when their partition columns contain
+too many unique values. An example of a poor choice for partition column is, first name. There could be thousands of different first names in
+a table of customers. In the remainder of this lesson, you will learn how to create and load data into partition tables. You'll learn more about
+the risk of using partitioning. A final note to anyone
+who's familiar with partitioning from the world of relational database systems. Many relational databases do support other types of
+table partitioning. Such as range, hash,
+and list partitioning. In general, Hive and Impala
+do not support these. There are some ways to achieve these more specialized types of partitioning with
+Hive and Impala, but that topic is outside
+the scope of this course.

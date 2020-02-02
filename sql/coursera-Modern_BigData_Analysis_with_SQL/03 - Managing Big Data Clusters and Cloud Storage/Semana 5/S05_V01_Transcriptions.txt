@@ -1,0 +1,18 @@
+Anyone who has written
+SQL queries for real-world applications
+should be familiar with how lengthy and complex
+these queries can be. For example, the query shown here combines data from
+the flights, airlines, and planes tables to show
+information about the kinds of aircraft flying into or out
+of a particular airport. This query is not even really that long
+by many standards, but still working
+with queries like this, can become cumbersome. With the example here, it could be that you need to repeatedly enter the same query, substituting only the origin and dest values in the where clause. Using views can help
+you to simplify complex queries especially ones that you need to run repeatedly. A view is like a saved query which can be used as if
+it were a table itself. You can hide the complex part of the query in the
+definition of the view, allowing you to run a simpler query against
+that view each time. Views can be useful not only for convenience but
+also for security. For example, if a table
+contains sensitive information, you can restrict access to the table and create a view that exposes only the rows and columns of the table
+that are not sensitive. In this lesson, you'll learn how to create, query, modify, and remove views, and
+you'll learn about the limitations of views
+in Hive and Impala.
