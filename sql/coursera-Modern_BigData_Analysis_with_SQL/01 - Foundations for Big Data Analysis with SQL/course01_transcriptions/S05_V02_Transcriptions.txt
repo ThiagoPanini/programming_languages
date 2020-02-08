@@ -1,0 +1,47 @@
+Hive translates SQL statements
+into programs in MapReduce or Spark to general purpose systems for
+big data. In contrast,
+Apache Impala is built from the ground up as a distributed SQL engine for
+big data. The concepts and design behind Impala, originated with Google when
+they realized they needed to build a high speed query system,
+specifically for big data. Google published a paper about their
+project called Google F1, in 2012. Marcel Kornacker,
+the technical lead on the F1 project, joined Cloudera to create similar
+functionality in open source software. Cloudera contributed Impala to
+the Apache Software Foundation, and Impala became a top level
+Apache project in November 2017. Impaler runs as a collection of
+Impala daemons running in a cluster. The word D-A-E-M-O-N can be pronounced
+damon or demon, either way. I find it more fun to say daemon. A daemon is a continuously running
+server program that awaits and serves requests as they appear. A web server, for example,
+is a kind of daemon. This diagram shows how Impala performs
+your interactive select statements. Your client connects to any
+Impala daemon in the cluster, and sends it your select statement. This daemon coordinates with the other
+Impala daemons, and collectively, these daemons read and process
+the data needed to perform your query. Finally, the daemon you contacted
+gathers the results, and returns them to your client program for
+display. Impala has a long list of
+special internal tricks, designed to process your big data
+queries as quickly as possible. An Impala query can run 10 or even 50
+times faster than the same query in Hive. And the performance differences
+are even more striking with multiple analysts querying your
+cluster data at the same time. If, as will happen on occasion,
+a worker machine in the cluster fails while your
+Impala query is running. Your current program will
+receive an exception, and you will need to restart your query. This is a principle difference
+between Hive and Impala. Unlike Hive,
+which gives you strong assurances that your queries will complete,
+Impala always opts for speed as a priority,
+even a priority over fault tolerance. By the way,
+this diagram is slightly simplified, here is a more detailed version. There are a couple of other Impala
+processes called the catalogue service and states tour,
+that run in support of the Impala daemons. These processes have the sole duties
+of consulting the Hive metastore and data file storage, keeping the Impala
+demons informed with this metadata. The SQL dialects, Impala SQL, and hive QL, are about 95% the same, so you can run most queries
+using either Hive or Impala. As a general rule, when you need to
+produce a new large data setting or cluster, Hive is a good choice for
+its reliability and fault tolerance. Requires that analyze your big data but
+return a small set for you to examine,
+Impala is the better high-speed choice. Impala is also good for
+business intelligence programmes or dashboards that query your cluster. It's no surprise that I had
+a large corporate customer say, we use Hive to prepare our data, and
+Impala to serve our data to users.

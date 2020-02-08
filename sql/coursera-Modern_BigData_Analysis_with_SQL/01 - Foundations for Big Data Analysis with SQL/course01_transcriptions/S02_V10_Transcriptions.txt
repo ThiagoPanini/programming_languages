@@ -1,0 +1,43 @@
+So far you've seen three main
+differences between normalized and denormalized design approaches. Normalization prevents
+some data anomalies, enforces some business rules, and produces a smaller database size
+than a denormalized database. All these differences seem to suggest 
+that normalization is a better way to go, and it often is, for these very reasons. A primary benefit for denormalization,
+on the other hand, is that it can improve the speed of your system - especially
+the speed of some SELECT statements. Look at this table with a derived column,
+showing the total of amount 
+and shipping. The normalized form of this table
+would not have this column, and so would not risk inconsistency 
+between the total and the other two columns. Denormalization stores the total
+explicitly, which makes it quick for a SELECT statement to sort, search, and report the order total value 
+from the table. This example is trivial, and SQL can do all those things 
+without needing the derived column, but the computation of adding two columns
+does take some non-zero amount of time. If the function to compute a value for the row becomes more complex,
+it will take more time, and with more rows in the table,
+even more time to run a SELECT statement. When you denormalize and
+store a derived column in a table, you take on the extra work to
+store it correctly in your rows, in order to make the value quickly and
+readily available for SELECT queries. Look at this summary table from before. In two rows, this table condenses data
+from 83 rows of the customer_orders table, 45 rows for one customer and
+38 rows for the other customer. This table does not contain all
+the details of the other table, but it makes a SELECT statement
+for these summary statistics much faster. Regarding SELECT speed,
+look at these two table designs. Consider this simple question: 
+What is the state for the person named Kiko? A SELECT in the normalized database
+requires a JOIN of two tables, while the denormalized database
+allows a simple lookup on one table. So, the redundant storage of the city data, 
+and the effort to keep these extra elements up to date, is a trade-off 
+to save the time it takes to perform a JOIN to find those elements 
+when you issue a SELECT statement. A thoroughly normalized database 
+may require you to join many tables in order to gather all
+the details you want to find. So for more involved databases 
+and larger tables, you'll find significant differences 
+in the run time of queries against normalized, or pre-joined tables. Remember that analytic databases
+are primarily built for data analysis. Analytic queries perform summaries
+and other deep dives into your data, to uncover insights that
+are implicit in the data as a whole. Because data analysis leans toward
+queries of greater complexity across more parts of your data,
+analytic databases tend to perform better with more denormalized designs. Operational systems,
+with their ongoing mix of DML and lookup queries,
+often work better with normalized designs. These are not hard rules, but they are tendencies you'll see 
+in good design for the two types of databases.

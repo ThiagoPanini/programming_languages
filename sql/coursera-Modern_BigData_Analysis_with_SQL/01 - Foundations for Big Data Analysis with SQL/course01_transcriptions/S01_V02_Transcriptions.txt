@@ -1,0 +1,47 @@
+Remember the movie poster from the last video. You look at the image and with the
+superpower of your own human brain, you interpret what you see to
+answer some simple questions. Who are the actors in the movie? What are the showtimes at this theater? You organize the sight of the poster to
+get some information that interests you. If you take a photograph of the movie
+poster with your phone, you do have data, but the form of the data as image pixels determines what use you can easily
+make of that data. Think about what you need to do
+if I share with you my photographs of every movie
+poster on display in a city, and then you want to find all the
+movies starring one certain actor. Now, imagine a simple table or spreadsheet
+with each row containing the movie title, the actor names and the showtimes. This may not be as aesthetically
+pleasing as the pictures of posters, but it makes things much simpler
+if you want to find a movie with some actor or answer some simple
+questions about a movie. Notice, of course, you cannot answer any questions about information
+that is not included in your data. For instance, your table with
+movie title, actor names and showtimes, cannot tell you whether there are tickets 
+available for a certain showing of the movie. What if instead of sharing my
+movie poster photos, I share all my photos including
+shots of restaurant menus, friends I meet, buildings I like. This may carry more information but it
+makes it even tougher for you to answer a simple question about what movies
+are showing with a certain actor. The important thing to learn here is
+that the organization of data has a major impact on how easily you can
+use the data to answer questions. At this point, I'd like to
+establish a few terms. By the way, you may have colleagues
+who use these terms with a meaning similar to the definitions here
+but not identical. It's OK as long as you know that the
+meanings given here are generally accepted and you can clear up the details with
+your colleagues if any confusions arise. A data store is a collection of data
+of any type. This is a general term and it can be used
+for collections of different sizes. For instance, I could call the collection
+of photos on my smartphone a data store. I might have a cloud storage account
+with photos, videos and text messages. This is a different, larger data store, and I could upload all my photos from
+my phone to this larger data store. The service that maintains my
+cloud storage also has a much larger data store of
+all the documents saved by all of its users. A database is an organized data store. A simple example of a database is a
+spreadsheet containing movie titles, actors, and showtimes. You can even organize your photos
+and call that a database. A database can contain organized
+data about different topics. For instance, I can have another
+spreadsheet of movie theaters, with name of the theater, address, and parking information,
+if available. If I like, I can keep the movie
+spreadsheet and the theater spreadsheet together
+in the same folder, and I can call those different
+parts of the same database. A type of software that helps you organize data
+is a database management system or DBMS. A DBMS enables you to create a database, add and update data, and easily retrieve data based on
+its organization. Electronic DBMSs were first developed in 1960s and have enjoyed increasingly
+widespread use since then. Informally, you may call the
+combination of your database and the DBMS software you use a
+database system.

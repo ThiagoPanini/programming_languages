@@ -1,0 +1,79 @@
+Now consider the time it takes to 
+read data from a disk. Starting with the basics, assume a common hard disk drive, with a sequential read rate of around 
+128 megabits per second. How long does it take to scan your data? (By "scan" I mean reading through the
+data end-to-end, one time.) I'll stop at 1 petabyte! You can see that at the scale of 
+big data, the read times become huge. What if you invest in higher solid state 
+drives at around seven times the cost? I'll give the numbers for drive that 
+is considerably faster, delivering a sequential read rate of 
+around 3 gigabytes per second. This is much faster - - though still far from instantaneous. And remember that an exabyte is a 
+1000 times the size of a petabyte, and it would take over 10 years to read 
+once, even at the faster rate! Fortunately, distributed storage also 
+brings you "distributed parallel reads." If your programming is clever, you can avoid scanning your file from 
+start to finish and instead, read different parts of the file in 
+parallel, reading from multiple disks simultaneously. Consider, say, a ten-terabyte file. From my previous calculations, reading this file one time end-to-end 
+would take 22 hours from a (rather large) hard disk drive, or 
+nearly an hour from a solid state drive. Now look at the time to read the file 
+if you combine the total read capacity of 
+multiple disks. This rough calculation gives times 
+assuming that your reads have no wait time and no contention 
+with other programs for disk usage. So, these numbers only give you a sense 
+of the times you can expect at best, and in idealized setting. And actual times will be longer. You can see that read times have 
+a significant impact on the time you can expect to do any 
+kind of processing on big data, and that you must use multiple parallel
+reads in order to achieve good read times. What goes with multiple parallel reads? Multiple concurrent process threads, 
+running on multiple computers. Suppose your program needs to find all 
+the records for a few customers, and give total net amounts 
+for their purchases and payments. A distributed set of processes can do 
+parallel reads, selecting just the needed data for 
+the desired customers; then these partial results can be collected in another process for final calculation 
+and display. If your program calculation is 
+sufficiently complicated, then there may be an additional stage 
+of distributed processing, in which intermediate results are reorganized by 
+grouping or sorting then processed further, and then, there is a collection and display. This intermediate reorganization of 
+interim results can be called a "shuffle" of the data. At big data scale, the shuffle of data between distributed 
+processing stages involves heavy network traffic, and may require temporary disk usage on some machines 
+to complete properly. If the calculation on your original 
+data is even more complex, it may require another shuffle, and another processing stage before results 
+can be gathered and displayed. In principle, a program may require 
+any number of processing stages, with a shuffle 
+between each stage. In the general case, your big data program may not produce 
+a small amount of data for your display but instead, may read a large data set, and produce 
+another new large data set. In this case, your program will perform 
+not just distributed reads, but also distributed writes. With large data reads plus 
+large data writes, your program makes even more demands 
+on disk read/write capacity. It is no wonder that these programs are 
+"batch programs" - - that is, real-world programs on real-world big data often take minutes, 
+or sometimes hours or more to complete. I've had one customer for whom one data 
+processing program ran for two weeks! And as before, with complex calculations, your program can have one or more shuffle 
+phases prior to the final output. With large shuffle between stages, your big data program can take even 
+more time. Perhaps you realize by now that I've 
+been describing a generalized big data processing 
+framework called MapReduce. This framework was first presented in 
+a paper from Google in December, 2004. Then in 2006, a team of engineers 
+working on big data indexing announced a project to implement Google's ideas in 
+open source software. That project was named Hadoop after a yellow plush elephant toy that 
+belong to Doug Cutting's young son. Today MapReduce is a solid production-quality 
+framework for processing big data. HDFS and MapReduce form the initial 
+basic components of the Hadoop platform, for storing and processing big data, and they remain in use today. Apache Spark uses the same underlying 
+processing paradigm as MapReduce, with independent parallel reads 
+into multiple processes, and possible shuffle into another 
+stage of processes, and so on. Spark improves on MapReduce in 
+a number of ways, including making use of the greater amount 
+of memory available in servers today, so the intermediate use of 
+temporary disk is greatly reduced, resulting in significant 
+performance gains. Today you can choose to store data 
+on premises in your data center using HDFS, or Apache HBase, or 
+some other storage approach; or in the cloud, with Amazon S3, Microsoft Azure, or some other cloud storage. Some companies use a hybrid approach, with data 
+generated in the company's servers stored on premises, using say, HDFS, and data 
+generated on the Internet remaining in the cloud. You can use content from both data 
+stores in one program. Transfer of big data volumes between 
+cloud and "on-prem" storage is not free. Look back at the estimated time to read 
+big data, and note that network transfers also take time, and that cloud providers will 
+charge a fee for a high-volume transfers. For these reasons, some users say 
+that big data has "high mass" and "high inertia," and "doesn't 
+want to move from where it's generated." On the other hand, it can simplify your data and programming 
+practices to have your big data consolidated, whether that is on-prem or in cloud 
+storage. In the end, it's your decision, 
+your business decision, whether you want to choose on-prem, cloud storage, or a hybrid of the two. Regardless of your choice, your big data store will necessarily be 
+distributed across many storage devices, and processing will also be distributed 
+in nature.

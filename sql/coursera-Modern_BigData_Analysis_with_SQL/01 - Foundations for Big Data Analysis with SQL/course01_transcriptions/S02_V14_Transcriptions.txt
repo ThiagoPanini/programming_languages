@@ -1,0 +1,56 @@
+I've previously distinguished between 
+operational and analytic database systems; operational databases primarily track 
+the ongoing state of a system, and analytic databases are meant to enable complex queries that perform a 
+deep dive into data, hopefully uncovering information that was 
+previously unseen in the data as a whole. There are overlaps between the two functions, 
+but large organizations are likely to have separate specialized database systems 
+to serve operational and analytic needs. One type of operational database 
+is an OLTP system. "OLTP" stands for Online Transaction Processing. It shouldn't surprise you that OLTP systems 
+rely strongly on an RDBMS's ability to support 
+transactions and business rules. ACID-compliant transactions, 
+along with database constraints, enable the gold standard for database support 
+of financial applications. OLTP systems, and especially online financial systems, perform an active mix of CRUD activities, 
+and rely on ACID-compliant transactions and 
+the enforcement of business rules to maintain consistency and order in the database, 
+and in business processes. So, high-quality OLTP systems must support good performance for many concurrent transactions and queries, in a healthy mix of the two. However, not all DBMSs support ACID-compliant transactions or business rules, 
+and not all applications need them. Consider this example: a social chat system needs the ability to store 
+and retrieve individual messages at high volume and high speed, but the 
+individual storage actions can be extremely simple: all they need to do is to add 
+individual messages to the system. In relational database terms, such systems only need a guarantee of single-row atomic INSERTs, without any need 
+for multiple statement transactions at all. The simplicity of the data added means 
+that a single, scalable program can handle all the INSERTs, and it is not necessary to use computing time to enforce data rules 
+at the database level. I'll mention such applications again 
+in a couple of weeks when I talk about NoSQL database systems. The other broad category of database system 
+to consider is an analytic database. The primary purpose of an analytic system 
+is to support deep, complex queries. Many analytic systems contain data harvested 
+from an operational system, and this harvesting happens on a periodic 
+basis in a process called "ETL" for "extract, transform, and load" activity. For example, you may have an operational 
+database that retains up to 24 hours of traffic information 
+for a system that supports transportation. On a nightly basis, an ETL program 
+can retrieve this data from the operational database and load it 
+into a separate analytic database. This extract and load step also often 
+requires "transformation" because, among other things, an operational database 
+tends to be normalized, and an analytic database 
+tends to be denormalized. This ETL action can occur overnight, every night, until the analytic database has accumulated months' or even years' worth of data, which can serve as a rich source of deep analytic insights 
+about changes in traffic patterns. The ETL phase may take place overnight, 
+and then the analytic queries occur during the day, 
+when the database state is not changing. The alternation between ETL and queries 
+happen on a daily cycle, or some other time period, 
+such as hourly, but there is a separation of data load 
+and query activity, and this is fundamentally different from the ongoing 
+mix of CRUD in an operational system. So the addition of data to the analytic system 
+is not a series of small DML operations, but a bulk load of data. This means the burden of maintaining 
+consistency on the data can be shifted from the database system 
+to the ETL program. That lets us optimize the database 
+for complex query performance, so it does not need is to support 
+transactions at all. Because these specialized ETL programs 
+do all the DML, database triggers and even 
+key constraints are usually left unsupported in 
+production analytic databases. Having the database double-check the work 
+of the ETL program would only slow down the ETL phase. The SELECT statements that perform analytic queries do not engage triggers or other constraints at all, so they're not needed. The discussion I've presented here 
+presents an important form of analytic database called a "data warehouse." A data warehouse gathers accumulated data 
+from one data source, such as an operational database as I've described, 
+or often from multiple sources. For example, a data warehouse can combine 
+daily traffic data, and daily weather reports, and data in area population density, and changes in housing costs, 
+to build a very rich set of analyses of ongoing transportation needs and 
+transportation business opportunities.

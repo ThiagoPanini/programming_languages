@@ -1,0 +1,27 @@
+Some data can be characterized as 
+"semi-structured." This is usually defined as data in 
+which fields in a record are tagged, but there is no definite schema that 
+all records are guaranteed to meet. Look at this set of JSON records: You can see the tags: name, pcode, age, and city in these 
+records. However, there could be other records 
+in the dataset, and you have no guarantee that only 
+these tags will appear, or that field values will have 
+consistent data types. Another form of semi-structured data is XML. This clearly indicates tags and values 
+for different records, but again, the XML document alone does not have a schema. Many data services on the Internet provide data records on request using a 
+programming API. Such records most commonly come to you 
+as JSON or XML. Of the two, JSON is more popular, mostly because it is more compact. JSON and XML are the most common forms 
+of semi-structured data. A CSV file with column headers is another 
+form of data with labels but no schema. Similarly, if you create a spreadsheet, you can have headings for each column, but you have no constraint that 
+requires you to record similar data elements consistently in a column. Informally, some people use the word semi-structured to mean that data has 
+some structure, but without their regularity or schema 
+of structured data. Look at this log file example from the 
+documentation on the Apache HTTP Server: An Apache Server can be configured to 
+emit a log entry like this for every request it receives, and the total of all such log records hitting a website is indeed a rich source of information. The fields in this line are defined: Armed with this information, you can 
+use character patterns like regular expressions to break out pieces of the character string into specific, 
+atomic values, and these can be shaped into a 
+structured record to the extent that all records conform 
+to this format. The challenge with log files is that servers may have a variety of options 
+in what is logged, and there is no enforcement of the 
+content or format of logs. Also, the logging options of different 
+kinds of servers may vary, and custom logging created by engineers 
+can vary widely in the kinds of data recorded. So, in this second, looser definition 
+of "semi-structured data," log files serve as a good example.

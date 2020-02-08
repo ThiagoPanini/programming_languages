@@ -1,0 +1,51 @@
+There are a few other column properties 
+that you can set, depending on the particular RDBMS you use. Here are a couple of those other properties: a column definition may define a default value for the column, or a numeric column 
+may allow only positive values. It's good to learn the complete list of available column properties 
+for whatever system you use, but I'm going to skip those to get 
+to the next important concept. Here are two key properties that 
+take you from columns further into overall table design: 
+primary keys and foreign keys. "Two key properties" - get it? These properties are not required 
+by all RDBMS software, but they are frequently supported, and they enable a well-known approach to
+database design that I'll discuss this week. A "primary key" is a column - or sometimes 
+a set of columns - that is used definitely, uniquely to identify any row in a table. I'll talk about single-column primary keys, 
+called simple primary keys, for now. If a table has a primary key column, then for any row, the value of the column in that row identifies exactly that row, 
+and no other row in the table. An RDBMS supports a primary key 
+by making the column NOT NULL, 
+and also unique. This means that if any record is submitted 
+for INSERT to the table, the primary key must be included 
+as a non-NULL value. And also, the database system will check 
+all rows in the table 
+at the time of the INSERT, and will reject the new row if its primary key value is found to be 
+already present in the table. In this way, the primary key prevents 
+the table from ever having two rows that are exact duplicates of one another, because no two rows 
+can have the same primary key. Look at this table: The RDBMS 
+does not require you to have a primary key but the id column 
+may well be the primary key 
+for this table. Here the numbers in the column 
+cover a sequential range of integers. That may not be the case, 
+and it doesn't matter. The important thing is that 
+there can be no two rows with the same value in the id column. So, a primary key value will always locate exactly one row in the table - or no row 
+if the primary key value isn't found. When you design a table, you may find more than one column that 
+could be used as the primary key, but just be aware that RDBMSs usually permit 
+no more than one primary key, so the schema for your table will have 
+no primary key, or one primary key, not more than one. Columns with "id" in the name are often used 
+for primary keys. Employee id, customer id, store id: these can be used to identify exactly 
+one employee, or one customer, or one store. Another aspect of a primary key is that 
+it must never be changed. For example, you can keep 
+an employee table up-to-date by changing the name, or the salary, or the department of an employee, 
+but the primary key - say, the employee id - never changes, and in this way the other changes 
+reflect a change in the data about the employee, but not a change 
+from one employee to another. This rule of no changes allowed, 
+or "immutability," for primary keys is often not enforced 
+by RDBMS software, but it nevertheless is an important principle for you to follow when you think about 
+table design. Systems use different ways to represent 
+a primary key in a table schema, but here's one: The note "PK" indicates 
+that the id column is a primary key. PK automatically implies that a column is also NOT NULL and must have no duplicates 
+in the table, so indicating these is optional. This design tells you that the table 
+will always have a value for id in every row, and that no two rows 
+will ever have the same id. Of course different rows may have the same price. As for the name column, it may or may not make sense for you to have 
+two rows with the same toy name, but this table design does not say 
+anything about that: it only restricts the use of duplicates 
+in the id column. I'll talk about foreign keys, 
+and a bit more about primary keys, 
+in the next video.

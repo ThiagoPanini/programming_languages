@@ -1,0 +1,18 @@
+Imagine that you're
+a contestant on a game show. I'll show you a series
+of four doors, and you can choose any one door to claim
+the prize behind it. I'll even tell you in
+advance: behind door number 1 is a 1000 ten-dollar bills; behind door number 2
+is a million one-dollar bills; behind door number 3
+is a billion dimes - - that's tenths of a dollar; and behind door number 4
+is a trillion pennies - - hundredths of a dollar. Which door do you choose? If you choose door number 4, you'll get the highest
+dollar figure for your choice - but you'll have
+to manage a trillion pennies. Working with big data is
+like choosing the pennies: you have the opportunity
+to store vastly larger amounts of data, even data with
+lower value per item, but with a higher reward
+from your data overall. This week I'll cover the main characteristics
+of big data stores today. You'll learn the "three
+V's" of big data, and you'll begin to
+appreciate the differences between big data and
+relational databases.

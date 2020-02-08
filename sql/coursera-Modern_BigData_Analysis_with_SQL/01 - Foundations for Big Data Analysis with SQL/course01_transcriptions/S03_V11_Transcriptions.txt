@@ -1,0 +1,83 @@
+As you know, unstructured data 
+is of the sort that any information contained in 
+records is not immediately, readily available. Broadly, there are two types of 
+unstructured data: binary content, like media files; and text, like emails. Unstructured binary data is 
+pervasive today: audio recordings, videos, and photographs are commonly in 
+digital form, and there are also specialized 
+binary records like seismic data or medical X-rays. Sometimes you can store binary 
+data in your tables alongside your 
+structured data. Consider this table: Some relational systems,
+like Oracle, allow you to store a binary field using the BLOB datatype, and so you can have data like employee photos in a column 
+like this. However, there are no SQL 
+commands at all for analyzing the content 
+of the photos. You can store a photo in a row, 
+and you can retrieve the photo along with the other parts of 
+a row. But SQL provides no means at all 
+for sorting, or searching, or computing any results from the photos 
+themselves. Now you can see the original 
+meaning of the term BLOB when given as a 
+column datatype. When Jim Starkey at Digital Equipment Corporation came up with a datatype "BLOB", he deliberately meant that featureless jelly-like mass in 
+the monster movie "The Blob" from 1958. It was only later that the word 
+"blob" was tagged to mean 
+"binary large object". From the point of view of SQL, the content has no structure and
+no usable data. If you want to add
+functionality to your SQL dialect to support a 
+specialized binary field, you can do so using 
+user-defined functions, or UDFs, supported by many 
+SQL-based systems. A UDF is a function that you write in a general programming language, 
+like C, or Java, or Python, and that you add to the database 
+software itself. With some programming effort, you can create a set of functions to manipulate a specialized
+binary field in some way. For instance, you may have a set 
+of UDFs that manipulate parts of a field that represents genetic information. Be careful, though: this may be a poor design approach. Although it may be possible to add your own UDFs to work with
+custom binary content, it is likely you will play against the strengths of your database system. The power of SQL is to analyze large amounts of structured data, and the best approach is probably to keep the
+manipulation of binary fields in programs outside
+your database software. Note that many well-known
+digital formats include metadata tags. Digital photographs, for example, contain tags for the equipment 
+manufacturer and exposure time of a photograph. Emails have a sender or recipient,
+and a timestamp. Simple programs can extract this metadata in structured
+or semi-structured form, and so you can add these as
+separate fields to a table. Then you can use SQL to query 
+this metadata. For example, you can find the oldest photo, or the oldest
+email in your database. Note, however, that you are then 
+working with the metadata, not the unstructured 
+content. When that metadata is not present, you may work with human analysts 
+to add structured metadata to
+unstructured content. This can be prohibitively expensive 
+for big data scale; however, some organizations like 
+museums and libraries have used crowdsourcing to bring many individuals to the task. Today, many computing systems go 
+beyond the analytic techniques of SQL to find patterns in 
+unstructured data. These programs include a 
+variety of machine learning techniques like classifiers that perform
+optical character recognition to read the words in an image, or that can tag images automatically, or recognize spoken words. The important thing to note here 
+is that such programs extract structured content
+from unstructured data. You can operate on unstructured 
+data in your big data stores using
+machine learning algorithms; probably written in Apache Spark 
+or a deep learning system like TensorFlow or DeepLearning4j. Once the structured information 
+has been obtained using these programs, this resulting structured data may be profitably analyzed using systems like Hive and Impala, for the kind of data analysis performed 
+with ease in SQL. Besides binary data, the other 
+form of unstructured data is
+natural language text. Examples of text-based unstructured 
+data include emails, text messages, news articles - any texts where words are used, not as categorical labels like 
+product names, but where the expressive power
+of the language is used to convey information
+between people. Traditional SQL databases typically have some limited support for 
+unstructured text. For instance, you can search a 
+set of emails for the ones that contain
+some word. Typical relational systems 
+do not have the benefit of extensive indexing 
+on long-form text, and so such a search is likely to be rather slow at big data scale. Apache Hive does have a few interesting natural 
+language functions, like the ability to find the 
+multi-word phrases that appear most frequently in a large collection of text documents. But for the most part, you'll use separate programs for the more powerful work of
+natural language processing. So, there are some similarities in the approaches you will most 
+likely take to unstructured text and
+unstructured binary data: You will use some programs other 
+than SQL databases to work with 
+such data directly. Fortunately, big data systems 
+permit you to store and maintain data of 
+all sorts, bar none, and then bring a variety of tools to bear on 
+the data. Without moving data between 
+different systems, you can apply machine learning and natural language techniques to get structured features from 
+your unstructured data. Then you can use those structured features in 
+a SQL-based system like Impala or Hive to gain increased 
+analytic insights.

@@ -1,0 +1,67 @@
+Consider the storage capacity of 
+a single disk drive - - whether it is a hard disk or a 
+more expensive solid state drive. As I'm speaking, a single drive 
+usually stores around a terabyte, or a handful 
+of terabytes. Now consider if you want to store 
+30 terabytes, or 30 petabytes, 
+or more! In modern technology there's no 
+choice but to store your data across multiple 
+disk drives, and the largest data stores must necessarily 
+span thousands of disk drives. So, a big data store relies on 
+"distributed storage." For distributed storage, instead of 
+storing a large file sequentially, you can split it into pieces, and scatter 
+those pieces across many disks. This illustration shows a file split 
+into pieces, sometimes called blocks, with those blocks distributed across 
+multiple disks for storage of the file. The big data platform Apache Hadoop 
+includes a file system called the 
+Hadoop Distributed File System, or HDFS. In HDFS, a single block is usually of size 128 megabytes. So, a one-gigabyte file would consist 
+of 8 blocks, and a one-terabyte file would consist 
+of 8000 blocks. If you study Hadoop administration, you'll learn more about the placement 
+of blocks on different disks, but the more-or-less random scatter of 
+blocks across disks is a common general case. Notice, though, that if one disk fails, then a part of your file is lost. This presents a problem for keeping 
+the file system available. You can usually purchase a disk drive 
+with a tested mean time to failure of 100,000 hours, 
+or just over 11 years. And this gives you a high degree of confidence 
+if you just use one drive on one computer, making periodic backup copies, 
+for a number of years. But, what if you have a 1000 
+drives ganged together, and each one is needed 
+to keep your files available? The mean time to failure is now about 
+100 hours - less than a week. With 10,000 drives, you can estimate 
+a drive failure every 10 hours. So disk failure must be an expected,
+common occurrence for big data systems. In order to keep files available, 
+HDFS keeps redundant copies of blocks on 
+different disks. The accepted standard for redundancy 
+in HDFS is 3 copies. If one disk fails, there are still 
+2 copies of each lost block available. And, the file system is self-repairing: the system notices the failure of a disk, and automatically makes additional 
+copies of the lost blocks, distributed across 
+the remaining available disk drives. If you study file system and disk 
+architectures, you may recognize the approach of HDFS 
+as similar to a RAID 10 design. It is a fairly simple approach, 
+that requires you to invest in raw disk storage volume that is triple 
+the usable space you need in your file system. In other words, since HDFS stores 
+each block 3 times, it requires, for example, 3 gigabytes of disk to store a 
+1 gigabyte file. A Hadoop installation on premises in a corporate data center is usually made 
+up of banks of standard computers, each with its own memory, processors, and disk storage, 
+combined in a single computing cluster. Such a Hadoop cluster pairs computing power - - memory and CPU - together with disk storage. For these systems, some disk space 
+must be set aside for software and temporary working space on 
+each computer. So, the ratio of raw disk storage 
+to usable space in the big data store is really 4-to-1, instead of the 3-to-1 ratio I gave 
+a minute ago. Now, how much does storage cost? As I speak, hard disks cost around 
+3 cents US per gigabyte, and the faster solid state disk cost 
+around 20 cents US per gigabyte. Including the 4-to-1 ratio of raw 
+disk space to file system space, you have these estimates. Considering the largest big data stores 
+reached to hundreds of petabytes, you can see that an organization needs a very compelling reason to choose 
+faster solid state drives at this scale. Clearly, there's plenty of motivation 
+to look for space-efficient file formats and 
+to do file compression. Alternative file systems to HDFS 
+are also interesting, in that they may offer 
+trade-offs between cost, storage footprint, write times, 
+and read times. I'll talk about cloud storage later, but I just want to point out here that 
+storage costs at big data scale are significant. This is true regardless of the 
+storage solution you choose, whether it's cloud storage or storage 
+on premises in your data center, and whether or not you deploy specialized 
+hardware storage solutions. Here's the main take-away of this video: at big data scale, there must be a way to store data 
+in your database - and even a single database table - 
+across multiple disks, and so a conventional file system that stores 
+each file on a single disk is not adequate. Distribution of data across a large number 
+of disks is the norm with big data.

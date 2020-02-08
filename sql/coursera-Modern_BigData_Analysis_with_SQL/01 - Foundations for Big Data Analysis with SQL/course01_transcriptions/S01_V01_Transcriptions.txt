@@ -1,0 +1,28 @@
+Data analysts work with guess what? Data. Starting from the beginning: What Is Data? In this specialization,
+data means digital data. Information that can be transmitted,
+stored, and processed using modern digital technologies, like the Internet,
+disk drives, and modern computer. Imagine that you walk
+by a movie theater and see a movie poster about
+a new movie you want to see. You enjoy the image and you read to
+find out about the actors in the movie. And the showtimes at the local theater. So you get information that is
+interesting and useful to you. But does the site of the movie
+poster itself comprise data? No, the poster presents
+an image to your eye. Which you read and interpret to get
+the actors' name and the showtimes. So an actual object or a direct
+sensory experience is not really data. But you can have data about those things. Data is a representation of something that captures some features and
+ignores others. Now data itself can be divided into two
+kinds, analog data and digital data. A photograph of the the movie poster taken
+with a film camera is not digital data. An image from photographic film results
+from chemical processes on photosensitive materials with essentially infinite
+continuous ranges of color on paper. In contrast,
+a digital scan of the movie poster or a photo taken with
+a smartphone is digital data. It can be saved, copied,
+sent to another smartphone, displayed on many screens, so on. A film photograph requires mechanical and
+chemical processes to reproduce. But a smartphone photograph is
+just numbers stored in the phone. These numbers can be copied to
+cloud storage, sent to another device, displayed on any number of screens. This may sound a bit philosophical but
+it's worthwhile to notice the transition from things to representations
+of those things as data. And since data analysts work with data, it's a basic skill to be able to
+identify what is and is not data. Also please note that from now on,
+whenever I say data, I always mean digital data unless
+I specifically say otherwise.

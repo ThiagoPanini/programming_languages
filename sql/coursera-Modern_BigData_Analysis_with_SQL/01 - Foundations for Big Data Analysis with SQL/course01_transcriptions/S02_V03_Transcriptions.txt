@@ -1,0 +1,32 @@
+We've looked briefly at a small table 
+and its simple schema. Every bit of data in a relational database 
+is a row in a table, and so the data permitted 
+in your database will be determined by the table schemas 
+you define using CREATE statements. Since your table schemas must always 
+provide a data type for every column, the data types determine 
+what kinds of data you can have. If you study the dialect 
+of SQL used by any system, you'll find a list of supported data types. For example Apache Impala includes these data types: There's no need to learn 
+each of these data types right now, the later courses will include these 
+in a detailed study. For now, it's important to note two things. One, a relational database design always 
+gives a data type for each column in a table. And two, different SQL dialects, for different software systems, will have some differences in the exact list 
+of data types supported. So if you actively use a particular system, you want to familiarize yourself 
+with its available data types. In fact, if you copy data 
+from one system to another, you may need to adapt some columns 
+from the data types in the one system, to use the data types 
+available in the new system. There are two special column data types 
+that I want to mention briefly here: BLOBs and CLOBs. "BLOB" stands for Binary Large Object, and "CLOB" stands for Character Large Object. Look at the maximum allowed sizes. That's right: a table might have 
+a BLOB column that stores, say, an entire movie in each row, or a digital x-ray. Or, a CLOB column might store 
+the entire text of a book in each row. These large data types are very unusual, because many SQL dialects 
+do not support them at all, and those that do usually 
+have very limited support. There's typically no built-in way 
+to use these columns in any analysis. With standard SQL dialects, you cannot sort, or search, or calculate anything with the values 
+in these large data types, and so these columns cannot be used 
+in the kinds of SQL commands that do those things. At most, such column values can be stored in a table, and then retrieved from the table. In fact, database systems that do support BLOBs and CLOBs usually store them in a part of the file system that is altogether separate from the storage 
+of all the other columns of a table. Again, these large data types are supported 
+in some RDBMSs, like Oracle, but are not supported universally. For instance, Impala does not have BLOB or 
+CLOB in its list of allowed data types. Also, the size limits of a BLOB or CLOB 
+may be different in different systems. There's one more general category 
+of data type: complex data types. Those are unusual data types 
+in the conventional relational world, but they add flexibility in 
+your table designs for big data. I'll discuss complex data types 
+later in the course.

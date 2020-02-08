@@ -1,0 +1,35 @@
+The volume enabled by big data storage 
+means that you can capture the contents of your operational databases 
+at different times, many times over. But that's far from everything you can store. Here's an important example. In the recent past, organizations would keep machine logs from their applications for a limited period 
+of time - - maybe for 24 hours, or for a few days. These logs were then used for troubleshooting 
+problems in the short term. Today, you can capture and store logs 
+spanning years, so that this data becomes more than a resource 
+for troubleshooting recent problems: it is now a new source for insight about 
+the activities and trends in your business. It's easy to turn on informational logging 
+in production programs, and logs can be generated, captured, and stored without interfering with the normal 
+operations of the application. And then, there's publicly available data. Online search engines are able to 
+record and keep details about every search ever 
+entered, and social media sites keep every message and 
+comment, on every subject. News archives are digitized and current 
+news articles are published in digital form. The number of datasets, articles, photos, audio, and videos available on the 
+internet is only increasing. You can obtain these kinds of data 
+for little or sometimes no cost. You can then use this data to gain 
+richer insights into your own data. And then, there's the Internet of Things. The era of IoT is just beginning. Vehicles, appliances, and other devices 
+will record simple measurements, generating data worldwide at a pace at least one or two orders of magnitude higher than the total production of 
+digital data today. The important thing to notice is that, because big data stores let you store 
+such high volumes of data inexpensively, you can now store many new kinds of data. So, big data has not just high volume, but also has high variety. You can classify digital data as
+structured, semi-structured, or unstructured. These categories do not have 
+strict boundaries, but they do have general meanings 
+that you can understand and apply. I'll start with a discussion of 
+structured data. A simple definition of structured data is: 
+data that conforms to a set schema. Look at this simple schema and table 
+from last week. The important thing about this table is 
+- that without even looking at the data - you have a guarantee that every record 
+that will ever appear in the table will always conform to the table 
+schema, without any exceptions, ever. If the columns are NOT NULL, you have even stronger guarantees 
+on the data. This is structured data. And since every record in a relational 
+database is a row in a defined table, you have a guarantee of structure - - even more so if the database is 
+normalized. The widespread use of relational databases, 
+and the table definitions required for all relational data, yield a common notion that structured data, and data in a 
+relational database, are equivalent. This is not universally true, but it is largely so. I will discuss ways a relational database 
+can accommodate some unstructured data shortly.

@@ -1,0 +1,15 @@
+SQL, Big Data, Big Data, SQL. It's not a perfect fit as
+much as we'd like it to be. Relational databases
+don't just pick up and move over to
+encompass Big Data. As you'll see this week, some approaches avoid
+the SQL question altogether and use very different types of systems for
+Big Data applications. You'll see that the term NoSQL has two different
+interpretations, and both interpretations
+are useful. But for data analysts, the appeal of SQL remains, and is so useful and popular that it's
+nearly Irresistible. You'll see how some technologies
+adapt SQL to Big Data, and how these systems
+handle metadata differently than traditional
+relational systems do. You'll also consider
+the growing options for storing Big Data. In your own company data
+centers, in Cloud storage, or a combination of the two, and you'll see why
+you might choose one option over the others.

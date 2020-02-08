@@ -1,0 +1,35 @@
+Table columns each have a name and
+a data type, but they can also have other properties. Here's one more column property for
+now: NOT NULL. Sometimes a row can have
+no value at all for one or more of its fields, which are the values
+for the different columns. The special term for
+no value is NULL, or a NULL value. Note that NULL is not the same as zero for
+numbers. And for STRING columns, it's not even the same as an empty string,
+a string with no characters. NULL is the absence of any value at all. So then another property of a column
+is that it can be NOT NULL. This means that a row must have
+a value supplied for that column, or it is not a legal row. Look at this revised schema. Now there are notes that the id column and
+the name column are both NOT NULL columns. So, a row in a table must
+always have a value for id and a value for name. But this note does
+not appear for the price column, a row may occur with no value
+given at all for the price. Look at the table schema and
+the data given here. The values in every row conform to the
+data types of their respective columns, and the NOT NULL columns
+have values in all the rows, so all the rows are legal
+according to the table schema. Notice here that the word
+"NULL" is presented for the price in one of the rows. Many of the database systems
+will have some way to indicate a NULL value in a row
+whenever the row is printed out, and the printed word
+NULL is one common way. This first course emphasizes concepts, and so the syntax for
+INSERTing rows comes up in a later course. However, I can tell you that there are two
+common ways to indicate a NULL value for part of a row: one is to leave the value out
+of the row INSERTed, like so. This is not SQL syntax: I'm just giving
+the data for a row presented clearly. Since no value is given for price,
+the row must use a default value. In some systems,
+there could be a default for columns whose values are not
+supplied on an INSERT. If no value was specified in the table
+schema, the missing value must be NULL. The other way to supply a NULL value
+is to use the word NULL explicitly in the row values. It's important to get to
+know the schema of any table, because that tells you what kind
+of data can be in the table. And so, what kind of information you
+can expect to store and retrieve. There's more to say about data types and
+I'll continue with that in the next video.

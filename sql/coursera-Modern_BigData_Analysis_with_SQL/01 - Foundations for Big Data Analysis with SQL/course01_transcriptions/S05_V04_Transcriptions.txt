@@ -1,0 +1,26 @@
+In this course and throughout
+this specialization, you'll find the optional
+honors track as a focus on one concrete goal. Preparing you to become a Cloudera certified
+associate data analyst. Their certification is
+a separate credential from the ones you
+receive from Coursera. It is a professional
+certification and meant to verify your ability as
+a data analyst of big data. We cannot guarantee that if you go through this
+Coursera training, you will pass the
+Cloudera certification. Of course, we can't
+guarantee that. But we will help you to develop the variabilities that
+the exam is designed to test. We'll give you practice with these skills you'll
+need to demonstrate, and familiarity with
+the resources you'll use both in the exam and in
+your professional work. The rest is up to you. We have designed
+this specialization and the certification with the same ultimate goal
+to help you build proven mastery of data analysis
+in the big data world, and to help organizations
+of all sorts to find people such as
+yourself for this work. For this week, I'm assigning
+you the task to read Cloudera's webpage on
+the certification program. Because that contains
+the core information you need to enroll and
+take the examination. I'll test you on that page
+because I want you to be secure in knowing how you will go about the
+certification process.

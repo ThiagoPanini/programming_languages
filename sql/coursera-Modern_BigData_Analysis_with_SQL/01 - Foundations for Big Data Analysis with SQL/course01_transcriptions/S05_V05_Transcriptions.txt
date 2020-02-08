@@ -1,0 +1,12 @@
+If you're watching this video, then I assume you've read the web-page about Cloudera
+certification process, and you've verified
+your understanding of the web-page by taking our quiz. I'm glad you're interested
+in Cloudera certification. The honors track in the rest
+of this specialization, will give you
+the extra practice with the tools and experience
+with the documentation, so that you'll be largely
+self-sufficient and well-qualified to work
+as a big data analyst. I hope you'll then go on
+to take and pass the exam, and I look forward to
+seeing you on the roles of Cloudera certified
+associate data analysts.

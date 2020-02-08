@@ -1,0 +1,33 @@
+As I've said before, the main organizing concept of relational 
+database management systems is a table. Relational database theory has a 
+formal concept called a "relation." A table implements a relation, and that's how we get the name relational database management system. A table has rows and columns. You might think of this as similar to, 
+say, a spreadsheet. However, a table always has a strict set of columns, 
+and then any number of rows. Look at this toy table. This table is set up to have just the columns 
+id, name, and price. A row (or record) in this table will have 
+exactly these three data elements: an id, a name, and a price. A row cannot have any extra data 
+elements besides these three. But the table has no set restriction 
+on the number of rows. Here you see 3 rows, but there can be no rows, or a thousand rows, 
+or a million rows or more! (If anyone can think of a million different toys 
+to record in the table.) Look a little closer at this table, at the kinds of data you see in each column. The id column has whole numbers. The name column has words, and the price column 
+has money amounts with units in hundredths. (Maybe dollars and cents, or 
+maybe some other kind of money: there is no indication of 
+what monetary unit it is.) The table is made so that each column 
+has a declared data type, which determines what kind of data 
+can go into that column. So then any row is just a combination of legal values for each of the columns in the table. Look now at the declared data types 
+for these three columns. The INT data type says that the id column 
+can only store an integer. (The allowed range is around 
+plus or minus 2 billion, but let's not worry about that right now.) The name column has data type STRING, which is a simple data type for character data. Any character, including numbers and 
+other symbols, can be part of a string. The price column has a different 
+kind of numeric value: a decimal number, with up to 5 digits total, and with 2 of those digits 
+to the right of the decimal place. So, a DECIMAL(5,2) column can have a value 
+as high as 999.99, but no higher. A DECIMAL data type like this 
+is good for money amounts, because it will always stay accurate to the exact number of decimal places 
+you give in the data type. A really important idea to get here is that the table has no set limit 
+on the number of rows it can have, but has definite limits and rules 
+on what can go in any row. The table has a strict definition for 
+its column names and their data types, and this comprises the structure 
+of the data your table can accept. So, you can just sketch out the design of the table by stating the 
+column names and their data types. See how this describes the table? This doesn't show any of the data, the actual toy records, 
+that can be in the table. But it shows the kinds of rows or 
+records that the table will accept. This is the structure of the table, 
+also called its "schema" or "metadata."

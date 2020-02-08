@@ -1,0 +1,31 @@
+Unstructured data, is plainly enough, 
+data without clear, definite structure - - especially the structure you find in normalized relational tables, using 
+atomic values and simple data types. Natural language text is one type 
+of unstructured data. Look at these two records: These lines carry information about 
+individuals' names and ages, but not in a consistent, organized form, with names and ages put into atomic fields. Suppose you have ten thousand lines 
+of text like this, where people give their name and age
+in years, using informal language. You cannot readily use this content to find 
+the average age, or the most common name. Even this simple text presents 
+obstacles to analysis. And the broader case of written text in 
+general is even more challenging to analyze. Media files are also examples of unstructured 
+data. Of course these files have a definite format, like MP3 for audio or PNG for images, but they are not files of the simple data types 
+you have for relational database tables. You can readily store and copy media files, and you can reproduce sound and images 
+from them using suitable technology, but what if you want to search the data? Imagine if you have MP3s of 5,000 songs, and you want to find songs with a 
+particular singer. MP3 files do have an optional metadata tag, with up to 
+30 optional characters for "artist name", but if the singer names are not found there, you cannot easily search the files. You must first tag every file with a 
+singer names, and then you can search the tags, and 
+not the MP3 content itself. Media files, satellite images, medical x-rays - all these are examples 
+of unstructured data. Relational databases do allow you to 
+store some unstructured data. I'm thinking of the character data type. Many RDBMSs provide a character string 
+type that will store just over 65,000 characters 
+in one field of a row. This is more than enough for most 
+news articles, and you can use a column for natural 
+language in this way, then that qualifies as unstructured data. Even more extreme or the BLOB and CLOB datatypes sometimes supported, that I mentioned 
+briefly before. A BLOB column can store up to 4 gigabytes 
+of binary data; and a CLOB, up to 4 gigabytes of character data. Not all RDBMSs support these data types, 
+and those that do provide no functionality at all for 
+searching or analyzing their contents. As far as the database is concerned, BLOB and CLOB columns are undifferentiated masses of data that 
+can be stored and later retrieved, and that is all. When you leave out BLOBs and CLOBs, and you use text only for atomic values 
+like names and labels, then you can equate your relational 
+tables with structured data. But the broad range of digital media 
+and text we have today form a great mass of unstructured data.

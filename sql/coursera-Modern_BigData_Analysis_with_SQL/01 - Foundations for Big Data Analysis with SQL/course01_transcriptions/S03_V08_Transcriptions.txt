@@ -1,0 +1,62 @@
+Now I want to talk about some limitations 
+of traditional RDBMSs, especially when presented with the 
+challenges of big data. I've twice made the point that 
+relational systems have the strength that they can enforce 
+strong constraints on your data, and so they can enforce business rules. For these operational database designs, the good news is that records that violate 
+your constraints are rejected by the database. But, the bad news is that records that violate your constraints are rejected 
+by the database. In other words, your database cannot store a record that does not conform to your 
+pre-defined table schemas. This fundamental characteristic of 
+relational systems is commonly 
+termed "schema on write": records that do not meet your pre-defined 
+structure are rejected with an error code and are never stored. So, schema on write can be regarded as a strength or a weakness, depending on 
+what you're trying to do. In the big data world, you may be presented with millions 
+of records a day, and schema on write presents an obstacle if you want to retain them all - even the "bad" ones, or the ones for 
+which you do not have a schema defined already. Now, you might get the idea that 
+you can define a database table with a single BLOB 
+or CLOB column, and then you can store any records - all records of any sort - in that table. This is the extreme of a thoroughly 
+non-normalized data model. And yes, you could do that, but hold that thought: I'll come back to it. A great beauty of relational systems is that they allow 
+users to simply issue a statement like CREATE TABLE, and the software takes 
+care of all the rest. That is, you think in terms of tables 
+with rows and columns. The database software separates you from 
+the lower level concerns of the file storage, and managing files with all the 
+ongoing changes to data. But make no mistake: the data processing "under the hood," beneath the level of the SQL commands you 
+issue, is complicated. This abstract layer of working, 
+with isolation from implementation details, is generally 
+considered a strength of RDBMSs, but it does not come for free. The software that keeps your data 
+in nice neat tables for you will incur storage and processing 
+costs to do so. And, for many production enterprise applications, 
+significant monetary costs as well. Adding storage, processing, software licensing, and personnel needed for support, a relational database is a more expensive 
+type of a data store, where the total cost per terabyte of 
+data is perhaps 10 times or even 100 times the cost of 
+a simpler data store like a file system. The higher cost per terabyte is justified if the data you store has high value 
+per terabyte - meaning that you have high information 
+content in relatively small amounts of data. If you store all your personal 
+contacts of every type - media accounts, phone numbers, addresses, everything - you will 
+probably have a few thousand bytes of storage total;
+maybe ten thousand bytes. On the other hand, a single HD video can easily be 
+10 gigabytes. That's a million times more storage 
+for one video! Now, I'll return to the idea of creating 
+a table with a single BLOB or CLOB column. The database design provides no structure, and SQL provides almost no means for searching, or sorting, or calculating 
+any information on your column. An approach like this is an anti-pattern: an attempted solution that creates 
+more problems than it solves. The result of this anti-pattern is 
+a system that is essentially not a relational database at all, and its storage cost and performance would be worse than simply storing files in 
+a disk directory, and searching them when you need them. I hope by now you can see that the 
+careful structuring of data, and the ease of storage and manipulating 
+structured data, while all strengths of RDBMSs, play 
+against you when you have large amounts of 
+semi-structured and unstructured data. It is often estimated that
+less-structured data accounts for around 80% of all data, and this data, with such higher volume 
+and lower informational value per terabyte, cries out for other technology 
+than traditional relational databases. There's another difficulty I'll mention here: The problems with distributed transactions. Suppose you need to run a database 
+transaction that affects a 100 or so rows in various database tables. But at larger scale, your changes may affect rows distributed 
+across thousands of disks, and some redundant form of storage is 
+required to overcome unscheduled disk outages. So, how to provide a consistent commit 
+of all changes in a single atomic action? You could lock all the rows or tables 
+involved in your transaction, but this would quickly defeat the 
+usefulness of your system serving the needs of 
+many concurrent users. These large data stores require many disks, and many computers, with 
+networks connecting them. Distributed systems are faced with special technical difficulties of 
+synchronization over the distances involved. There are efforts to support atomic 
+transactions at scale, but these efforts all involve new 
+engineering innovations to overcome the limitations of transaction handling 
+in traditional RDBMSs.

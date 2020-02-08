@@ -1,0 +1,67 @@
+Both normalized and denormalized
+database designs have their uses. In this video, I'll discuss some of the main differences
+between the two design approaches. First, I'll consider data anomalies or problems with keeping
+the data well organized. When E.F. Codd first formulated his
+original principles of normalization, he made it clear that he was trying to
+help reduce the occurrence of anomalies. Consider the two table designs here. The denormalized design is
+subject to possible INSERT, UPDATE and DELETE anomalies. Here's an INSERT anomaly. If the person.name column is
+the primary key and therefore NOT NULL then you cannot add a city without
+also adding a person at the same time. Here's an UPDATE anomaly. If you change the spelling
+of San Francisco to "SF", you will generate
+inconsistencies in the table. Unless you search the table and
+make sure to update all occurrences. Here's a DELETE anomaly. If you delete the row for
+name "Sara" from the table, you will also delete the city
+Winnipeg, whether you intend to or not. The normalized tables are not
+subject to any of these problems. Of course, you can still have problems
+with your database - that's life - but the normalized design does avoid some problems like the ones
+I've just illustrated. Next, notice that a normalized
+database automatically enforces certain rules in
+the allowable data in your database. Look at these simple tables. The id columns are the primary
+keys in the two tables and the toy.maker_id column is a foreign key
+that references the maker.id column. When you define a primary key it is
+often called a primary key constraint. And a foreign key definition
+is a foreign key constraint. These are indeed constraints or
+restriction on the data in your tables. A primary key requires that no two
+rows in the table can be duplicates because every value of the primary
+key must be unique in the table. The intention is that a row
+represents an individual entity and that entity cannot occur
+more than once in the table. So, for instance, if you find a row
+about a maker in the maker table, the primary key assures you that
+you have found the one row. And you do not need to continue
+looking for other rows. (That is assuming that your primary
+key design is wisely done, then you take care not to assign more
+than one primary key to the same maker.) A denormalized table without 
+a primary key has no such constraint. There could be multiple rows 
+about the same maker with different, - maybe even conflicting -
+data in different rows. This may be easy enough to
+manage with a tiny table, but can cause major problems
+when the table gets larger. A foreign key constraint places
+other restrictions on your database. Because toy.maker_id is
+a foreign key referencing maker.id, the following restrictions
+all hold on these tables. Whenever you add a row for a toy, 
+it must have a maker that is 
+in the maker table. If you ever change the maker for a toy,
+it must be to a maker in the maker table. You cannot delete a row
+from the maker table that would leave toys without a maker. An RDBMS can enforce these primary key
+and foreign key constraints. So that any DML statement
+that violates a constraint will not succeed in updating your data 
+and will return an error instead. You can then build your operational
+programs to always maintain data in your database system. And so the response from the system,
+on any attempts at DML, can be used as guidance to implement
+certain rules in your business processes. In this case, for instance,
+the database enforces rules such as, "you cannot have a toy without a maker." Foreign key constraints can be
+used to enforce many rules. Like, "you cannot have a customer
+without an account rep"; "You cannot have an order
+without a customer"; "You cannot have an employee
+without a department"; and so on. A denormalized design without
+foreign key constraints, will not implement any of
+these rules in the database. Another difference is in
+the size of your data store. You have probably noticed by now that 
+one general principle implied in the rules of normalization is, "don't record
+anything in more than one place." Look at these two designs. The storage footprint is over 25 percent 
+larger in the denormalized table because of the repetition of the 
+city name and state or province 
+in each row. For such a tiny table that
+may not seem like much. But you can imagine that the difference
+in size becomes more extreme as you add more rows to the person table with more
+and more redundant storage of city data.

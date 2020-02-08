@@ -1,0 +1,75 @@
+By now you've seen a number of ways 
+that relational database systems define and maintain the organization of data. All these aspects of your design 
+have direct influence on the forms of data that your database can store. Actually, you can regard
+a well-thought-out design as a way to enforce business rules
+in your overall computing system. For an operational database design,
+a frequent approach is to use the database system as the single, central source
+of truth among different programs. Then any DML statement can be treated
+as not just a way to store data, but also as a way to validate processes. So, for example, an INSERT that attempts
+to add a row with a NOT NULL column missing, or a foreign key value that is
+not found in the related table, will fail. The application attempting the INSERT
+can then surface the error to the actual activity being represented. With this kind of coordination between
+the database system and the rest of your applications, you have a powerful
+method for enforcing business rules. So, your database not only helps
+keep the data in order; it helps keep your business
+processes in order as well. "Database triggers" provide a way
+to add even more constraint to your database organization. Not all RDBMSs support triggers,
+but for those that do, triggers give you a richly expressive
+way to enforce many more business rules. Triggers are activities that you
+create and store in your database, and that automatically occur
+as part of DML statements. An individual trigger is an activity 
+that occurs whenever you issue an INSERT, an UPDATE, or DELETE statement 
+on a particular table. The trigger can optionally
+return an error status, and that will cause the triggering
+DML statement to fail. For example, you can write a trigger
+that runs whenever there is an UPDATE on a record in a checking account table
+reflecting a withdrawal of funds. The trigger can perform queries
+to see if the current balance, plus the overdraw limit of the account,
+is sufficient to cover the withdrawal. If the amount of the withdrawal is 
+over the limit, the trigger can return an error, and the triggering UPDATE
+itself will fail with an error, preventing the withdrawal from succeeding. The ability of a trigger to 
+check all kinds of conditions 
+in the database and then refuse DML statements that
+fail to meet those conditions gives operational databases an expressive, powerful way to enforce all kinds of
+business rules at the database level. Enforcing business rules at the database
+level has the advantage that multiple programs that use the database do not
+need to keep repeating the same logic - - indeed, all programs must obey the 
+rules embedded in the database they use. It stands to reason that you can add
+triggers to a database with a CREATE TRIGGER statement, in a category of 
+DDL data definition. When you add triggers to a table,
+you are indeed doing data definition: you are defining further the kinds of
+data that your database will accept. Aside from adding complex constraints
+to a table, another activity you can perform with a trigger is 
+"cascading DML," in which a 
+DML statement on one table causes other DML statements
+to occur along with that statement. For example, suppose you have a normalized order table, with a related
+line_item table. The individual items in the order
+are recorded in the line_item table, with the order_id as a foreign
+key in the line_item row. With these normalized tables, if you want to delete an order you 
+must first delete all of its line items; then you can delete the order - - otherwise, the delete of the order would
+violate the foreign key constraint that "you cannot have a line item
+that is not part of an order." You can write a trigger, attached to
+the DELETE action of the order table, that will also delete all the 
+related rows in the line_item table. So, then if you delete an order, the trigger will automatically delete
+the line items along with the order. This can make good sense in your table
+design, on the judgment that a line item has no reason to exist
+except as part of an order. Another example of cascading DML is the
+ongoing maintenance of a summary table: whenever you INSERT a customer order,
+a trigger can automatically update a row in an order_totals table, incrementing
+the order count for that customer. The great things about triggers with
+cascading DML is that they can contain the DML statement you issue, and the
+additional DML performed by the trigger, in a single transaction, so that the
+database consistency is always maintained. There is another feature usually provided
+by systems that support triggers: these systems also let you
+write "stored procedures," and I want to mention those briefly here. A stored procedure is a routine,
+possibly with parameters, that performs some sequence of
+actions in your database, and that can be called by users and programs
+in addition to the usual SQL commands. For example,
+you could have a stored procedure for transferring funds between bank accounts, that can be invoked with an amount,
+an account to transfer from, and an account to transfer to: Then the procedure can perform
+the sequence of DML statements for the transfer. Stored procedures can simplify common
+database activities you want to perform, by keeping a logical sequence
+of steps in the database, rather than requiring different programs to rewrite
+these routines whenever they are needed. You can see that stored procedures provide
+a method to take database design even further beyond data alone,
+into areas of application programming.

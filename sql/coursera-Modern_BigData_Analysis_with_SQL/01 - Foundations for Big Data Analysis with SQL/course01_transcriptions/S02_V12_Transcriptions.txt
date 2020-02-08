@@ -1,0 +1,51 @@
+Many database users characterize 
+the expected capabilities of a transactional RDBMS by saying 
+that it is "ACID compliant," or informally, that the database 
+"has ACID capabilities" or even 
+"does ACID." The term ACID refers to guarantees 
+that, combined, give users confidence that they can use the RDBMS for particular kinds of applications 
+without worries. ACID stands for: Atomicity, Consistency, Isolation, and Durability. That's the noun form of those four words. Another way of saying it is to say 
+an ACID-compliant transaction is atomic, consistent, isolated, and durable. Personally, I find the second set of words 
+easier to say, but you can always impress your 
+friends and family by using the longer noun forms in a sentence. The important thing is that if you need 
+a transactional database application - and I'll talk more about those - then you probably want to get these guarantees 
+from your DBMS. I'll explain these guarantees: A transaction is "atomic" if it is indivisible, meaning that all the DML operations 
+in one transaction are guaranteed to be made effective 
+in the database at one time. So, a transactional system provides 
+an atomic COMMIT, exactly as I described in the last video. "Consistency" is closely related to atomicity, with an emphasis on respecting the constraints 
+in your database design. A transaction is "consistent" if it keeps the database in agreement with 
+the database design constraints. Or in other words, the transaction must never be allowed to leave the database in a state 
+violating its constraints. For example, look at this pair of tables. Now consider this attempted transaction: The DELETE at line 3 would create a broken 
+foreign key in the row added at line 2. In order to maintain the database 
+constraints consistently, an ACID-compliant system will disobey these commands and 
+roll back the entire transaction. It is true that the system "could" 
+allow statement 2, and then refuse statement 3, but this would break the notion that
+these statements together comprise a transaction. A consistent transaction, in its entirety, takes the database from one consistent state 
+to a new consistent state. Transactions are "isolated" if different 
+transactions running concurrently in different sessions do not interact with one another in their interim changes 
+to the database. Isolation can have different aspects, but the fundamental form is 
+further guarantee of atomicity. Multiple transactions currently running 
+in a database are all pending. Then, when one transaction commits, all its changes occur in one action. When a different transaction COMMITs, all its changes take effect. So, even though the statements in different 
+transactions may be interleaved in time, the system handles them as if they were 
+instead performed in a series. The ordering of different transactions 
+is determined by the time of their COMMITs. An ACID-compliant system has an internal engineering necessary to keep these interleaved activities 
+well organized. Finally, there's "durability," and this is 
+an important feature for a database. A transaction is considered "durable" if, when the COMMIT statement completes 
+successfully in your program, the database guarantees that 
+your data changes are "persistent," or safely stored 
+in the database. This usually means that your changes 
+have been stored on disk or flash memory, so that even a power failure 
+of the DBMS will not lose your data. With a guarantee of a durable COMMIT, your programs can safely clear all memory 
+of the data that they've put into the database, as a database system enables retrieval of that data 
+whenever it's needed again later. ACID-compliant transactions are 
+supported by many popular RDBMSs, like Oracle, SQL Server, PostgreSQL 
+and MySQL. As the course progresses, you will learn about the growing 
+variety of DBMSs that address needs other than those 
+served by transactional systems. Nevertheless, you can usually find 
+details about one or more of these guarantees, even for systems 
+that are not fully ACID-compliant. In particular, you want to pay attention to 
+what actions can be made atomic, and when your DML changes are durable. The way your DBMS handles these features will affect the way you want to write 
+your programs that use the database, since you know that atomic operations 
+will never be done "part way," and that durable retention of data 
+in the database allows your program to safely "forget" the data 
+without it being lost.
