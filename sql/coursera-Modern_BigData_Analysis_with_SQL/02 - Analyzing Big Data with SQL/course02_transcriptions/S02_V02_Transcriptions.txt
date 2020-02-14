@@ -1,0 +1,102 @@
+A SELECT statement begins
+with the keyword SELECT. The part of the
+statement starting at the beginning with
+the keywords SELECT and ending before the keyword FROM is called the SELECT clause. Everything that comes after the keyword SELECT in this clause is called
+the SELECT list. Recall some simple examples from the lessons in
+the previous week. In the statement,
+SELECT star FROM games, the SELECT list is simply
+the star, the asterisk. In the statement,
+SELECT name, year, inventor FROM games,
+the SELECT list is name comma year
+comma inventor. It's a list of the names of three specific columns
+separated by commas. You'll also recall from the previous lessons what the purpose of the
+SELECT list is. It's to specify what columns should be returned
+in the result set. In a SELECT list, the asterisk symbol which is universally pronounced "star", has the special meaning
+all the columns. So when you use the star
+as your SELECT list, the results will contain
+all the columns from the table in the same order that they're defined
+in in the table. If you want to return some
+but not all of the columns, then instead of using the star, you use a list of the column
+names separated by commas. When you do this, then the order of the
+columns in the results set is determined by the order of the column names
+in the SELECT list. Always remember that the order of the columns in a result
+set is deterministic, but the order of the
+rows is arbitrary. So if you run these statements and the order of the rows in your results set
+doesn't match what I show, that's perfectly fine. This all seems pretty
+simple so far. But in this lesson
+and the next one, you'll learn that
+there's much more you can do with the SELECT list, going beyond basic data retrieval and into data manipulation
+and data analysis. In all of this, the SELECT list is
+really important. So I'm going to take time
+to cover it thoroughly. During these lessons
+about the SELECT list, you'll also learn about
+some topics that you'll use again later in other clauses. With many SQL engines, the SELECT clause is
+actually the only part of a SELECT statement
+that's strictly required. With these engines, you can use SELECT without a FROM clause, but there's a catch. This will only work if you
+include only literal values or literals and no column
+references in the SELECT list. First, here are a couple of
+examples that will not work. SELECT star with no FROM clause. Star means all the columns, but there is no table for the columns to come
+from, so this will fail. SELECT name, year, inventor
+with no FROM clause. This again will fail
+because name, year, and inventor are
+column references, but the source of these
+columns is not specified. Here are a couple of
+examples that will work. SELECT 42. This returns a single row and a single column containing
+the integer number 42. Because 42 is a literal value not a reference to
+a column in a table, the statement will run
+successfully in many SQL engines. SELECT 'foo', 'bar'. The quoted strings foo and bar here are both
+literal string values. The statement returns
+a single row with two columns containing
+the three character strings, foo and bar. The single quotes around these strings tell
+the SQL engine to interpret them as literal
+strings, not column references. In both of these examples
+that have no FROM clause, the resultant has just one row. Whenever you omit
+the FROM clause, the SQL engine acts
+like you're querying an imaginary table with
+one row and no columns. Since there are no columns,
+you can reference, the only thing you can include in the SELECT list are literals. You can also mix column references and literal
+values in the SELECT list. But when you do this, you need a FROM clause to specify what table the columns
+should come from. For example, SELECT 'Board Game', name, list_price FROM games. The single quotes around Board Game mean that
+it's a literal string, but name and list_price with no quotes around them are
+both column references. The result of this statement
+has five rows, that's the number of
+rows in the games table, and it includes the name and list_price columns
+from the games table. It also has the
+literal string value Board Game in the first column
+repeated in every row. This is what happens when you use literal values in the SELECT
+list with a FROM clause. The number of rows in the result is controlled
+by the table in the FROM clause and the literal value is
+repeated in all these rows. In the examples here, I used single quotes to make literal strings
+in the SELECT list, and no quotes around
+column names in the SELECT list. In a later lesson, you'll learn more about
+the rules and conventions for quoting literal strings
+and column references, and you'll learn
+about how different SQL engines do this differently. For now, just remember literal strings are
+enclosed in single quotes and column references are just bare words with
+no quotes around them. This is the convention
+I'll use in this course, and it's a convention
+that works with all the major SQL engines. So in this video, I showed how you can
+use column references and literal values
+in the SELECT list, as well as the asterisk symbol
+meaning all the columns. But those are not the only things you can include in
+the SELECT list, and in the next video, I'll introduce expressions
+and show how you can use those in the SELECT list. To successfully answer
+the in-video questions and to complete the quizzes in this lesson and in
+upcoming lessons, you will need to write and
+run SELECT statements. You'll need to run
+these statements in the VM, in the Hue Query
+Editor or perhaps in Beeline or Impala shell, and then use the results
+to get the right answers. I'll start by asking you to query some of
+the smaller tables in the VM which are in the default database and
+the toy and fun databases. The tables in
+these databases have just a few rows
+and a few columns. Then in later lessons, I'll ask you to
+query the table in the wax database which
+is a little bit bigger, then the tables in
+the fly database, some of which are
+much, much bigger. One of the tables there has
+tens of millions of rows. You can also go ahead and explore these tables on your own and try running various SELECT
+statements on them but for now, you should not yet try
+to query the tables in the fly database
+because I have not yet introduced the clauses
+you'll need to work with very large tables.

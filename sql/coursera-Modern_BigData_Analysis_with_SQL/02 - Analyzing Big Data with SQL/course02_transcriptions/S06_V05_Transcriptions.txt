@@ -1,0 +1,75 @@
+So you've seen what a basic
+SQL join query looks like. In the FROM clause there are two table references separated
+by the keyword JOIN. After that there's the
+ON keyword followed by the join condition,
+and table aliases are used to resolve ambiguity about which table each column comes from while keeping
+the query concise. Here I've omitted the optional AS keyword before each
+of the table aliases. So it's just:
+toys t and makers m The result of a join query like this can contain columns
+from both of the tables and the rows are matched
+according to the join condition. In this example, the first column comes
+from the toys table and the second column comes
+from the makers table and each toy is in
+the same row as its maker. However, as you might have
+noticed, the maker Mattel is in the makers table but does not appear in the result
+of this join. The reason for this, as you
+might have inferred, is that none of the toys in the toys table are
+made by Mattel. Mattel is represented by maker_id 107 and none of the
+toys have maker_id 107. This is how joins work
+by default in SQL. For a row to be returned
+in the join result, it must match a row
+in the other table; rows without a match
+are not returned. This default type
+of join has a name: it's called an inner join. To understand why this
+is called an inner join, it helps to visualize the values in the columns
+we're joining on. In this Venn diagram,
+the circle on the left side represents the unique values in the maker_id column
+in the toys table, and the circle on
+the right side represents the unique values of the id
+column in the makers table. These are the columns
+we're joining on. Two of the values,
+105 and 106, are in both circles. Those values
+exist in both tables. However, one of these values, 107, is only in the right circle. That value exists only
+in the makers table. In an inner join, the result set only
+includes the rows that have values in the inner region
+of this diagram, the region where
+the two circles overlap. Rows that have values in
+either of the outer regions are excluded from the results
+of an inner join. So, when you use the keyword JOIN between the two table names
+like in this example, what the SQL engine
+performs is an inner join. But you can also explicitly
+specify that you want an inner join by using the
+keyword INNER before JOIN. This has exactly the same result. It does not matter if you include the INNER keyword
+or leave it off. I usually prefer to include it; I think it's better
+to be explicit. With an inner join, the order of the tables in the FROM
+clause does not matter. You could have toys on
+the left and makers on the right or you could have makers on the left and
+toys on the right; the result will be the same. The only case in
+which the order of the tables in the FROM
+clause does matter is if you use SELECT *; then the order
+of the columns in the result set will depend on which table comes first
+in the FROM clause. In this example where
+we joined the toys and makers tables, an inner join
+is appropriate. The purpose of
+this join query is to show more information about
+the maker of each toy. For each toy in the
+toys table there is a corresponding maker in the makers table,
+and since there are no toys made by Mattel, it seems appropriate that Mattel is
+excluded from the results. In this and many other situations, an inner join gives you exactly the result
+you're looking for. But in some other situations, the way that
+an inner join excludes the non-matching rows can be problematic. Here's an example. This query is slightly
+more complex. It joins the same two
+tables, makers and toys, but this time it groups
+by maker and it uses the COUNT function
+to return the number of toys made by each maker. The trouble is, the result
+set totally excludes Mattel. What I would like in
+this case is for the result set to include Mattel
+with a count of zero, but since this is
+an inner join and there's no row in the toys
+table with maker_id 107, Mattel is simply excluded. Depending on how
+this result set was used, the absence of Mattel
+could be misleading; it could cause an oversight
+or a misinterpretation. This is just one example
+of a case where inner joins do not return
+the result you're looking for. In the next video, you'll learn how to
+solve this problem by using outer joins.

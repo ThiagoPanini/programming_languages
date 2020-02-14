@@ -1,0 +1,40 @@
+A join in SQL combines data from two related tables
+into one result set. In the simplest sense, a join takes columns from one table and columns
+from another table, and it merges them together, it combines them horizontally. But a join does not to just throw together the columns
+from the two tables; it also matches the rows
+from the two tables. When you write a query in
+SQL that joins two tables, you specify what the relationship between these two tables is, and the SQL engine uses that relationship
+to match the rows. For example, the toys table
+and the makers table, both in the toy database, are related by the fact that each toy is
+made by a specific maker. The column named maker_id
+in the toys table refers to the column named
+id in the makers table. So for example, in
+the toys table, you can see that Lite-Brite
+has maker_id 105, and in the makers table, that id, 105, represents
+the company Hasbro. So when you write a query
+that joins these two tables, you specify that the maker_id
+column in the toys table corresponds to the id
+column in the makers table, and the SQL engine uses
+the matching values in these corresponding
+columns to match the rows when it combines
+the two tables together. The reason that joins are so important and so widely used in SQL is that related data are often stored in
+separate tables. Here for example, the name
+and city of the maker of each toy is not included
+in the toys table. Instead, that information is stored in the separate
+makers table. This principle of
+storing related data in separate tables is
+an important element of what's called
+normalized design. If you completed the first
+course in this specialization, you might recall some of the advantages of
+storing data this way. Although it's advantageous to store data in separate tables, it's often necessary to join the data from
+those separate tables together in order to analyze it and answer
+questions about it. For example, say you needed
+to answer the question: Which toys are made
+by Ohio Art Company? It's impossible to answer this by using only one of
+these two tables; you need both tables. The makers table tells you that Ohio Art Company has id 106, and then the toys table
+tells you that the only toy with that maker_id,
+106, is Etch A Sketch. You could answer
+a question like this by running a sequence
+of two queries, but by using a join, you can answer it
+with just one query. In the next video, I'll introduce the syntax
+of join queries.

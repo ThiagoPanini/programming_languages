@@ -1,0 +1,82 @@
+Recall that when you use
+an order by clause to sort your results in a descending
+order by sum column, then the rows with the lowest values in that column will be at
+the top of the results. If you sort in descending order, then the rows with the highest
+values will be at the top. As a data analyst, you'll often use the order by clause for exactly this purpose, to get the lowest or highest values at
+the very top of your result. This is what you do to identify
+the worst, or the best, or the smallest, or the biggest of whatever your data represents. But there is something
+they can prevent this from working as expected, and that is when
+the column that you're ordering by contains null values. Different SQL engines handle null values in ordering
+columns in different ways. In Impala and PostgreSQL, nulls sort as if they are
+higher than any non null value. In other words, these SQL
+engines put the nulls at the bottom of the results when you
+sort in ascending order, and at the top when you
+sort in descending order. So for example, the query shown here sorts the results from the inventory table by the price column in
+ascending order, that's the default sort order. When you run this query
+in Impala or PostgreSQL, the row with the null price is at the bottom of the results. But if you add the DESC keyword to sort in
+descending order by price, then the row with the null price is at the top of the results. That's how Impala
+and PostgreSQL work, but Hive and MySQL do
+exactly the opposite. In Hive and MySQL, nulls sort as if they are
+lower than any non null value. In other words,
+these SQL engines put the nulls at the top when
+you sort in ascending order, and at the bottom when you
+sort in descending order. So if you sort by price in ascending order
+with Hive or MySQL, the row with the null price
+is at the top of the results, and if you sort in
+descending order, then the null prices
+at the bottom. So if there are null values in the column or columns
+you're ordering by, you should always remember
+to consider where the SQL engine you're using
+will put them in the results. With some SQL engines, there is a way to
+explicitly control how the order by clause
+handles null values. You can do this by using
+the keywords nulls first or nulls last in
+the order by clause. I'll use an example to
+demonstrate how this works. Recall that Impala
+and PostgreSQL put the nulls at the bottom of the results when you
+sort in ascending order. So if you sort
+the inventory table by price in ascending order, then the row with the null
+price is at the bottom. To make that row
+with the null price appear at the top of
+your results set, you can add the keywords NULLS FIRST after
+the column reference in the order by clause. So it's order by
+price, NULLS FIRST. When you use multiple
+column references in an order by clause, you specify the
+keywords nulls first or nulls last separately
+for each column. These keywords come after the ASC or DESC keywords
+if you use them. So for example, this query uses the clause ORDER BY aisle
+descending NULLS LAST, price ascending NULLS FIRST. With this example Impala and PostgreSQL would sort the results differently if you had left off the nulls last
+or the nulls first. Note that regardless
+of whether you sort in ascending or descending order, the keywords nulls
+first and nulls last will do exactly what
+they sound like they do. They'll put the nulls first
+or last in the ordering. Using the nulls first and nulls last keywords won't necessarily change the order of your results. For example, with Impala or PostgreSQL using nulls
+first after a descending will have no effect because
+the SQL engines already put the nulls first by default when you sort in
+descending order. Not all SQL engines support these keywords nulls
+first and nulls last. Impala and PostgreDSQL do, but MySQL does not and
+only newer versions of Hive do. You can try it out
+with the SQL engine that you're using
+to see if it works. In the SQL engines like MySQL and older versions of Hive that
+do not support this syntax, you can use a trick to
+achieve the same result. The trick is to order by
+the Boolean expression, column name is null, then order by the column itself. For example, Hive and MySQL
+both put the row with the null price first in the top row when you sort by
+price in ascending order. But you can make them put it
+last in the bottom row by ordering first by price
+is null ascending, then ordering by price. Then the result has the null
+price in the bottom row. This works because price is null is a column
+of Boolean values, true and false values. When you sort Boolean
+values in ascending order, false comes before true. So the rows in which prices null is true and
+up at the bottom. Another option when you're
+working with data that has null values in
+the ordering columns is simply to remove
+the rows that contain those null values using the where clause or
+the having clause. In many cases, that's
+the easiest thing to do, but you should always be careful about removing rows
+with null values, because you could
+end up censoring meaningful parts of
+the data in ways that could dramatically
+changed the outcome of your results or your analysis. So anytime you're tempted to just remove the nulls
+from a dataset, always stop and think first about whether this could
+make your results incomplete or misleading.

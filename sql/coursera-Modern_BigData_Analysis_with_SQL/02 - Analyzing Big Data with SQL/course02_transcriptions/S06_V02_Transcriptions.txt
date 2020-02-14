@@ -1,0 +1,64 @@
+The SELECT statements on
+both sides of a UNION operator, can use any of the clauses that you've learned
+about in this course, with two exceptions:
+the ORDER BY and LIMIT clauses. I'll discuss the ORDER
+BY clause first. The way that the ORDER BY clause works when you use
+the UNION operator, differs depending on
+what SQL engine you're using. Here are some examples
+to demonstrate this. Say you wanted to return the names and prices
+of all the games from the games table and all the toys
+from the toys table. To do that, you would run
+a query like this: SELECT name, list_price AS price FROM games UNION ALL
+SELECT name, price FROM toys. On the VM, you can
+run this query in MySQL or PostgreSQL as it is. For Hive or Impala, you would need to add
+the database names before the table names (fun.games and toy.toys)
+and in the result set, you can see the names and prices of all five games and three toys. Recall that the row
+order is arbitrary; the rows might be in
+a different order for you. Now, what if you wanted to return these rows in a specific order, say in ascending order by price; the lowest price at the top, the highest price at the bottom? Well, with some SQL engines, including MySQL and PostgreSQL, you can do that by adding an ORDER BY clause at
+the end of the whole query. Notice that all the games and toys are now arranged in
+ascending order by price. This ORDER BY clause does not get only applied to the result
+of the second statement; it gets applied to
+the full result of the UNION. So it arranges all the toys and the games in order by price. You can see Candy Land
+is the least expensive, and Etch A Sketch and Risk are tied for the most expensive, so the order of these last two
+rows is arbitrary. Again, this method works with some SQL engines but
+not with others. This does not work with Impala, and it does not work with Hive, or at least not until
+a very recent version of Hive. If you try this with
+Hive or Impala, you will not get an error. In Impala depending on what client you're
+using to run the query, you might see a warning, but it will still
+return a result set. However, the rows
+of the result set will not be arranged in order
+by the price column. Also, you might be tempted
+to try something like this. Adding an ORDER BY clause, to both of the two
+SELECT statements on both sides of
+the UNION operator. But this will also not
+return a result set that's arranged in order
+by the price column. Depending on what SQL
+engine you're using, it might throw an error, or it might just ignore the two ORDER BY clauses and return the results
+in arbitrary order, or it might actually
+arrange each of the two intermediate result
+sets in the desired order, but then when the UNION operator shuffles the two intermediate
+result sets together, that row order might be lost. So using an ORDER BY clause in both of these SELECT
+statements in a UNION is generally not a technique that you should use
+with any SQL engine. With some SQL engines, including Impala and
+some versions of Hive, the only way to return the full results of
+a UNION arranged in order is to use something
+called a subquery. Subqueries are
+a more advanced topic that's beyond the scope
+of this course; they're covered in
+a later course in this specialization. The way that the LIMIT clause works when you use
+the UNION operator is similar; with some SQL engines including MySQL and PostgreSQL, you can put one LIMIT clause at the end of the whole query and that will limit
+the number of rows returned in the full result set. But with other SQL
+engines including Impala and some versions of Hive, this does not work. You can use two
+separate LIMIT clauses in the statements on
+either side of the UNION, to limit how many rows
+each of these can return, but there is no way to limit the total number of rows
+in the full result set, except by using subqueries, which you'll learn about in a later course in
+this specialization. So when you're using
+the UNION operator, remember that it's safe to use most of the clauses
+you've learned about in the two SELECT statements
+on either side of the UNION. You can use the SELECT, FROM, WHERE, GROUP BY, and HAVING clauses,
+but be careful about using the ORDER
+BY and LIMIT clauses. Check the documentation for this specific SQL engine
+you're using, and run some simple tests to make sure you
+understand how it will interpret the ORDER
+BY and LIMIT clauses in UNION queries.

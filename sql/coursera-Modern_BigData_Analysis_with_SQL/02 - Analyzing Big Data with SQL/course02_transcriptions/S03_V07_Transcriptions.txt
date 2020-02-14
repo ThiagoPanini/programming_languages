@@ -1,0 +1,62 @@
+In an earlier video, I described the
+comparison operators like equals and less than, that you can use to make comparisons in
+an expression in SQL. Each of these takes
+a single operand on the left side and a single
+operand on the right side. There are a couple
+other operators in SQL that are similar to these but they take more than one operand
+on the right side, these are the IN and
+BETWEEN operators. The IN operator
+compares the operand on the left side to a set of
+operands on the right side. It returns true if
+the operand on the left matches any value in
+the set on the right. Here's an example, this statement filters the games table
+by the name column returning only the rows
+in which the value in the name column is in the specified set of
+three literal strings; Monopoly, Clue and Risk. On the left of the IN operator is
+the column reference, name, and on the right
+side is the set of three literal values separated by commas and enclosed
+in parentheses. This is the syntax you
+use with the IN operator. This example uses
+character string operands but you can use any datatype. However, the operands on
+the left and right should have compatible datatypes just like with the comparison operators. Also, this example uses
+a column reference on the left and literal
+values in the list on the right but you can use any combination of
+column references, literal values, and
+expressions on either side. You could get
+the same result by using three equality tests with OR operators combining them
+into one Boolean expression. But as you can see using
+the IN operator is more concise and more
+readable especially if you have a large set
+on the right side. Also, some SQL engines can process a query more quickly and efficiently when it uses the IN operator instead of
+multiple equality tests. The BETWEEN operator compares the operand on the left side to a lower bound and an upper bound both
+specified on the right side. The comparison returns true if the operand on
+the left is greater than or equal to
+the lower bound and less than or equal
+to the upper bound. Here's an example, this statement filters the games table
+by the min_age column, returning only the rows
+in which min_age is greater than or equal to eight and less than or equal to 10. The BETWEEN operator
+is typically used with numeric operands like
+in this example, you can use it with non-numeric operands
+like character strings, but I would not recommend
+doing that yet. You need to learn first about how SQL engines compare
+the ordinal values of character strings and that's a topic you'll learn about
+later in this course. Also, this example uses
+a column reference on the left and two literal
+values on the right, but you can use any combination
+of column references, literal values and expressions as long as the operands have
+compatible datatypes. You could get
+the same result by using two comparison operators
+combined with an AND. In this example, it would be min_age greater than or equal to eight AND mean_age
+less than or equal to 10. But using the BETWEEN
+operator is typically more concise and more readable. One case where the BETWEEN
+operator is useful, is when you want to check
+a numeric value for approximate equality with
+some margin of error allowed. Recall the earlier
+discussion about the uncertain precision of
+decimal number comparisons, using BETWEEN is one way
+to work around that. Both IN and BETWEEN can be used with the word NOT
+immediately before them, that negates the result
+of the comparison. So NOT IN returns true
+if the operand on the left does not match any of the values in
+the set on the right. NOT BETWEEN returns true
+if the operand on the left is less than the lower bound or greater than the upper bound.

@@ -1,0 +1,37 @@
+Welcome to week two of
+analyzing big data with SQL. In the previous week's lessons, you ran some simple
+SELECT statements, but you did not yet use the SELECT statement
+to do data analysis. You just use it to do
+some simple data retrieval. Data retrieval is
+important and it's definitely something you'll
+do with the SELECT statement, but what the SELECT
+statement can do goes far beyond just
+data retrieval. Data analysis is when you try to answer questions
+using the data or you tried to
+discover things in the data like patterns
+and outliers. Sometimes the term
+data mining is used to refer to the practice of discovering things in the data, but I'll stick to
+the broader more popular term, data analysis. To do data analysis, you need to do more than
+just to retrieve data, you also need to manipulate or transform data in different ways. These two terms, to
+manipulate and transform, refer broadly and generically to any operations performed on data. Later, you'll learn
+some related terms that have more narrow
+specific meanings. In this course when I talk about manipulating or
+transforming data, I'm not talking about changing the existing data in the tables. I'm talking about reading the existing data from the tables essentially making a copy of it and then
+manipulating the copy, and returning the manipulated
+copy as the result. So for this entire course, you can consider the data in
+the tables to be immutable, it cannot be altered
+or modified in place. Throughout this course
+you will never alter or modify the
+data in the tables. Also, this word manipulate
+or manipulation has some negative connotations
+in common use like currency manipulation or
+psychological manipulation. It can be used to mean
+falsify or modify unfairly. But in the context of
+SQL and data analysis, it has no negative connotations, it just means to perform
+some operations on data to generate a result. So typically, the practice of data analysis is prompted by questions or by the need to make decisions that are
+informed by the data. In this week of the course and throughout the remaining weeks, I'll teach you how to
+answer different types of questions using
+SELECT statements. You'll learn the fundamentals
+of data analysis with SQL including
+some rules and conventions, and you'll do some simple
+data retrieval too.

@@ -1,0 +1,40 @@
+SQL provides built-in functions for performing
+common aggregations. These are called
+aggregate functions. In this video, I'll introduce the most important
+aggregate functions and I'll describe what
+arguments they expect. SQL's aggregate function
+for counting rows in a table is COUNT. To count rows, you do not need to know
+what's in the rows. So the count function
+does not require that you specify
+what values to aggregate. In SQL, there's a special syntax
+for the count function. Its COUNT(*). You use an asterisk, a star, as the argument, and this
+returns the number of rows. This star syntax is used
+only for the COUNT function, not with other
+aggregate functions. You'll see in a later video
+that you can specify different arguments
+to the COUNT function but for now, just use COUNT(*). The aggregate function
+for adding is SUM. SUM adds up the values
+in a particular column. When you use
+the sum function in SQL, you need to specify
+what values to add up. So for example, you could use SUM(salary) to add up the values in
+the column named Salary. You'll see that for all
+the aggregate functions besides COUNT, you need to specify
+an argument like this, so the aggregate function knows
+what values to aggregate. The aggregate function
+for computing the average or mean of a column is AVG. For example to calculate
+the average salary, you would use AVG(salary). The aggregate function for
+computing the minimum, the lowest value in
+a column, is MIN. So to calculate
+the minimum salary, you would use MIN(salary), and finally, the aggregate function for
+computing the maximum, the highest value
+in a column is MAX. So to calculate
+the maximum salary you would use MAX(salary). These five aggregate
+functions are all provided by all the
+major SQL engines. There are some other
+aggregate functions beyond these five but they're less commonly used and they're beyond
+the scope of this course. The names of aggregate functions are typically case insensitive, but by convention, we set
+them all in capital letters. This is different
+from the names of other built-in functions which we set in all lowercase letters. These different
+capitalization conventions can help you to distinguish the
+aggregate functions from other functions
+in this course.

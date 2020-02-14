@@ -1,0 +1,62 @@
+In this course, you've
+learned about all seven of the clauses that you can
+use in a select statement. The select clause,
+which specifies what columns should be
+returned in your query result. The from clause, which specifies where the data you're querying should come from. The where clause, which filters the individual rows of data
+based on some conditions. The group by clause, which splits data into groups, and the related topic
+of aggregation which reduces each group
+down to a single row. The having clause, which filters the data
+based on aggregates. The order by clause which sorts or arranges
+the results of a query, and finally the limit clause
+which controls how many rows a query can return and
+can also be used to paginate query results if
+you specify an offset. The order in which I have
+taught these seven clauses in this course matches
+their correct order within a select statement. Select, from, where, group by, having, order by and
+limit in that order. There are some minor exceptions. But in general, you
+must use the clauses in that order or you'll get
+an error from the SQL engine. But as you know, a query does not need to
+include all of these clauses. The only clause that's
+strictly required by all SQL engines is
+the select clause. Some engines also
+require the from clause, but all the others are optional. So you can pick and
+choose which clauses to use depending on
+the task at hand. This makes select statements
+very flexible, and you've seen in
+this course how you can use different combinations of these clauses to answer very different kinds
+of questions. So that's the order
+in which you must use the clauses in
+a select statement. But the order in which
+the SQL engine executes these clauses when it runs a select statement is
+slightly different. Specifically, SQL engines execute the select clause not
+at the beginning, but later after the from, where, group by and
+having clauses. So what a SQL engine does when it runs a select statement is, first, it executes
+the from clause, which tells it which table
+the data should come from. It reads the data
+from that table, and if there's a where clause
+it uses the conditions specified there to filter the individual rows of
+data as it reads them in. Then once it's done
+reading the data in, if there's a group by clause, the SQL engine uses
+the grouping columns specified there to split
+the data into groups. Next, if there's a having clause, it computes the
+aggregate expressions there and uses those
+to filter the groups. Only then does
+the select list get executed to create the columns that will be returned
+in the results set. Next, if there's
+an order by clause, the SQL engine uses
+the columns specified there to arrange the
+rows of the result set. Finally, if there's
+a limit clause, the SQL engine uses
+that to specify the maximum number of rows
+that can be returned. So that's the order
+in which SQL engines execute the clauses of
+a select statement in general. However, different SQL engines have their own minor
+variations on this. For example,
+a common variation that many SQL engines use
+is that they partially process the select
+list earlier to identify the column aliases
+that are defined there. That way those aliases can be used in the group by
+and having clauses. But regardless of
+minor exceptions like that, remembering this
+execution sequence will help you to understand how a SQL engine takes a select statement and
+turns it into a result set.

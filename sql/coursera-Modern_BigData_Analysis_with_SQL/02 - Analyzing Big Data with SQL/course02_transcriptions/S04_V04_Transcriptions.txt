@@ -1,0 +1,72 @@
+All the examples of aggregation that I showed
+in the previous lesson, returned to result set
+with only one row. They all aggregated the whole
+table down to a single row. But what if you want to
+aggregate subsets of the table and return a result that gives aggregates for each
+of the subsets? That is what the GROUP BY
+clause is for. It splits a table
+into groups of rows so that the aggregates can
+be computed for each group. I'll demonstrate this
+with an example. First, recall from
+the previous lesson, that this is the SELECT statement that you would use to count the number of rows in
+the employees table. SELECT COUNT(*) from employees. There's just one expression
+in the SELECT list, so the results that has just one column and it's
+an aggregate expression, so it aggregates the five rows of the employees table down to
+one row in the result set. This query answers the question: How many employees
+are there in total? Each row represents one employee, so counting the total
+number of rows, gives you the answer, five. But what if you wanted
+to answer the question, how many employees are
+there in each office? There's a column named office_id whose values identify which office each employee works in. The values are coded
+as letters A, B, C, and E, representing
+four different offices. So instead of counting
+the total number of rows, you want to count
+the number of rows that have each unique office_id. In effect, what you
+want to do is split up the employees table into
+four separate tables. Each representing the employees
+in one particular office. Then count the number of rows in each of those four
+separate tables. To do this, you add a GROUP By clause to
+the SELECT statement. The GROUP BY clause specifies which column to use to split
+up the table into groups. It comes after the FROM clause. In this example, to split up the employees table by office, you use "GROUP BY office_id." When you run this query, it returns a result
+set with four rows. One row for each unique
+value of office_id. Like before, the result set
+has just one column which now gives the count of
+the number of rows that have each unique office_id. But with just this one column, you cannot tell which count corresponds to which office_id. So you can add office_id to the select list and this makes the query
+return two columns. The first gives
+the office_id and the second gives the count of rows
+that have that office_id. This now answers the question
+we started with, how many employees are
+there in each office? There's one employee in office C, one in office E, two in office B, and one in office A. You can optionally use
+a column alias to control the names of the columns
+in the result set just like you can
+with any SQL query. So for example, you could add "AS num_employees"
+after count star. So this example demonstrates the basic syntax of
+a SELECT statement with a GROUP BY clause and the shape of the
+result set it returns. Recall that the order of the rows in a result
+set is arbitrary. So these rows might be in
+a different order for you, but their counts in the second column will
+still match up with the corresponding office_ids
+in the first column, the same way they do here. If you're familiar
+with spreadsheets or other software that can produce summary tables
+or pivot tables, you might be more accustomed to seeing the results
+presented like this with the rows and columns
+transposed so each group, each office is
+represented as a column. But SQL engines do not return
+results sets this way. SQL queries with
+a GROUP BY clause always return one row per group. The columns of the result set are specified by the select list, just like with any SQL query. You can use the GROUP BY
+clause together with the WHERE clause
+in a SELECT statement. The WHERE clause, if you use it, always comes before
+the GROUP BY clause. It filters the individual rows of the table before they're
+grouped and aggregated. For example, say you wanted to know how many employees with a salary of more than $35,000
+are there in each office. To answer this, you would use
+the same query as before, but with a WHERE clause added. The WHERE clause
+filters the rows of the employees table before they're grouped and aggregated. So the results that only includes the offices
+where there's at least one employee with a
+salary greater than $35,000. You can see from the
+results that there are two employees with
+a salary greater than 35,000 in
+office B and one in office E. The absence of
+the other offices A and C, in this result set, indicates that there
+are no employees with a salary greater than
+35,000 in those offices. In other words, all the
+employees in the other offices have salary less than
+or equal to 35,000.

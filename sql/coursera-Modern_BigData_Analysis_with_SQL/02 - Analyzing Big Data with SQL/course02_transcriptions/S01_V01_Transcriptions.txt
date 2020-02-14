@@ -1,0 +1,59 @@
+This course is the second in the
+specialization Modern Big Data Analysis with SQL from Cloudera. The first course in this specialization,
+Foundations for SQL on Big Data, teaches the key concepts behind
+relational databases, SQL, and big data. In this video, I'll do a whirlwind
+review of that first course to ensure you're prepared for
+this second course. If you already took the first course,
+that's great, and this will just be a quick recap for you. If not, then this video should help you
+to understand what it's about so you can decide whether to take that first course
+before continuing with this second course. So here's that first course in a nutshell. Data analysis begins with data. Somewhere in the data, you'll often find information that
+you need to answer questions. Finding that information
+isn't always easy, but organizing the data allows you to
+find it more quickly and efficiently. Relational database systems and SQL are
+popular because they allow you to do just that, organize data, so
+it's easier to work with. SQL enables you to perform four categories
+of activities with relational databases. Designing using
+SQL's Data Recognition Language, or DDL. Updating using Data Manipulation Language,
+DML. Retrieving using Data Query Language, DQL. And managing using Data Control Language,
+DCL. SQL statements fall into
+these four categories. It's common to use SQL with two
+different types of relational databases. Operational databases, which are mostly
+used to store rapidly changing data about the current state of a process or
+business. And analytic databases,
+which are mostly used for answering questions about more static
+data, sometimes going back many years. The design of the tables
+in a database affects the type of data you can store and use. So the way you intend to use your data
+will inform how the database should be designed. For an operational database, you'll
+typically use a well normalized design. But for an analytic database,
+you will often denormalize your tables. When it comes to analysis on big data, there's often a much larger volume and
+a greater variety in the data. And this drives many of the decisions
+about how data is stored and processed. Traditional database systems have
+their place with smaller datasets, but they become too slow and storage becomes
+too expensive for very large scale data. These traditional systems also require
+the data to be highly structured. But there is a type of newer distributed
+SQL engine that can work with much larger datasets and can handle semistructured and unstructured data as well, enabling you
+to answer a larger variety of questions. These modern distributed engines
+use their own dialects of SQL, which provide features that
+are helpful for working with big data. This includes different options for storing data, a separation of
+the metadata from the data itself, and loose coupling between the SQL engine and
+the metadata and data it operates on. However, the basics of
+the data query language, the select statement,
+that's used with these distributed engines is mostly the same as with
+traditional relational databases. So if you have some
+experience with SQL queries, you'll be able to reuse many of
+those skills with these engines. Two examples of this type of distributed
+query engine are Hive and Impala. Both are designed for
+use as analytic databases. These are two different SQL engines, but they can both operate on
+a shared set of metadata and data. Some of the parts of the SQL language that
+are important when you're working with a traditional relational database are not
+relevant when you're working with these distributed big data query
+engines like Hive and Impala. This specialization focuses on the skills
+that do apply when you're doing data analysis in this big data world. The final part of the first course shows
+how to set up the virtual machine, or VM, that you'll use for hands-on exercises and
+practice in this course. If you haven't yet set up your VM, the document attached to this video
+provides instructions to help you do that. If the topics I've described in this
+video all sound familiar to you, then you're ready to take this course. But if some of these topics were
+unfamiliar, then you probably need more of a conceptual foundation before
+you're ready to take this course. If that's the case, I recommend completing
+the first course in this specialization, Foundations for SQL on Big Data,
+before you continue with this course.

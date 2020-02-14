@@ -1,0 +1,61 @@
+So far, whenever we've run a select statement that
+has a FROM clause, the results that
+had the same number of rows as the table
+in the FROM clause. Later in the course, you'll
+learn about some ways to return fewer rows by filtering, aggregating, and limiting,
+but you'll need to learn about some other clauses
+to do those things. But there is a way
+that you can return fewer rows simply by adding a special keyword to the select clause,
+the distinct keyword. Distinct is a keyword you can insert right
+after the keyword select to modify what the
+select statement does. The distinct keyword makes
+this select statement, omit, duplicate rows
+from the results set. I'll demonstrate this
+with some examples using the games table
+in the fun database. You can use distinct with a single column reference in the select list like
+in this example. SELECT DISTINCT
+min_age FROM games. This returns the distinct values, the unique values of
+the min_age column. The results set has
+one row for each of the three distinct values
+in the min_age column, three, eight and 10. The row order is
+arbitrary as usual, and there's just one column in the results set,
+the min_age column. Without the distinct keyword, this statement would
+have returned five rows, and some of these rows would
+have had duplicate values. There would have been 3-eights but with the distinct
+keyword included, these duplicate rows are omitted. If you replace min age with
+min players in this example, then you'll get a result set with a different number of
+rows because there are a different number of
+unique values in that column. You can also use distinct with two or more column references
+like in this example. SELECT DISTINCT min_age,
+max_players FROM games. In this case the rows of
+the results set represent all the distinct combinations of the columns in
+the select list. You can see that there are four distinct combinations of min players and max players. Although there are five games
+in the games table, all five have one of these four pairs of
+min age and max player's. That's because both monopoly
+and clue both have min age, eight and max players, six. You can also use distinct with a select star query that
+returns all the columns. This returns all the
+distinct full rows. This is useful for deduplicating
+the data in a table. If you know that there might be erroneous duplicate
+rows in a table, then you can run this statement, SELECT DISTINCT * FROM that table to return a result set that has
+any duplicates removed. The games table has
+no duplicated rows, so in the case of this table, SELECT DISTINCT * FROM games just returns the same thing
+as SELECT * FROM games. You can also use the distinct keyword with
+expressions in the select list, just the same way as you can use it with
+column references. For example, say
+you wanted to find the distinct decades when the games in the games
+table were invented. You can get the decade
+from a string containing a four-digit year by taking
+the first three digits, then appending a zero
+and an S to the end, so 1903 becomes 1900s. So to get all the distinct
+decades from the games table, you would use
+this statement shown here, SELECT DISTINCT concat substring of years starting at position one with length three
+and zero S FROM games. You can see that
+these five games were all invented during four decades, the 1900s, 1930s,
+1940s, and 1950s. You cannot generally use the distinct keyword more than once in a select statement. It generally has to come right
+after the keyword, SELECT. There are some exceptions to this which you'll learn about later, but for now you
+should not try to use the distinct keyword more than once in a select statement. Also a lesser known fact in SQL, the opposite of distinct is all. In fact, with most SQL engines
+you can use the keyword, ALL right after
+the keyword SELECT, but you don't need
+to because all is the default modifier of select. Selecting all the rows is what we've been
+doing all along, so it's unusual to explicitly include the keyword
+all after "Select".

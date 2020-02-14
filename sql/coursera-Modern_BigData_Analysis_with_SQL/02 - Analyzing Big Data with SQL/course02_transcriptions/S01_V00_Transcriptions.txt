@@ -1,0 +1,65 @@
+Welcome to analyzing big
+data with SQL, I'm Ian Cook. This course teaches
+the fundamentals of the SQL SELECT statement, which is the most important part
+of the SQL language, and the one part you
+definitely need to know if you're doing
+data analysis. SQL is an essential skill for data analysts, and
+data scientists. It's the standard
+language for accessing tabular data, and
+it's ubiquitous. Whether you're
+working with data in a relational database,
+in a data warehouse, or in a set of files on
+a cluster or in Cloud storage, in all these cases you can use SQL to retrieve and
+analyze this data. Popular applications
+for analytics, and business intelligence
+virtually all use SQL to retrieve
+or analyze data. Also data scientists,
+data engineers, and Machine Learning
+developers who use other languages
+like Python and R, often also use SQL to connect their code to a wide variety
+of different data sources. So you can use SQL
+to create data of all sizes across
+numerous different systems, and in this course you'll gain SQL skills that apply to
+all of these systems. But there's a particular
+emphasis in this course on a newer breed of SQL engines. Open source distributed
+SQL engines that can query
+extremely large datasets, engines like Hive, Impala,
+Presto, and Drill. These engines are
+a cornerstone of modern analytic database systems. As data has grown bigger and bigger at an ever
+accelerating rate, it's become impractical to store it in relational databases, and too expensive to store it in traditional data warehouses. So systems built with
+these newer distributed SQL engines have increasingly replaced those older systems. In this course, you'll
+have an opportunity to get hands-on experience using two of these engines,
+Hive and Impala. These are the most
+widely deployed of the open source SQL engines, and they are the standard in numerous companies
+and organizations. If you're new to SQL, this course is
+a great place to learn it. It teaches the basics of the SQL SELECT statement
+one step at a time, and gives you opportunities to practice writing and running SQL SELECT statements to answer real-world types
+of questions. If you're already
+familiar with SQL, maybe you've used it to
+query relational databases, then this course
+will help you cement your knowledge and
+update your skills, so you can be proficient with modern distributed SQL engines. This course is the second
+in the specialization modern big data analysis
+with SQL from Cloudera. The sequence of courses in this specialization is
+designed to provide excellent preparation for the Cloudera Certified Associate Data Analyst certification exam. This certification was created to identify qualified data analysts, with a talent for using
+SQL to analyze big data. It's a great way to
+stand out and be recognized by
+potential employers. You can earn this
+certification by taking a hands-on practical exam using the same SQL engines that this specialization
+teaches, Hive and Impala. If you're interested
+in this certification, you should take the Honors
+track of this course. In the Honors lessons you'll have the opportunity to gain
+some additional skills, learn a few more techniques, and become more resourceful
+as a data analyst using SQL with
+these big data engines. If you have not already taken the first course in
+this specialization, foundations for SQL on big data, then I would definitely encourage
+you to take that course before continuing with
+this second course. That first course teaches the key concepts behind
+relational databases, SQL, and big data. The final part of that first
+course shows how to set up the virtual machine that you'll use for hands-on exercises, and practice in this course. Please go ahead now and
+watch the next video which gives a whirlwind review
+of that first course, that should help
+you decide whether to take it if you
+haven't already. Whether you are looking for a basic intuitive introduction to data analysis with SQL or you're eager to establish your credentials as a big
+data analytics professional, this course and the
+specialization it's a part of, will help you to get there.

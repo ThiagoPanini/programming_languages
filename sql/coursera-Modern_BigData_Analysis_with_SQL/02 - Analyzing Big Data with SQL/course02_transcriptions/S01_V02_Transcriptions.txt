@@ -1,0 +1,85 @@
+At this point in the course,
+you should have the VM set up and running. Throughout the course, you will need
+to use the VM to follow along with demonstrations and
+to complete quizzes and assignments. The two SQL engines you'll use
+in this course, Hive and Impala, are both installed on the VM. And all the data you'll need to query with
+those engines is preloaded in tables on the VM. To interact with this data and
+these query engines, you'll be using Hue. Hue is a web browser based analytics works
+bench that provides a user interface to Hive and Impala. With the VM set up and running, you can
+open the web browser in the VM, and click the link in the bookmarks
+toolbar to access Hue. Hue includes a number of
+different interfaces, many of which you will
+not use in this course. There are just a few
+interfaces that you will use. If you completed the first
+course in this specialization, you should recall that one of the Hue
+interfaces is the Table Browser. Click the icon in the upper left corner,
+then under browsers, click Tables. Here in the Table Browser, you can
+click Databases to see databases exist. You can see there are databases named
+default, fly, fun, toy, and wax. You can click the name of the database
+to see what tables are in it. I'll click fun, you can see that
+the fun database has tables named card_rank, card_suit,
+games, and inventory. Then you can click the name of a table
+to see more details about that table. I'll click games. If you go to the columns tab you can see
+that this games table has eight columns, id, name, inventor, year,
+min_age, min_players, max_players, and list_price. You can also click the Sample tab to
+see a sample of the data in this table. So the Table Browser in Hue provides a
+convenient interface for browsing tables, through simple point and click actions. And if you completed the first
+course in the specialization, you should recall it well. In this course, you'll go beyond
+simple point and click actions and learn how to run SQL statements
+to query the tables. Hue has a different interface for that. Notice the big Query button
+in the top bar in Hue. When you click the right side of
+this button, a dropdown menu opens. Under Editor in the dropdown menu,
+you'll see options for Impala and Hive. There are some other options below that,
+you can ignore those for now. I'll click Impala and
+this opens the query editor for Impala. The query for Hive is nearly identical, it says Hive at the top instead of Impala,
+but besides that it looks the same. All the features I'll describe here are
+also available in the Hive query editor. When you're in the query editor, you can use this assist panel on the left
+side to browse the databases and tables. If the assist panel is hidden,
+you can click to show it. And you should make sure that the SQL mode
+is active at the top of the assist panel. Click this database icon to make
+sure that's the active mode. You can use this assist panel
+to see what databases exist. If you're already in one of
+the databases you'll have to click this back arrow to go back to
+the list of all the databases. You can click the name of the data
+bases to see what tables are in it. If you click the name of a table
+you'll see the columns in it. And you can click the letter i icon
+to the right of a table name to see more details about the table. The is all very similar to what you can do
+through the table browser I showed earlier in this video. The most important feature of the query
+editor is this text area in the center, where you can enter and
+edit SQL statements then run them. We'll be using this extensively
+throughout the course. When you click inside this text area, another assist panel opens
+up on the right side. We will not be using this assist
+panel at this point in the course, so you can click to hide it for now. Throughout the remainder of this course
+you want to keep the Hue query editor open in the web browser on your VM. You'll need to use it in almost every
+lesson for the rest of the course. So Hue has sequel query editors for
+both Hive and Impala, for most of this course,
+it doesn't matter which one you use. Most of the SQL statements you'll learn
+about will work the same with both Hive and Impala and with most SQL engines too, including relational databases and
+data warehouse systems. Whenever I show a SQL
+statement that is not broadly compatible across different
+engines, I'll be sure to indicate that. Typically, Impala returns query
+results faster than Hive, so I'd encourage you to use the Impala
+query editor throughout this course. The Impala query editor
+is the default one. So if you click the center of
+the big Query in the top bar in Hue, that will take you directly
+to the Impala query editor. Keep in mind that Hive and Impala are both accessing the same
+tables with the same data. These are two different engines operating
+on one set of underlying tables and data. So on the VM when you choose to
+use the Hive query editor or the Impala query editor,
+you're simply choosing which SQL engine will run the queries on
+that shared set of tables. Also a quick comment about terminology,
+the word database as I've used it in this video, refers to a logical
+container for a group of tables. If you're familiar with the concept
+of a named space, then you can think of a database as the same thing,
+it's just an abstract container. In this case,
+a container that holds tables. Within one database the tables
+all need to have different names. But two different tables can have the same
+name if they're in different databases. But this word database also
+has some broader meanings. Any organized collection of
+data can be called a database. SQL engines in general
+are often called databases, and one specific instance of a SQL
+engine is often called a database. To try to resolve this confusion
+sometimes people use the word schema, to refer specifically
+to a group of tables. In this course,
+I'll use the word database not schema, but keep in mind that you might see this
+word schema used to mean to same thing, a logical container for a group of tables.

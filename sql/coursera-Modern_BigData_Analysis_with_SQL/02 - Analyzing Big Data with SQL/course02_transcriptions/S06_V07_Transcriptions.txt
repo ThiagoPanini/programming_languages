@@ -1,0 +1,47 @@
+When you join together two tables,
+if there are NULL values in the join key columns in both tables,
+the SQL engine will not match these NULLs. It will not combine rows based on
+a NULL value in one table matching a NULL value in the other table. Here's an example to demonstrate this. These two tables are the same
+as the customers and orders tables on the VM,
+except here each one has an additional row added containing a NULL
+value in the cust_id column. So there's one customer record
+with a cust_id value of NULL, and there's one order record
+with a cust_id value of NULL. When you run a query to join these tables,
+the records with these NULL values in the join key column are not
+merged together in the result set. To understand why this is,
+look at the join condition: c.cust_id = o.cust_id. That's the equality comparison that
+the SQL engine uses to identify matches when it performs the join. Recall that whenever one or both sides
+of an equality comparison are NULL, the comparison yields NULL. So when the SQL engine compares the NULL
+cust_id value in the one table to the NULL cust_id value in the other table,
+these two NULLs do not yield a match. NULL = NULL is not true; it's NULL. So the SQL engine does not merge
+together these two rows with the NULL join key values. And since this is an inner join, neither of these unmatched rows
+is included in the result set. Typically this is exactly the behavior
+you would want and expect in a join. In an example like this, NULLs in the join key columns
+would probably mean unknown. And you would not want to merge together
+two records on the basis of them both having an unknown value
+in the join key column. However, in some cases, you might want
+to match NULL values when doing a join. For example, suppose that the company
+that this data comes from allows customers to place
+an order anonymously, for example to complete a transaction as
+a guest instead of creating an account or signing in. And suppose that the row in
+the customers table that has a NULL in the cust_id column represents
+all anonymous customers. And that orders by anonymous customers
+are stored in the orders table with a NULL in the cust_id column. Using NULL that way is a questionable
+choice, but suppose that someone else designed the database that way, and
+you're just trying to analyze the data. So in this case,
+perhaps you would want the join query to merge together these records
+with NULL in the join key column. You would want it to treat
+NULL as equal to NULL. To do this,
+you can change the join condition to use this special operator
+instead of the equality operator. You might recall this operator
+from earlier in the course. It's written as ＜=＞ and it's shorthand for
+IS NOT DISTINCT FROM. This operator is sometimes called
+the NULL-safe equality operator. And this type of join is
+called a NULL-safe join. When this operator compares two NULL
+values, it returns true instead of NULL. So with this join condition,
+the SQL engine merges together the two records that have NULL
+values in the join key column, and in includes the merged
+row in the join result. This type of join works
+with many SQL engines, including Hive, Impala, and MySQL. With PostgreSQL, you need to use
+the long form of this operator, IS NOT DISTINCT FROM,
+instead of the shorthand form.

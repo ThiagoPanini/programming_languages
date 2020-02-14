@@ -1,0 +1,77 @@
+Earlier in this course, you learned that
+the FROM clause is the clause you use to specify where the data should come from. That was true when you were querying data from single tables, and it's also true when you use a join to combine
+data from two tables. In the case of a single table, you use a single table reference
+after the FROM keyword. But to join data from two tables, you use two table references separated by the keyword JOIN. The table references can be simple table names
+like in this example, toys and makers, or they can be in the form
+database_name.table_name. The two tables you're joining can be in the same database, or in two different
+databases, or schemas. If they are in
+different databases, then you'll need to use
+database_name.table_name. So that's how you specify
+which two tables to join, but you also need to specify what
+the relationship between the two tables is, so that the SQL engine can
+match the rows. To do this, you use
+the ON keyword, followed by an expression that specifies the relationship
+between the tables. This comes right after
+the table names; it's part of the FROM clause. In this example, it's:
+ON toys.maker_id = makers.id. Looking at the toys
+and makers tables, recall that the maker_id
+column in the toys table corresponds to the id column
+in the makers table. So this expression
+after the ON keyword tells the SQL engine to
+use the matching values in these corresponding columns to match the rows when it joins
+the two tables together. This expression
+after the ON keyword is known as a join condition, and it's typically in this form, a reference to
+a column in one table, the equals sign,
+and a reference to the corresponding column
+in the other table. The column names are prefaced by the names
+of the tables they come from: toys.maker_id
+and makers.id. This way the SQL engine knows which table each of the
+corresponding columns comes from; the maker_id column comes
+from the toys table and the id column comes
+from the makers table. These corresponding columns
+in a join are sometimes called join columns
+or join key columns. If you run this query, you get this result. The information about
+each toy is returned along with information about
+the company that makes it. Because the SELECT list
+is a star, SELECT *, the query returns all
+the columns from both tables. But looking at the result set, you can see there
+are a few problems: There are two columns named name, one is from the toys table and one is from the makers table, and also there are
+two columns named id. Also, the column
+named maker_id and the second column named id
+contain the same information, so you do not need
+both of these columns. To solve these problems, you need to replace
+the * after the SELECT keyword with an explicit list of
+the columns to return. But because you're querying
+data from two tables, you need to write
+this list differently than you would if you were querying
+from just one table. The columns id and
+name each need to be prefaced with a table name so the SQL engine knows whether you want the one from the toys table, or the one from the makers table. So in the list, you can see toys.id,
+toys.name, and makers.name. For each of these, I also
+included a column alias with the AS keyword to control the names of
+the resulting columns: toys.id AS id, toys.name AS toy, and makers.name AS maker. These column aliases make the result set easier to understand. For the remaining columns
+in this SELECT list, price, maker_id, and city, there is no ambiguity about which table they
+should come from: there's only one price column, it's from the toys table; There's only one maker_id column, it's from the makers table; and there's only one city column, and it's from the makers table. So for those three columns, you do not need to qualify each column name
+with a table name; just the bare column name
+is sufficient. However, some people prefer to qualify all the column names with table names just to avoid any possibility of ambiguity. This is a good practice
+with join queries, especially if you're writing
+queries that will be run again in the future or built
+into an application. So that's the syntax of
+a basic join query in SQL. But there's one more thing: qualifying column names with table names like this can get awfully repetitive, especially if the table names are long. Fortunately, there is
+a shortcut that you can use to avoid typing the table names
+over and over again. You can give an alias to
+each of the table names, and use these table aliases instead of the full table names. Table aliases are
+usually chosen to be very short, often just
+a single character. A common choice is the first letter of the table name, if they're
+different letters. In this example, it's:
+toys AS t and makers AS m. The AS keyword is optional
+and it's common to omit it. Once you have given
+these aliases to the tables, you can use them
+in the SELECT list and in the join condition
+after the ON keyword. So in both of these places, you can replace toys with t and makers with m. Notice how that makes the query
+much more concise. Using table aliases is optional, but in the real world, you'll find that they are used in almost every join query. The example join query I
+showed in this video used only the SELECT clause
+and the FROM clause, but you can use all of the other clauses
+with a join query; there are no exceptions to this. And the aliases that you give to the tables
+in the FROM clause, you can use those in all the
+other clauses too, to resolve any ambiguity about which
+columns are from which tables.

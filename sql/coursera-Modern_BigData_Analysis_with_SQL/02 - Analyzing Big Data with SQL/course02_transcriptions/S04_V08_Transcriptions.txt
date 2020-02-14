@@ -1,0 +1,65 @@
+In this video, you'll learn
+how SQL engines handle NULL values when they
+group and aggregate data. But first, recall
+how NULL values are handled in queries that do
+not group or aggregate. Here are some examples using the inventory table
+in the fun database. In the inventory table, there are a couple
+of NULL values. One in the aisle column and
+one in the price column. When you run a query that returns NULL values
+in the results set, they are represented
+by the keyword NULL. Although the way they're
+displayed might vary depending on what software you're using
+to display the results. When you use an expression with arithmetic operators or with most non aggregate functions, when an operand or
+argument is NULL, the expression evaluates to NULL. For example, the NULL value in the price column multiplied by 1.21 and rounded to two digits after
+the decimal returns NULL. There are some special
+conditional functions that take a NULL argument and
+return a non-NULL value, but those are a special case. When you use any of the standard comparison
+operators in an expression, then any value compared
+to NULL yields NULL. So when the NULL value in
+the price column is compared to 10 in an inequality expression,
+that returns NULL. Finally, recall that when
+you use a WHERE clause, rows in which
+the Boolean expression in the WHERE clause evaluates to NULL are omitted from the results just like the rows where it
+evaluates to false. So that's a review of how
+NULL values are handled in queries that do not use
+grouping or aggregation. Now let's consider
+how SQL engines handle NULL values
+in aggregation. Here's a simple example that uses the aggregate function
+avg to compute the average of the values in the price column for all the
+rows in the inventory table. Although one of
+the price values is NULL, this query does not return
+NULL, It returns 21.99. That's because
+aggregate functions in SQL ignore NULL values. Instead of returning
+a NULL result when some of the values
+being aggregated are NULL, SQL engines just
+ignore the NULL values and use only the non-NULL values
+to compute aggregates. Some other languages and
+systems work differently, but this is what SQL engines do. The only case in which an aggregate function
+will return a NULL, is when there are
+no non-NULL values to aggregate. For example, if you
+use a WHERE clause to filter out all the games
+except Candy Land, then take the average price, the query returns NULL
+because there are no rows with game equals Candy Land
+that have a non-NULL price. If you add a GROUP BY
+clause to the query, the same principles apply. Within each group,
+NULL values are ignored and the aggregates are computed using
+the non-NULL values. So although there are three
+games in the Board 'Em shop, the average price of
+a game in that shop, $30, is calculated using just the two non-NULL
+prices, $25 and $35. But if you GROUP BY game
+instead of by shop, then there is
+one game, Candy Land, that has no non-NULL
+prices in the data. So in that case since there are no non-NULL prices in that group, the average price for
+the group is NULL. These examples all
+use the AVG function, but the same principles
+apply for SUM, MIN, and MAX. Finally, let's consider
+how SQL engines handle NULL values
+in grouping columns. I'll use the inventory table
+to demonstrate this. Notice that there is a NULL
+value in the aisle column. Say we GROUP BY
+that aisle column. Then, in the results
+set there is a row representing the group
+in which aisle is NULL. So when there are NULL values in a column that you use
+in the GROUP BY clause, a NULL group is created
+and it includes all the rows in which
+that column value is NULL.

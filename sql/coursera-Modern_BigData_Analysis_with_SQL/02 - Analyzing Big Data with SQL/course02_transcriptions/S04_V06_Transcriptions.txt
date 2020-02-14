@@ -1,0 +1,77 @@
+The simplest kind of GROUP BY clause,
+consists of, the key words GROUP BY,
+followed by, a column reference. For example, if you are querying
+the games table in the fun data base, you could use a GROUP BY clause like
+GROUP BY min_age or GROUP BY max_players. But this is not the only
+form of a group by clause, in this video you'll learn about
+what else you can do in this clause. Besides a column reference you can also
+use an expression in the GROUP BY clause. For example say you want to define
+two groups in the game's table. The group of games that cost less than
+$10 and the group that cost $10 or more. There is no existing column in the games
+table that defines these two groups, but you can write an expression that uses
+the list price column to define them. The simplest way to do this is
+with the Boolean expression list_price<10 this expression
+returns a true or false value for each row or a one or
+a zero value with some SQL engines. So all the games are grouped
+into these two categories. Another way to do this is to use the if
+function in the GROUP BY clause. If list_price<10, low price, high price. This also groups all the games into
+two categories but here the groups are defined by the character strings,
+low price and high price. And you could also do this
+with a case expression. That would give you the flexibility to
+define more than two categories if you wanted to. .When you use a grouping expression
+like in these examples, you generally need to use the expression in the GROUP BY
+clause and also in the Select list. If you don't include the grouping
+expression in the select list, then you can't tell which row in
+the result set corresponds to which group. So in this example, to count how
+many games are in each of these two price categories,
+you would use the SELECT statement, SELECT list_price <10, COUNT (*)
+FROM games GROUP BY list_price > 10. The result set shows that there are 2
+low-price games and 3 higher-price games. I used the simple Boolean
+expression in this example but you could use the the if function or
+a case expression. Whichever way you wanted
+to write the expression, you would just repeat it in both the
+Select list and in the GROUP BY clause. But repeating an expression like this
+in two places can be cumbersome, so some SQL engines offer a shortcut. With some SQL engines, you can specify the
+grouping expression in the SELECT list. Give it an alias and then use that
+alias in the GROUP BY clause. This way you do not need to repeat
+the grouping expression twice. This is especially useful when
+the expression is long or complex. This shortcut works with Impala,
+MySQL, and post PostgreSQL, but not with Hive, and
+not with many other SQL engines. If you're using some other engine,
+try it to see if it works. The reason this does
+not work with Hive and others Is that SQL engines generally
+process the group by clause before they compute the expressions
+in the SELECT list. Recall that there is a similar
+limitation with the where clause. But the developers of Impala,
+MySQL, and PostgreSQL implemented a work around to allow column aliases
+in the group by clause even though it goes against the usual order in
+which the clauses are processed. With Hive and the other SQL engines that
+do not support this shortcut, you can still use an alias to give a name to
+the grouping column in the result set but you cannot use that alias
+in the group by clause. All the examples I've presented so
+far had only one column reference or expression in the GROUP BY clause,
+but you can use more than one. After the keywords GROUP BY, you can
+specify a list of column references or expressions separated by commas. This is called the GROUP BY list. Here's an example with a group
+by list that has two items. This statement groups by min_age and
+max_players. It returns the counts of the number of
+rows in the groups defined by these two columns. When you specify two or
+more items in the GROUP BY list, the sequel engine splits up
+the data into one group for each combination of the values that
+occur in these grouping column. It splits the data into groups by
+the first column specified in the GROUP BY clause. And then splits those groups further
+by the next column specified and so on. Finally, it computes the specified
+aggregates on those groups. In this example every game in
+the games table has one of these four combinations of min_age and
+max_players. You can see in the results set
+that two games have min_age 8 and max_players 6, so
+the count in this row is 2. The other three games all have
+unique combinations of min_age and max_players, so those counts are all 1. This example uses column
+references in the GROUP BY list. But the items the list can be
+color reference, expression and column areas if the SQL engine
+support them in the group by clause. You can include any name of these. Using example that uses a column
+reference and an expression. If you're using a SQL engine that
+allow aliases in the GROUP BY clause, then you could rewrite the statement this
+way to avoid repeating the expression. These examples used two items in the
+GROUP BY list, but you can use three or more, and of course, you can use other
+aggregate functions besides count. And you can include multiple aggregate
+expressions in the SELECT list.

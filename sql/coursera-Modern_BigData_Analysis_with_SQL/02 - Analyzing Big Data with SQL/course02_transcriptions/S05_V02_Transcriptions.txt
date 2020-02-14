@@ -1,0 +1,62 @@
+When you use an ORDER BY
+clause in a query, the SQL engine returns the rows in order
+by the column or columns that you specify. The order they're returned in
+by default is ascending order. Ascending means from smallest to largest. Smallest at the top,
+largest at the bottom. Or if you're ordering by a string column, then ascending means in
+alphabetical order from A to Z. Here's an example using a numeric column. When you run the query,
+SELECT * FROM games ORDER BY list_price, then in the result set, the least
+expensive game is in the first row at the top and the most expensive game
+is in the last row at the bottom. But sometimes you'll want the rows to
+be arranged in the opposite order, with the largest values at the top and
+the smallest at the bottom. This is called descending order. For a string column, descending order is
+reversed alphabetical order, from Z to A. In SQL,
+you can arrange rows in descending order by using the keyword DESC
+in the ORDER BY clause. This keyword goes after
+the column reference. So, in this example,
+it's ORDER BY list_price DESC. When I use this DESC keyword,
+I'll speak it as descending. That's how most people say it. So, for this example, I would say
+order by list price descending, but the actual keyword is DESC. You can also use the keyword ASC for
+ascending. But since ascending is the default sort
+order, this keyword has no effect. So ORDER BY list_price ASC does the same
+thing as just ORDER BY list_price. But sometimes it's helpful to include this
+ASC keyword just to make the sort order abundantly clear. When you use multiple column
+references in an ORDER BY clause, you specify ascending or
+descending order separately for each one. Each keyword ASC or DESC only applies to
+the one column reference it's used with. The query in this example arranges
+the results in descending order by max_players,
+then in ascending order by list_price. So the rows with the largest values
+of max_players are at the top and then within the sets of rows
+in which max_players are tied, the smallest values of
+list_price come first. And of course, remember that you could
+leave off the ASC keyword here, and you would get the same result
+because the default sort order for each column is ascending. But in this kind of case, where you're
+sorting on multiple columns, some ascending, some descending, it's helpful
+to include the ASC keyword for clarity. There is an important point I want to
+clarify about sort order when you're using HUE. In the HUE query editors, if you run a
+query that returns a result with more than 100 rows, only 100 rows are initially
+returned and displayed. The demonstrate this,
+I'll run the query SELECT * FROM flights. The flights table has tens
+of millions of rows, but when I run this query,
+HUE only displays 100 rows. If I scroll down to the bottom
+of the page, HUE will load and display 100 more rows. I could scroll down
+again to load more rows. When I scroll back up to the top, and move
+the cursor over one of the column headers, you can see that there are grayed out
+up and down arrow icons visible there. If I click the header once, HUE sorts the displayed results by the
+values in that column in ascending order. If I click a second time, it sorts in
+descending order, and if I click a third time, it returns the results to the
+original order, with no sorting applied. What's happening here
+is that HUE is sorting only the portion of
+the results that are displayed. HUE is not sorting the full result set. If you mistakenly think that HUE
+is sorting the full result set, you could easily misinterpret the data. For example, when you sort in ascending
+order, you might mistakenly think that the value shown in the top row is
+the minimum value in this column for the whole data set. And when you sort in descending order, you might mistakenly think that the value
+shown in the top row is the maximum value. But you would be wrong because these
+are only the minimum and maximum values within this arbitrary subset of
+the rows that's displayed in HUE. So I recommend not using this sort
+feature in HUE unless you are sure that the results that are displayed are the
+entire result set, not just a subset. This issue is not unique to HUE. There some other SQL clients and
+BI applications that have table viewer interfaces like this with similar controls
+that might mislead you in a similar way. So whenever you're using software that
+displays a subset of your query results, keep in mind that the controls or
+functions for sorting the rows might only be sorting
+that subset, not the full result set.

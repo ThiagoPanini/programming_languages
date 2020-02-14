@@ -1,0 +1,114 @@
+In this video, I'll
+describe when it's a good idea to use
+the LIMIT clause, and when you could
+get yourself in trouble by using it
+for the wrong purpose. One very common use of the LIMIT clause is
+when you want to return just a few rows from a table to get a sense of what the data
+in the table looks like and what values are
+in the different columns. The LIMIT clause
+is great for this. You use it to return a few arbitrary rows
+and then inspect them. Often, that will give you
+ideas for how you might analyze the data or what
+queries to run next. For example, one of the first things you might
+do when working with the flights table is to return 5 or maybe 10 or 20 rows,
+and take a look at them. By doing this, you can quickly ascertain some things
+about the data. For example, you can
+see how the year, month, and day are represented. Four-digit years, and
+integer month and day values. You can see that the time
+columns appear to be formatted as the hour in 24-hour time,
+followed by the minutes. From there, you might run
+some follow-up queries to find out things like, what's the earliest and the latest year
+represented in the table, and are there any missing values
+in the time columns? Another common use of the
+LIMIT clause is when you've written a select statement
+but you don't know how many rows
+it will return, and you want to avoid returning an enormous number of rows. This is a very common situation. Working as a data analyst, it's not unusual to realize you have no idea whether
+a query that you just wrote will return
+100 rows or 100,000 rows. So if you find yourself
+in this situation, often the safest and
+easiest thing to do is to put a LIMIT
+clause at the end of the query to limit the result
+set to a number of rows that's small enough that it
+won't cause any problems. Then after you run the query, you can check whether
+the number of rows it returned reached
+that limit that you set. If it did, then you could modify the query to reduce the number
+of rows, for instance, by using more restrictive
+filtering conditions or by using different
+grouping columns. Of course, another option is to find out exactly how
+many rows will be returned by writing and running
+a separate count query, but that requires writing and
+running a separate query. So often, it's just
+quicker and easier to add a LIMIT clause to
+the query you already have. Here's an example of this. Say, you're using a BI or
+Data Visualization Tool, and you want to use
+it to draw a map showing all the routes
+represented in the flights table, all the origin and destination pairs with lines connecting them, and you want the lines
+to vary in thickness based on how many flights
+flew on that route. Many BI and Data
+Visualization Tools can draw maps just like that. To get the data you would
+need to draw a map like that, you would run a query like this. It groups the flights table
+by origin and destination, and in each row of
+the result set, it returns an origin,
+a destination, and the number of
+flights that had that origin and destination. The trouble is, we don't
+know how many rows this query will return. If it were to return more
+than about 1,000 rows, the map might take
+a really long time to render, and it would be so crowded with lines that you
+couldn't interpret it. A quick and easy way
+to avoid this problem is to add LIMIT
+1000 to the query, then you know your map
+will not take too long to render and it will not be crowded with
+many thousands of lines. After running this query
+with the LIMIT 1000, you could see in the BI or Data Visualization
+Tool that it did in fact return 1000 rows. It hit the limit. So then you could experiment
+with ways to filter the data to avoid hitting
+this limit of 1000 rows. One way to achieve
+this would be to return only the routes
+that had many flights. In other words, omit the less frequently flown routes
+from the results. With a little bit
+of experimentation, you could find out that filtering out the routes that
+had fewer than 20,000 flights gives a result
+with fewer than 1,000 rows. A result with fewer
+than 1,000 rows means this query is no
+longer hitting the limit, so then you could remove
+the LIMIT clause. In addition to limiting the number of rows
+that are returned, the LIMIT clause can also
+reduce the amount of compute resources
+that the SQL engine needs to process your query. So in addition to
+speeding up your queries, it could also reduce
+the load you're putting on the SQL engine making other people's queries
+run faster too. Recall that when the LIMIT clause limits the number of
+rows that are returned, it picks the rows arbitrarily. There's no guarantee about
+which rows you'll get. You might think this
+means that you can use the limit clause to get
+a random sample of rows, but you should not use the limit clause if what you
+want is a random sample. With a distributed query engine
+like Hive or Impala, there are a variety of
+unpredictable factors that affect which rows are
+returned by the LIMIT clause, factors like
+the processor, memory, and network usage of the different computers
+on the cluster, and how the data is distributed
+across the cluster. So which rows are returned
+is not predictable, but it's also not random. This is an important distinction. Unpredictable does
+not mean random. Here's an analogy to help
+you understand this. Imagine you have
+a brand new deck of cards and you just took
+it out of the box, so the cards are in
+predetermined order, arranged by suit, then by rank. Then imagine you shuffle
+this deck just one time. One shuffle is not enough to make the cards be in
+really random order. After just one shuffle, they're not in a totally predictable order but
+they're definitely not in totally
+random order either. This is a lot like
+what happens with rows in a distributed SQL engine. They get shuffled a little bit
+so they're not in a predictable order but they're
+not thoroughly shuffled, so you should never consider
+them to be in random order. So the subset of rows that's
+returned when you use a LIMIT clause is
+not a random sample. It's taken from the top of a pile that's not
+in random order. It might be called a
+sample of the data, but it's definitely
+not a random sample. Because it's not a random sample, you should never interpret
+the results from a select statement with
+a LIMIT clause as being representative of
+the full results like the way that a real random
+sample of the rows would be.

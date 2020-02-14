@@ -1,0 +1,105 @@
+In an earlier lesson, I described how an expression in SQL is a combination
+of literal values, column references,
+operators, and functions, and I showed some examples of simple expressions including one that used the round function. The round function rounds decimal numbers to
+the nearest whole number. In this example, it rounds each list price to
+the nearest dollar. A function is invoked in a SQL statement by
+using the function name followed by a pair of
+parentheses enclosing the arguments or parameters
+to the function. When there are
+two or more arguments, they're separated by commas. Function names in SQL are
+typically not case sensitive, and by convention we write
+them in all lowercase. The round function is just
+one of many functions in SQL. Functions like round
+are often called built-in functions
+because they're built right into the SQL engine. Different SQL engines offer different sets of
+built-in functions, numbering anywhere
+from about 100 after maybe several 100
+different functions depending upon the engine. In this video, I'll cover some common
+mathematical functions, most of which are built into
+all the major SQL engines. Round is one of the most
+basic mathematical functions. Rounding to the
+nearest whole number is an elementary concept, but it's a bit more complicated
+than you might imagine. When you use the round function
+with just one argument, then it rounds to
+the nearest whole number, to the nearest integer. So round 19.37 returns 19. But you can also use the round function
+with two arguments. The second one specifies how many decimal places
+to round two. So round with the first argument 19.37 and the second
+argument one, we'll round to one decimal place
+and return 19.4. Recall that, an easy way to try out these built-in functions, is to use them with
+literal arguments in a select statement that
+has no FROM clause, just the same way you tried out arithmetic operators
+in an earlier lesson. In addition to round, there are two related functions, floor and ceil for ceiling. Floor rounds down to the nearest integer
+value and ceil rounds up to the
+nearest integer value. So for example, ceil
+19.37 returns 20, taking the ceiling of 19 point
+anything will return 20, and taking the floor of 19 point
+anything will return 19. So whereas round we'll
+round up or down depending on whether
+the number is closer to the integer above or below, floor will always round to
+the nearest integer below, and ceil will always round to
+the nearest integer above. Another note about
+the round function. With positive numbers,
+if the number you're rounding is
+exactly in the middle, equally far from
+the rounded value above and the one below, then the round function will
+round to the one above. For example, 4.5 which
+is right in the middle between four and
+five, rounds to five. But with negative numbers, it will round to the one below. For example, negative 4.5
+rounds to negative five. So in the case where
+a value is equally far from the one above
+and the one below, it's always rounded to one
+that's farther from zero, positive up, negative down. Two other common mathematical
+functions are ABS and SQRT. ABS returns the absolute
+value of a number, SQRT returns the square
+root of a number. Both of these take
+just one argument. There is also the pow
+or power function, which returns the first argument raised to the power of
+the second argument. Raising a number to a power is also called exponentiation. Some SQL dialects and many programming
+languages support an exponentiation operator. Often it's the caret symbol
+or a double asterisk. But Hive and Impala and
+many other SQL dialects, do not have an
+exponentiation operator. Instead, you use the pow or power function for
+exponentiation. With most major SQL engines, including Hive or Impala, you can use either pow or power, but some SQL engines might
+only support one or the other. Whatever you do, just
+do not try to use the caret operator for
+exponentiation in Hive or Impala. This operator does something
+completely different in those engines called the
+bitwise exclusive OR, that's beyond the scope
+of this course. The rand or random function, returns a pseudo-random
+decimal number between zero and one. If you're looking for
+a pseudo-random numbers in a different range, you can use the
+arithmetic operators to shift and scale the output, and you can round it using the round or floor
+or ceil function. For example, to get
+a pseudo-random integer between one and 10, you could write
+an expression that takes the ceiling of rand times 10. You can see from this example, that the arguments to
+a function can themselves be expressions not just column
+references and literals. The rand or random
+function does not require any arguments but
+with many SQL engines, you can supply a seed value to control whether its output
+is predictable or not. Different SQL engines do
+this in different ways, the details are beyond
+the scope of this course. As for the two different names,
+rand and random, some SQL engines like Hive and MySQL will only recognize rand. Others like PostgreSQL will
+only recognize random and some like Impala will recognize either and that's the case
+with many built-in functions. There's a great deal of inconsistency between
+different SQL dialects, so you should always
+test functions to check whether they work with the particular SQL engine
+you're using. There are many more
+mathematical functions including trigonometric
+and logarithmic functions. The details of those are beyond
+the scope of this course, but the principles of
+using them are the same. There are also other types
+of built-in functions, like string functions for
+working with character strings. See the reading to
+learn about those. Also, notice that
+the built-in functions I've talked about so far, return a column with
+the same number of rows as the table
+you're querying from. In other words, they do
+not reshape the data. With these functions,
+when you use them in a select list and you
+have a from clause, then the results that we'll always have the same number of rows as the table
+in the FROM clause. When you use them with
+literal arguments with no FROM clause, then the result always
+has just one row. But you'll see later
+in the course, that there is another type of function that does
+reshape the data.

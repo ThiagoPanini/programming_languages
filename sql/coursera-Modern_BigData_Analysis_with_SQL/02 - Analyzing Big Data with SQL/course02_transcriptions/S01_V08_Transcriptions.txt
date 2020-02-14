@@ -1,0 +1,42 @@
+In this video, you'll
+learn how to start Impala Shell from
+the command line, and use it interactively. With the VM running,
+open the terminal. To start Impala Shell, use the command impala-shell. You can specify
+arguments after this, but on the core VM none
+are required. In other environments you might need to include arguments. For example, you might
+need to use -i to specify the host name and
+port of an Impala daemon. That's the name of
+the service that Impala Shell needs to connect
+to to run queries. To see all the
+available arguments, also called options, you
+can use the -h option, short for help, that prints
+a list of all the options, but does not start Impala Shell. You can also use this same
+-h option with Beeline. One useful option is -d, which sets the current
+database on startup. If you don't specify it, then the current database
+after you start Impala Shell will be
+the default database. I'll specify -d fun, then press "Enter" to
+start Impala Shell. You'll see some messages as
+it starts up and connects to an Impala daemon including
+a random tip of the day. If you see a message
+indicating that Impala shell could not
+connect to an Impala daemon, then please see troubleshooting the VM in the course resources, which explains ways to fix this. When Impala shell is connected, you'll see a prompt to
+enter SQL statements. The prompt includes
+the host name and port of the Impala daemon
+you're connected to, and ends with a
+greater than sign. On the VM, it's
+localhost port 21,000. Now you can enter and run SQL statements just
+like in Beeline, and results are
+displayed similarly. Like Beeline, Impala shell requires statements to be
+terminated with a semicolon. The command to quit Impala shell is different
+than in Beeline. It's the word quit with
+no exclamation mark before it, and in Impala shell you do need to terminate the quit command
+with a semicolon. So, you learned about
+a few important differences between Beeline and Impala shell, but mostly they
+work the same way. A few more things
+they have in common. In both, you can clear the screen by
+pressing "Control+L". In both when you execute a query, the entire results set is returned and
+printed to the screen, not just 100 rows like in
+the You Query Editors. In both you can cancel a query
+by pressing "Control+C". Later in the course,
+you'll learn about more ways to use Beeline
+and Impala shell.

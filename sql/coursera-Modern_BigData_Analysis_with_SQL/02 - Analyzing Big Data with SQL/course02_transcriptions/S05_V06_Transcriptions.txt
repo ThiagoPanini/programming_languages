@@ -1,0 +1,51 @@
+The final clause
+that's covered in this course and
+the clause that comes last in the select statement is the optional limit clause. The purpose of
+the limit clause is to set a maximum number of rows for the query to return.
+Here's an example. The flights table in the fly database contains
+tens of millions of rows, but say you want to only
+return five of those rows. To do this, you
+would run the query, select * FROM flights LIMIT 5, then the result will have
+five rows and no more. Now you're probably wondering
+which five rows do you get. What you get is
+just five arbitrary rows. If you ran this same query
+again on the same data, you might get
+five different rows, or it might be the same five. There's no guarantee. The exception to this is when you also use an orderBy clause, you'll learn about that
+in an upcoming video. Here's another example. This one is a more
+complicated query. It finds the carriers, the airlines that have at least 5,000 flights with an air time of seven hours or longer and the limit clause limits
+the results to 10 rows. But notice that the results
+set has only four rows. That's because in this case, the result of
+all the other clauses returns fewer than
+the specified limit of 10. When this happens
+the limit clause has no effect. So you should never
+assume that you'll get exactly as many rows as
+your limit clause specifies, it can be fewer but it
+will never be more. The limit clause must come
+after all the other clauses, and it's applied after
+all the other clauses. So in this example it
+does not affect which of the individual rows of the flight table are included
+in the aggregations, it's applied after the filtering, after the grouping,
+after the aggregation, after everything else
+at the very end and it only affects how many of
+the result rows are returned. The number that comes after
+the limit keyword generally needs to be a non negative
+literal integers. So any whole number,
+zero or higher. Some SQL engines will let you use an expression after
+the limit keyword, but only a constant
+numeric expression, not an expression with column references
+or column aliases. Some SQL interfaces like Hue automatically limit the number of rows that a query can return. Recall that the
+Query Editors in Hue display up to 100 rows initially, and they let you load
+more rows by scrolling down. That makes it unnecessary
+to use the limit clause unless you want to use
+a limit smaller than 100. In Hue, if you do use the limit clause and you specify a number higher than 100, then Hue will still display
+only 100 rows at first, and you'll need to
+scroll down to display anything beyond the 100th row. However, if you continue
+scrolling down, it will not load any more than the number of rows you
+specified in the limit clause. But you can't always rely on your SQL client to automatically limit
+how many rows are displayed. With some software if
+you run a query that returns millions or
+billions of rows, the software will attempt
+to download them all, which could put a big load
+on your SQL engine, saturate your network,
+use up lots of memory, and take a long time to finish. By using the limit clause, you can prevent this
+from happening.

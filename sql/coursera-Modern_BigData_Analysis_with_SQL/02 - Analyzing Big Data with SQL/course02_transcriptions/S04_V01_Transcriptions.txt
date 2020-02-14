@@ -1,0 +1,24 @@
+Aggregation is the act of taking multiple values and reducing
+them down to a single value. Two of the simplest forms
+of aggregation, are counting and adding. Everyone understands these
+but just for completeness, I'll show an example of each
+using the employees table. Counting, simply
+means tallying up the roads figuring out
+how many rows there are. It's easy to see that
+this table has five rows. You do not need to look at any of the values in the rows
+to count them. Adding or summing is
+also very simple but it does require you to look
+at the values in the rows. For example, to compute the sum or total of
+all the salary values, you add up all the values
+in the salary column. The sum of these is $185,403. The result of an aggregation
+is called an aggregate. So in these examples
+5 and 185,403 are both aggregates counting and adding are not the only forms
+of aggregation. Here are a few others. Computing the average of
+the values in a column. The average is the sum of all the values divided
+by the number of values. In this example the average
+salary is $37,080.60. Finding the minimum
+value in a Column. The minimum salary is $25,784. Finding the maximum
+value in a column. The maximum salary is $54,523. All of these are
+types of aggregation. In the next video
+you'll learn about the built-in functions in SQL
+for computing all of these.

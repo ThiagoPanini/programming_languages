@@ -1,0 +1,78 @@
+Ah, greetings. I am The Count. Do you know? Oh! Look,
+a table with rows. I will count the rows. One, one row. Two, two rows. Three, three rows. Four, four rows. Five, five rows! Okay. That's enough of that. So as you saw, the inventory table in
+the fun database has five rows. Recall that you can return
+the number of rows in a table by using the COUNT
+function with an asterisk, a star, as the argument. So COUNT(*) FROM inventory
+returns five. You can also use a
+GROUP BY clause. If you do, then COUNT(*) returns the number of
+rows in each group. For example, this query uses COUNT(*) and GROUP BY shop, and the result tells you
+that there are two games in the Dicey shop and three games
+in the Board 'Em shop. But there is another way
+to use the COUNT function. Instead of using *
+as the argument, you can specify a column
+reference as the argument. When you do this,
+the COUNT function does something different: it returns the number
+of rows in which that column has a non-NULL value. For example, if I run the query, SELECT COUNT(price)
+FROM inventory, then the result is not five, it's four because there are four non-NULL values
+in the price column. If you include a GROUP BY clause, then the result is not two
+and three like before, it's two and two; there are two games in
+the Dicey shop with a non-NULL price and two games in the Board 'Em shop
+with a non-NULL price. So when you use a column
+reference or it could be an expression as the argument
+to the COUNT function, then the COUNT function
+does not count the missing values in
+that column, it ignores them. To understand why this is, remember that this is what the other aggregate functions do, the functions like SUM and AVG, they ignore NULL values. The COUNT function was
+designed to be consistent with these other aggregate functions except in the case where
+you use COUNT(*). So the general rule is that aggregate functions
+ignore NULL values, and the one exception to that rule is when
+you use COUNT(*). The COUNT function has
+another useful feature. You can use it to count
+the number of distinct values, unique values, in a column. To do this, you use the keyword DISTINCT inside
+the parentheses after COUNT. For example, to count
+the number of unique values in the aisle column in
+the inventory table, you would run the query SELECT COUNT(DISTINCT aisle)
+FROM inventory. This returns three, which
+tells you that there are three unique non-NULL
+values in the aisle column. NULL values are not
+counted regardless of whether or not you use
+the DISTINCT keyword. With some SQL engines, you can specify more than
+one column reference or expression after
+the DISTINCT keyword in the COUNT function. This returns the number of unique combinations of
+the specified columns that exist in the data. This works in Hive, Impala, and MySQL, but not in PostgreSQL. Also, with some SQL engines, you can use more than one COUNT DISTINCT in a SELECT list, like in this example which
+uses the crayons table. Here, the COUNT function is used three separate times in the SELECT list and the DISTINCT keyword is
+included in all three. So the result set
+has three columns giving the number of unique
+values in the red column, the number of unique values
+in the green column, and the number of unique
+values in the blue column. But with some other SQL
+engines including Impala, you are limited to only one COUNT DISTINCT per SELECT list. Impala will throw an error if
+you try to run this query. In the examples I just presented, the DISTINCT keyword is used with the COUNT function inside
+the parentheses after COUNT. But recall that this is not the only place where you can
+use the DISTINCT keyword, you can also use it just after the SELECT keyword without
+any aggregate function. That returns the unique rows of the table instead of returning the count of
+how many unique values or combinations of
+values there are. In SQL, the opposite
+of DISTINCT is ALL. In fact, you can
+use the ALL keyword in both of these places where you can use the DISTINCT keyword. But using the ALL keyword does nothing because in
+both of these cases the default behavior when
+you use no keyword is the same as what you get when you explicitly use the ALL keyword. You can actually use the DISTINCT keyword with other aggregate functions
+besides COUNT, but there is not usually
+any good reason to do that. For example, there is usually
+no good reason to calculate the sum or the average of all the unique values
+in a column. You can do this, but typically the result does not answer any practical question. If you're using the MIN or
+MAX aggregate functions, you should not use the DISTINCT keyword because
+the minimum or maximum of the unique values
+is always the same as the minimum or
+maximum of all the values. So the COUNT function is unique among the common
+aggregate functions because it's the only one that is often used with
+the DISTINCT keyword. The COUNT function is
+also the only one of these common aggregate
+functions that you'll often see used with
+character string columns. You can't find the sum or average of
+a character string column, those aggregate functions
+are for numeric columns. Although you can find
+the min or max of a string column according to
+their lexicographical order, it's not so common for data
+analysts to need to do that. But finding the count
+of the values in a string column is something data analysts
+often need to do.

@@ -1,0 +1,117 @@
+In this video, I'll introduce
+some built-in functions, that are often used for
+handling null values. Some of these can be used
+for other purposes too. Some other functions I'll
+describe here are very common, and are built into
+virtually every SQL engine. Others are not
+universally implemented. When you're using any
+one of these functions, always do a test first
+to check for errors, and to check that the output
+is what you expect. The if function takes a Boolean expression
+as the first argument. If the expression
+evaluates to true, it returns the second argument. If not, it returns the third
+argument. Here's an example. This select statement uses the if function in an expression
+in the select list. It checks each row to see if the value in the
+price column is null. It returns the value
+8.99 if it is null, otherwise it returns
+the actual value from the price column. The resulting column has
+the alias correct price. In the results side, you can
+see that the one null value, in the price column has
+been replaced with 899. Here's another example
+using the if function. This one demonstrates that, when the expression in the first argument
+evaluates to null, the if function returns
+the third argument, the same as if the expression
+evaluated to false. The expression here price
+greater than 10 evaluates to true for the rows
+with monopoly, and risk. So for those the if function returns the second
+argument, high price. The expression evaluates
+to false for clue, and to null for Candy land. So for both of those it returns the third argument low
+or missing price. So the if function allows you to conditionally return
+one of two values. But if you want to conditionally return more than two
+different values, you can use a case expression. This uses a different syntax, than the built-in functions. I'll demonstrate this
+with an example. In the previous example, I use the if function to give each game one
+of two designations; high price, or low
+or missing price. Here, I use a case expression to give them three designations; high price, low price,
+or missing price. The case expression begins
+with the keyword case. Following that there's
+a series of clauses, that each begin with
+the keyword when. After each 'When' keyword, there's a Boolean expression, then the keyword then, and an expression
+giving the result. If the Boolean expression
+evaluates to true, then that result is returned. Otherwise, it continues
+to the next when clause. After all the when clauses, there is an else clause. That gives the result
+to return when none of the above Boolean
+expressions are true. Finally the case expression ends, with the word end. There's no punctuation
+between the when clauses, and you can write the whole
+case expression on one line, or you can use extra white-space like I did here to
+make it more readable. Case expressions are really
+useful for implementing complex conditional logic in an expression in the select list. So the if function, and the case expression are both useful for handling null values, and they're also useful for some other kinds of
+cases where you need to implement conditional logic
+in a SQL expression. The remainder of the functions I'll describe in this video, are narrower in the scope
+of their application, and they pertain
+just few null value. The null if function, takes two arguments, and returns null if the two
+arguments are equal. If they are not equal, it returns the value
+of the first argument. That might seem like
+a puzzling thing for a function to do, and it probably doesn't
+sound very useful at first, but there are some particular
+cases where it is useful. I'll demonstrate
+one such case with an example using the flights
+table in the fly database. You probably remember from
+elementary mathematics, that you're not supposed
+to divide by zero. If you try to divide by zero in an expression in
+a select statement, some SQL engines like Postgres
+SQL will throw an error. Others like Impala, will return a special value signifying
+that the result is infinite, or that it's not a number. The null if function can
+help you to avoid this. The expression in this example divides the flight
+distance in miles, by the time spent in
+the air in minutes. To compute the average speed, it multiplies that by 60 to get the units in miles per hour. The trouble is that there are some rows in the flights table, in which the air-time is zero. Air-time is in the denominator
+in this division. So you need to do something about those zeros to avoid
+dividing by them. If you use the nullif
+function as shown here that replaces
+these zeros with nulls. Dividing something by
+null, just returns null. But that's okay, it's
+better than getting an infinite value or an error. The nullif function, is really just shorthand for
+a case expression, or an if function with the argument specified
+in a certain way, but it's shorter to write it
+using the nullif function. Another case where
+the nullif function is useful, is when there is
+some particular value that's used to represent
+a missing value, but it's not a null. For example, there are many
+data sets where values like 999 are used to represent missing values
+in numeric columns. This kind of thing is
+unfortunately very common, and if you don't properly
+handle these values, by converting them
+to actual nulls, they can cause
+all kinds of problems. The nullif function can help you to work
+with data like this. There's another function that's named ifnull in some SQL engines. It's named NVL in some others. This function tests if
+an expression evaluates to null. If it's not null then it returns the value
+of the expression. If it is null then it
+returns some other value. Here's an example
+of this function. In the flights table, the air-time column has
+some null values in it. For whatever reason the value is missing for some of the flights. Say you're looking specifically at flights from New York EWR, to San Francisco SFO, and you want to replace
+those missing air-time values, with an estimated value. I happen to know that a typical
+flight from New York to San Francisco is in the air
+for about 340 minutes. So I want to replace
+those nulls with 340. You can do this with the
+ifnull function as shown here. The first argument is
+the column reference air-time, and the second argument
+is the value to replace the nulls, 340. The result set from
+this query will not contain any nulls. The final function
+I'll introduce in this video is coalesce. Coalesce can take
+any number of arguments, and it returns the value of the first argument,
+that's not null. If they're all null,
+it returns null. Here's an example. In
+the flights table, there is an actual
+arrival time column, and a scheduled
+arrival time column. There are a lot of
+missing values in the actual arrival time
+column but very few in the scheduled
+arrival time column. Suppose you want to return the actual arrival time
+for each flight, but if it's missing you want to fall back on the
+scheduled arrival time, and a return to that instead
+of a null if possible. To do this, you can use the coalesce function
+as shown here. The first argument is
+the column reference ARR time, and the second argument is the column reference,
+scaled ARR time. You could use more arguments. Whenever you use
+these conditional functions, check that they're available with the SQL engine you're using, and test them out to verify that they're working as you expect, before you use them to
+produce a result that you analyze or send
+to someone else.

@@ -1,0 +1,104 @@
+Recall that the LIMIT
+clause is used for returning up to a certain
+number of result rows, like up to 100 rows. But what if you want
+to do something like return 100 rows, then return the next 100 rows, then the next 100
+rows, and so on? This is called pagination
+or paging because you can think of
+it like returning one page of results at a time. Many SQL engines allow you
+to paginate query results by specifying a row limit
+and a row offset. So for example, to
+paginate your results into pages of 100 rows each, you would first
+specify a limit of 100 and an offset of zero. That's the first page. Then you would specify
+a limit of 100 and an offset of 100 to
+get the second page. Then a limit of 100
+and an offset of 200 to get the third
+page and so on. So by running a sequence of multiple queries with
+different offsets, you can return the
+rows of the result set split up into multiple pages. So you already know
+how to specify the limit by using
+the limit clause. But how do you
+specify the offset? Well, different SQL engines support different ways
+of specifying it. With Impala and PostgresQL, it's specified using
+the offset keyword which comes after the limit. But Hive uses a different syntax. With Hive, there's
+no offset keyword. Instead you specify two numbers
+after the limit keyword, separated by a comma. The offset comes first, then a comma, then the limit. This only works with
+newer versions of Hive. MySQL supports both
+of these syntaxes. Some other SQL engines
+use other syntaxes. For example, some use the
+keyword skip instead of offset. Check the documentation
+for the SQL engine you're using to see which
+syntax it supports. In some of the SQL
+engines that use the offset keyword like Impala, you can actually use it
+without the limit keyword. So you can specify only
+an offset and no limit. So you could think of offset
+as a separate clause, but it's pretty unusual to
+use offset without limit. So usually I just
+think of offset as an optional part of
+the limit clause. There's something important you need to remember when you use limit and offset for pagination. First, recall that when you run a select statement using
+a distributed SQL engine, if the statement does not
+have an ORDER BY clause, then the order of the
+rows in the results set is arbitrary
+and unpredictable. You could run
+the exact same query twice and get the rows in
+a different order each time. What this means for pagination
+is that if you were to run a sequence of multiple queries with different offsets to
+paginate your results, each of those queries
+could shuffle all the rows differently before applying
+the limit and offset. So the query to get
+the second page of results might return some
+of the same rows that were returned by the query
+that you ran to get the first page and some of the rows might not be
+on any of the pages. So across the pages
+of the results, there could be duplicate
+rows and missing rows. That's no good. Because of this,
+it's essential that you use an ORDER BY
+clause to arrange the rows in deterministic
+order whenever you use limit and
+offset for pagination. When I say deterministic order, I mean that the order
+of the rows is not at all or arbitrary
+or unpredictable. Every row is arranged in predictable order according
+to the ORDER BY clause. With the rows of the full results at in deterministic order, then the limit and
+offset clause can split it up into
+nice clean pages of results, where every row appears
+on exactly one page. Some SQL engines like Impala
+try to enforce this by throwing an error if
+you try to use limit and offset without ORDER BY. But some other SQL engines will allow you to leave off
+the ORDER BY clause. So it's up to you to remember
+that you need to use it. To ensure that you
+don't have missing or repeated rows in
+paginated results, you need to ORDER BY
+a column that has a unique value in every row, or by multiple columns that have a unique combination of
+values in every row. That way, there are no
+ties in the values you're ordering by because recall
+that if there are ties, then the order of the tied rows is arbitrary not deterministic, and we need to make
+the row order deterministic. Often, there is
+a single column like a unique ID or unique timestamp column that has a unique value in every row. If so, you can
+ORDER BY that column. But sometimes, there's not
+a single column like this. For example, the flights table
+on the VM does not have any one column with
+a unique value in every row. But if you ORDER BY year, month, day, origin,
+destination, carrier, and flight, then the rows will be in deterministic
+order and you can use limit and offset to get cleanly paginated results. I think there are still
+a few rows there that are in indeterminate order due to
+missing or erroneous values. So you might also want
+to filter those out. Also, keep in mind
+when you are using the ORDER BY clause in a query
+that paginate the results, that the purpose of the
+ORDER BY clause in this case is not necessarily to return the
+rows in a meaningful order, like it is in a top end query. Often, the point is just to get the rows in some
+deterministic order, so the pagination
+works correctly. Any order might be fine, just so long as
+it's deterministic. This method of paginating
+results by running a sequence of separate queries
+with different offsets, it works, but it's inefficient. It requires running
+multiple queries which can put a lot of
+stress on the SQL engine. It's especially
+inefficient if you run many queries that each return
+a small number of rows. For performance,
+it's better to run fewer queries that each return
+a larger number of rows. There are more efficient ways
+to implement pagination. But to use them, you would need to use
+a programming language to write an application that
+communicates with the SQL engine through one of the interface standards like
+ODBC or JDBC or Thrift. The details of that are beyond
+the scope of this course.

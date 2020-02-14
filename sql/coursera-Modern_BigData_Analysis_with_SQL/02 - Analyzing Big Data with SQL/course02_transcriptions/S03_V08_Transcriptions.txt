@@ -1,0 +1,116 @@
+When you're filtering data
+based on some conditions, it's important to
+consider whether the conditions are known
+for all the rows or not. The presence of missing or
+unknown values in the data, can make it impossible
+to determine weather conditions
+are true or false. For example, if the price of
+some board game is unknown, then it's impossible
+to determine whether that price is less than $10. Maybe it's less, maybe it's more, maybe it's exactly $10, you have no way of knowing. Life would be easier if you never had to work
+with missing values. But the reality is that
+many datasets have them, and as a data analyst, you'll need to handle
+them properly. So the next few videos and
+readings are all about how to work with and interpret
+missing or unknown values. In SQL, a null value is a value that's
+missing or unknown. This is represented by the keyword "null" in
+SQL expressions, and in result sets. The small tables I've used
+in the examples up to this point like the games table
+and the crayons table, do not have any
+null values in them. But some of the other tables do. Among the small tables
+the ones that have null values are the offices table in the default database, and the inventory
+and card_rank tables in the fun database. The null values that are in these different tables
+all look the same, they're all just null. But the meaning or
+interpretation of null values, what they actually represent, can differ based on the context. In the offices table, the row representing these
+Singapore office has a null value in
+the state_province column. The reason that value is null, is that Singapore is not divided into states or provinces. So the null there
+means not applicable. In the inventory table, there is a null in
+the aisle column and another in the price column. In this table what
+these nulls mean are, we don't know what aisle the game clue is
+in the dicey shop and we don't know
+what the price of Candy Land is in
+the Board 'Em shop. The nulls here mean unknown. In the card_rank table, there is a null in
+the value column, in the row representing ace. The reason that's a null, is that the value of
+an ace card can vary. For instance, in
+the card game blackjack and ace card can be worth either
+one point or 11 points. So this null means
+undefined or indeterminate. Real-world data sets often have lots of
+missing values in them. There are many datasets in
+the real world that have more missing values than
+non missing values. These are referred to
+as sparse datasets. None of the tables on
+the VM are like that, but some of the tables in the fly database which
+contain real-world data, do have many missing values. For example, in the flights table the actual departure
+time column, depth_time, and the actual
+arrival time column, ARR_time, have lots of nulls. Some of these nulls represent
+flights were canceled, others are there because
+of data collection errors. There's one row in
+the flights table representing the famous US
+Airways Flight 1549. This flight took off from
+LaGuardia Airport in New York, ran into a flock of geese that caused both engines to fail, and ditched in the Hudson River. You might have heard about this. There was a movie about
+its starring Tom Hanks. No. Not that solely.
+Yes. That's the one. Anyway, try writing a query to find this flight in
+the flights table. It was on January 15th, 2009, the carrier is US, the flight number is 1549, and the origin airport is LGA. After you write and run
+a query that returns that row, take a look at which column values are
+missing in this row. In each of the examples I
+showed so far in this video, you could see the null value in the table or in
+the results set. Null values are mostly straightforward to interpret
+when you can spot them. You might have some questions
+about what they mean, but at least you know
+they're there and you can interpret
+the results accordingly. However, null values become more of a tricky problem when you inadvertently filter them out of your results using
+a WHERE clause. Recall that when you
+use a WHERE clause, you specify the
+filtering conditions with a boolean expression, and only the rows for which
+the boolean expression evaluates to true are
+returned in the result set. So far we've assumed
+that for each row, a boolean expression
+will evaluate to either true or false. But if a table has
+null values in it, then there is
+a third possibility, a boolean expression
+could evaluate to null. That's because as I said at
+the beginning of this video, missing values can
+make it impossible to determine whether some
+conditions are true or false. Rows in which
+the boolean expression in the WHERE clause
+evaluates to null, are omitted from the results just like the rows where
+it evaluates to false. This is a really
+important concept to understand so I'll repeat it. Any rows in which the expression in
+the WHERE clause evaluates to false and any rows in
+which it evaluates to null, are filtered out excluded
+from the result set. This can have
+important implications for interpreting query results. Here's an example to
+demonstrate this using the inventory table
+in the fun database. This table contains
+information about board games that are in
+stock at a couple of shops. What if you wanted to
+know which games are available in these shops
+for less than $10? To find this, you would
+run a query like, SELECT star FROM fun.inventory
+WHERE price less than 10, and you would get a result
+with just one row, the game clue in the shop Dicey, which has the price $9.99. You might interpret this result and make a statement like, there is only one game
+available at the shop that's priced under $10. But this is not necessarily true. There is a null value in the price column indicating
+that the price of Candy Land in the Board
+'Em shop is unknown. When a numeric value is unknown, you cannot determine
+whether it's less than 10. There's just not
+enough information to know whether it is or not. So because of this null value
+in the price column, it's misleading to say there is only one game at these shops
+priced under $10. It would be better to
+make a statement like, there is at least one game at the shops possibly two
+for less than $10, or there is only one game
+at the shops that we know has a price of less than
+$10 or something like that. As a data analyst, you can avoid a lot of
+trouble and blame by being mindful of the possibility
+of missing values, and phrasing your interpretations to account for that possibility. It's also important
+to explicitly check for null values and handle
+them in your queries, that's the subject
+of the next video. Also, if you took the first course that's part
+of this specialization, or if you have
+any past experience with traditional relational
+database systems, you might be familiar with the concept of null constraints. Null constraints can
+prevent data with null values from
+being loaded into the database in the first place, but distributed SQL engines
+like Hive and Impala, do not generally support
+these constraints. The way they work
+makes it impractical. So you often need to
+assume that any column in any table could have
+null values in it.
