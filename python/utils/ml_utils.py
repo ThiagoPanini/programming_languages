@@ -8,10 +8,15 @@
 ---------- IMPORTANDO BIBLIOTECAS ----------
 --------------------------------------------
 """
+import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.cluster import KMeans
 from utils.viz_utils import *
+from sklearn.cluster import KMeans
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split, RandomizedSearchCV
+from sklearn.metrics import classification_report
 
 
 """
@@ -91,3 +96,78 @@ def plot_kmeans_clusters(df, y_kmeans, centers, figsize=(14, 7), cmap='viridis')
     ax.set_xlabel(variaveis[0])
     ax.set_ylabel(variaveis[1])
     plt.show()
+    
+
+"""
+--------------------------------------------
+------- 1. MODELOS DE CLASSIFICAÇÃO --------
+--------------------------------------------
+"""
+
+
+class BinaryBaselineClassifier():
+
+    def __init__(self, baseline_model, X, y, features):
+        self.baseline_model = baseline_model
+        self.X = X
+        self.y = y
+        self.features = features
+        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=.20,
+                                                                                random_state=42)
+
+    def random_search(self, scoring, param_grid=None, tree=True):
+        """
+        Etapas:
+
+        Argumentos:
+
+        Retorno:
+        """
+
+        # Validando baseline como Árvore de Decisão (grid definido automaticamente)
+        if tree:
+            param_grid = {
+                'criterion': ['entropy', 'gini'],
+                'max_depth': [3, 5, 10],
+                'max_features': np.arange(1, 8)
+            }
+
+        # Aplicando busca aleatória dos hiperparâmetros
+        rnd_search = RandomizedSearchCV(self.baseline_model, param_grid, scoring=scoring, cv=3, random_state=42)
+        rnd_search.fit(self.X_train, self.y_train)
+
+        return rnd_search.best_estimator_
+
+    def fit_model(self, rnd_search=False, scoring=None, param_grid=None, tree=True):
+        """
+        Etapas:
+
+        Argumentos:
+
+        Retorno:
+        """
+
+        # Treinando modelo de acordo com o argumento selecionado
+        if rnd_search:
+            self.trained_model = self.random_search(scoring=scoring)
+        else:
+            self.trained_model = self.baseline_model.fit(self.X_train, self.y_train)
+
+    def feature_importance_analysis(self):
+        """
+        Etapas:
+
+        Argumentos:
+
+        Retorno:
+        """
+
+        # Retornando feature importance do modelo
+        importances = self.trained_model.feature_importances_
+        feat_imp = pd.DataFrame({})
+        feat_imp['feature'] = self.features
+        feat_imp['importance'] = importances
+        feat_imp = feat_imp.sort_values(by='importance', ascending=False)
+        feat_imp.reset_index(drop=True, inplace=True)
+
+        return feat_imp
