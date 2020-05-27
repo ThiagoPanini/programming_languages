@@ -115,36 +115,48 @@ class BinaryBaselineClassifier():
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=.20,
                                                                                 random_state=42)
 
-    def random_search(self, scoring, param_grid=None, tree=True):
+    def random_search(self, scoring, param_grid=None, tree=True, cv=5):
         """
         Etapas:
+            1. definição automática de parâmetros de busca caso o modelo sejá uma Árvore de Decisão
+            2. aplicação de RandomizedSearchCV com os parâmetros definidos
 
         Argumentos:
+            scoring -- métrica a ser otimizada durante a busca [string]
+            param_grid -- dicionário com os parâmetros a serem utilizados na busca [dict]
+            tree -- flag para indicar se o modelo baseline é uma árvore de decisão [bool]
 
         Retorno:
+            best_estimator_ -- melhor modelo encontrado na busca
         """
 
         # Validando baseline como Árvore de Decisão (grid definido automaticamente)
         if tree:
             param_grid = {
                 'criterion': ['entropy', 'gini'],
-                'max_depth': [3, 5, 10],
-                'max_features': np.arange(1, 8)
+                'max_depth': [3, 4, 5, 8, 10],
+                'max_features': np.arange(1, X_train.shape[1])
             }
 
         # Aplicando busca aleatória dos hiperparâmetros
-        rnd_search = RandomizedSearchCV(self.baseline_model, param_grid, scoring=scoring, cv=3, random_state=42)
+        rnd_search = RandomizedSearchCV(self.baseline_model, param_grid, scoring=scoring, cv=cv, random_state=42)
         rnd_search.fit(self.X_train, self.y_train)
 
         return rnd_search.best_estimator_
 
-    def fit_model(self, rnd_search=False, scoring=None, param_grid=None, tree=True):
+    def fit(self, rnd_search=False, scoring=None, param_grid=None, tree=True):
         """
         Etapas:
+            1. treinamento do modelo e atribuição do resultado como um atributo da classe
 
         Argumentos:
+            rnd_search -- flag indicativo de aplicação de RandomizedSearchCV [bool]
+            scoring -- métrica a ser otimizada durante a busca [string]
+            param_grid -- dicionário com os parâmetros a serem utilizados na busca [dict]
+            tree -- flag para indicar se o modelo baseline é uma árvore de decisão [bool]
 
         Retorno:
+            None
         """
 
         # Treinando modelo de acordo com o argumento selecionado
@@ -153,13 +165,111 @@ class BinaryBaselineClassifier():
         else:
             self.trained_model = self.baseline_model.fit(self.X_train, self.y_train)
 
-    def feature_importance_analysis(self):
+    def evaluate_performance(self, cv=5):
+        """
+        Etapas:
+            1. medição das principais métricas pro modelo
+
+        Argumentos:
+            cv -- número de k-folds durante a aplicação do cross validation [int]
+
+        Retorno:
+            df_performance -- DataFrame contendo a performance do modelo frente as métricas [pandas.DataFrame]
+        """
+
+        # Iniciando medição de tempo
+        t0 = time.time()
+
+        # Avaliando principais métricas do modelo através de validação cruzada
+        accuracy = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
+                                   scoring='accuracy').mean()
+        precision = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
+                                    scoring='precision').mean()
+        recall = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
+                                 scoring='recall').mean()
+        f1 = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
+                             scoring='f1').mean()
+
+        # AUC score
+        try:
+            y_scores = cross_val_predict(self.trained_model, self.X_train, self.y_train, cv=cv,
+                                         method='decision_function')
+        except:
+            # Modelos baseados em árvores não possuem o método 'decision_function', mas sim 'predict_proba'
+            y_probas = cross_val_predict(self.trained_model, self.X_train, self.y_train, cv=cv,
+                                         method='predict_proba')
+            y_scores = y_probas[:, 1]
+        # Calculando AUC
+        auc = roc_auc_score(self.y_train, y_scores)
+
+        # Finalizando medição de tempo
+        t1 = time.time()
+        delta_time = t1 - t0
+        model_name = self.trained_model.__class__.__name__
+
+        # Salvando dados em um DataFrame
+        performance = {}
+        performance['acc'] = round(accuracy, 4)
+        performance['precision'] = round(precision, 4)
+        performance['recall'] = round(recall, 4)
+        performance['f1'] = round(f1, 4)
+        performance['auc'] = round(auc, 4)
+        performance['total_time'] = round(delta_time, 3)
+
+        df_performance = pd.DataFrame(performance, index=performance.keys()).reset_index(drop=True).loc[:0, :]
+        df_performance.index = [model_name]
+
+        return df_performance
+
+    def confusion_matrix(self, labels, cv=5, cmap=plt.cm.Blues, normalize=False, figsize=(6, 5)):
         """
         Etapas:
 
         Argumentos:
 
+        Retorno
+        """
+
+        # Realizando predições e retornando matriz de confusão
+        y_pred = cross_val_predict(self.trained_model, self.X_train, self.y_train, cv=cv)
+        conf_mx = confusion_matrix(self.y_train, y_pred)
+
+        # Plotando matriz
+        plt.figure(figsize=figsize)
+        sns.set(style='white', palette='muted', color_codes=True)
+        plt.imshow(conf_mx, interpolation='nearest', cmap=cmap)
+        plt.colorbar()
+        tick_marks = np.arange(len(labels))
+
+        # Customizando eixos
+        plt.xticks(tick_marks, labels, rotation=45)
+        plt.yticks(tick_marks, labels)
+
+        # Customizando entradas
+        fmt = '.2f' if normalize else 'd'
+        thresh = conf_mx.max() / 2.
+        for i, j in itertools.product(range(conf_mx.shape[0]), range(conf_mx.shape[1])):
+            plt.text(j, i, format(conf_mx[i, j]),
+                     horizontalalignment='center',
+                     color='white' if conf_mx[i, j] > thresh else 'black')
+        plt.ylabel('True Label')
+        plt.xlabel('Predicted Label')
+        plt.title(self.trained_model.__class__.__name__ + '\nConfusion Matrix', size=14)
+        plt.show()
+
+        return conf_mx
+
+    def feature_importance_analysis(self):
+        """
+        Etapas:
+            1. retorno de importância das features
+            2. construção de um DataFrame com as features mais importantes pro modelo
+
+        Argumentos:
+            None
+
         Retorno:
+            feat_imp -- DataFrame com feature importances [pandas.DataFrame]
         """
 
         # Retornando feature importance do modelo
