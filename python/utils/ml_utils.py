@@ -10,13 +10,16 @@
 """
 import pandas as pd
 import numpy as np
+import time
+import itertools
 import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.viz_utils import *
 from sklearn.cluster import KMeans
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import train_test_split, RandomizedSearchCV
-from sklearn.metrics import classification_report
+from sklearn.model_selection import train_test_split, RandomizedSearchCV, cross_val_score, cross_val_predict, \
+                                    learning_curve
+from sklearn.metrics import classification_report, roc_auc_score, confusion_matrix
 
 
 """
@@ -114,6 +117,7 @@ class BinaryBaselineClassifier():
         self.features = features
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=.20,
                                                                                 random_state=42)
+        self.model_name = baseline_model.__class__.__name__
 
     def random_search(self, scoring, param_grid=None, tree=True, cv=5):
         """
@@ -135,7 +139,8 @@ class BinaryBaselineClassifier():
             param_grid = {
                 'criterion': ['entropy', 'gini'],
                 'max_depth': [3, 4, 5, 8, 10],
-                'max_features': np.arange(1, X_train.shape[1])
+                'max_features': np.arange(1, self.X_train.shape[1]),
+                'class_weight': ['balanced', None]
             }
 
         # Aplicando busca aleatória dos hiperparâmetros
@@ -161,9 +166,13 @@ class BinaryBaselineClassifier():
 
         # Treinando modelo de acordo com o argumento selecionado
         if rnd_search:
+            print(f'Treinando modelo {self.model_name} com RandomSearchCV.')
             self.trained_model = self.random_search(scoring=scoring)
+            print(f'Treinamento finalizado com sucesso! Configurações do modelo: \n\n{self.trained_model}')
         else:
+            print(f'Treinando modelo {self.model_name}.')
             self.trained_model = self.baseline_model.fit(self.X_train, self.y_train)
+            print(f'Treinamento finalizado com sucesso! Configurações do modelo: \n\n{self.trained_model}')
 
     def evaluate_performance(self, cv=5):
         """
@@ -221,7 +230,7 @@ class BinaryBaselineClassifier():
 
         return df_performance
 
-    def confusion_matrix(self, labels, cv=5, cmap=plt.cm.Blues, normalize=False, figsize=(6, 5)):
+    def plot_confusion_matrix(self, labels, cv=5, cmap=plt.cm.Blues, normalize=False, figsize=(6, 5)):
         """
         Etapas:
 
@@ -281,3 +290,54 @@ class BinaryBaselineClassifier():
         feat_imp.reset_index(drop=True, inplace=True)
 
         return feat_imp
+
+    def plot_learning_curve(self, ylim=None, cv=5, n_jobs=1, train_sizes=np.linspace(.1, 1.0, 10),
+                            figsize=(12, 6)):
+        """
+        Etapas:
+            1. cálculo dos scores de treino e validação de acordo com a quantidade m de dados
+            2. cálculo de parâmetros estatísticos (média e desvio padrão) dos scores
+            3. plotagem da curva de aprendizado de treino e validação
+
+        Argumentos:
+            y_lim -- definição de limites do eixo y [int]
+            cv -- k folds na aplicação de validação cruzada [int]
+            n_jobs -- número de jobs durante a execução da função learning_curve [int]
+            train_sizes -- tamanhos considerados para as fatias do dataset [np.array]
+            figsize -- dimensões da plotagem gráfica [tupla]
+
+
+        Retorno:
+            None
+        """
+
+        # Retornando parâmetros de scores de treino e validação
+        train_sizes, train_scores, val_scores = learning_curve(self.trained_model, self.X_train, self.y_train,
+                                                               cv=cv, n_jobs=n_jobs, train_sizes=train_sizes)
+
+        # Calculando médias e desvios padrão (treino e validação)
+        train_scores_mean = np.mean(train_scores, axis=1)
+        train_scores_std = np.std(train_scores, axis=1)
+        val_scores_mean = np.mean(val_scores, axis=1)
+        val_scores_std = np.std(val_scores, axis=1)
+
+        # Plotando gráfico de curva de aprendizado
+        fig, ax = plt.subplots(figsize=figsize)
+
+        # Resultado em dados de treino
+        ax.plot(train_sizes, train_scores_mean, 'o-', color='navy', label='Training Score')
+        ax.fill_between(train_sizes, (train_scores_mean - train_scores_std), (train_scores_mean + train_scores_std),
+                        alpha=0.1, color='blue')
+
+        # Resultado em validação cruzada
+        ax.plot(train_sizes, val_scores_mean, 'o-', color='red', label='Cross Val Score')
+        ax.fill_between(train_sizes, (val_scores_mean - val_scores_std), (val_scores_mean + val_scores_std),
+                        alpha=0.1, color='crimson')
+
+        # Customizando gráfico
+        ax.set_title(f'Modelo {self.trained_model.__class__.__name__} Curva de Aprendizado', size=14)
+        ax.set_xlabel('Training size (m)')
+        ax.set_ylabel('Score')
+        ax.grid(True)
+        ax.legend(loc='best')
+        plt.show()

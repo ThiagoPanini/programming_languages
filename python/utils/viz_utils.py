@@ -7,6 +7,7 @@
 ---------- IMPORTANDO BIBLIOTECAS ----------
 --------------------------------------------
 """
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -220,4 +221,42 @@ def distplot(data, target_column, target_names, features, color_list, n_rows, n_
 
     # Finalizando customização
     plt.tight_layout()
+    plt.show()
+
+
+# Função para análise da matriz de correlação
+def correlation_matrix(data, label_name, top_k=10, fmt='.2f', cmap='YlGnBu', figsize=(18, 7),
+                       cbar=True, annot=True, square=True):
+    """
+    Etapas:
+        1. construção de correlação entre as variáveis
+        2. filtragem das top k variáveis com maior correlação
+        3. plotagem e configuração da matriz de correlação
+
+    Argumentos:
+        data -- DataFrame a ser analisado [pandas.DataFrame]
+        label_name -- nome da coluna contendo a variável resposta [string]
+        top_k -- indicador das top k variáveis a serem analisadas [int]
+        fmt -- formato dos números de correlação na plotagem [string]
+        cmap -- color mapping [string]
+        figsize -- dimensões da plotagem gráfica [tupla]
+        cbar -- indicador de plotagem da barra indicadora lateral [bool]
+        annot -- indicador de anotação dos números de correlação na matriz [bool]
+        square -- indicador para redimensionamento quadrático da matriz [bool]
+
+    Retorno:
+        None
+    """
+
+    # Criando matriz de correlação para a base de dados
+    corr_mx = data.corr()
+
+    # Retornando apenas as top k variáveis com maior correlação frente a variável resposta
+    corr_cols = corr_mx.nlargest(top_k, label_name)[label_name].index
+    corr_data = np.corrcoef(data[corr_cols].values.T)
+
+    # Construindo plotagem da matriz
+    fig, ax = plt.subplots(figsize=figsize)
+    sns.heatmap(corr_data, cbar=cbar, annot=annot, square=square, fmt=fmt, cmap=cmap,
+                yticklabels=corr_cols.values, xticklabels=corr_cols.values)
     plt.show()
