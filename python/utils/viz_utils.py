@@ -7,9 +7,12 @@
 ---------- IMPORTANDO BIBLIOTECAS ----------
 --------------------------------------------
 """
+import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from warnings import filterwarnings
+filterwarnings('ignore')
 
 
 """
@@ -45,6 +48,115 @@ def format_spines(ax, right_border=True):
 ---------- 2. PLOTAGENS GRÁFICAS -----------
 --------------------------------------------
 """
+
+
+# Função para plotagem de gráfico de rosca em relação a uma variávei específica do dataset
+def donut_plot(df, col, label_names, text='', colors=['crimson', 'navy'], figsize=(8, 8), circle_radius=0.8):
+    """
+    Etapas:
+        1. definição de funções úteis para mostrar rótulos em valor absoluto e porcentagem
+        2. criação de figura e círculo central de raio pré-definido
+        3. plotagem do gráfico de pizza e adição do círculo central
+        4. configuração final da plotagem
+
+    Argumentos:
+        df -- DataFrame alvo da análise [pandas.DataFrame]
+        col -- coluna do DataFrame a ser analisada [string]
+        label_names -- nomes customizados a serem plotados como labels [list]
+        text -- texto central a ser posicionado [string / default: '']
+        colors -- cores das entradas [list / default: ['crimson', 'navy']]
+        figsize -- dimensões da plotagem [tupla / default: (8, 8)]
+        circle_radius -- raio do círculo central [float / default: 0.8]
+
+    Retorno:
+        None
+    """
+
+    # Definindo funções úteis para plotagem dos rótulos no gráfico
+    def make_autopct(values):
+        """
+        Etapas:
+            1. definição de função para formatação dos rótulos
+
+        Argumentos:
+            values -- valores extraídos da função value_counts() da coluna de análise [list]
+
+        Retorno:
+            my_autopct -- string formatada para plotagem dos rótulos
+        """
+
+        def my_autopct(pct):
+            total = sum(values)
+            val = int(round(pct * total / 100.0))
+
+            return '{p:.1f}%\n({v:d})'.format(p=pct, v=val)
+
+        return my_autopct
+
+    # Retorno dos valores e definição da figura
+    fig, ax = plt.subplots(figsize=figsize)
+    values = df[col].value_counts().values
+    center_circle = plt.Circle((0, 0), circle_radius, color='white')
+
+    # Plotando gráfico de rosca
+    ax.pie(values, labels=label_names, colors=colors, autopct=make_autopct(values))
+    ax.add_artist(center_circle)
+
+    # Configurando argumentos do texto central
+    kwargs = dict(size=20, fontweight='bold', va='center')
+    ax.text(0, 0, text, ha='center', **kwargs)
+    ax.set_title(f'Gráfico de Rosca para {col}', size=14, color='dimgrey')
+    plt.show()
+
+
+# Função para análise da matriz de correlação
+def target_correlation_matrix(data, label_name, n_vars=10, corr='positive', fmt='.2f', cmap='YlGnBu', figsize=(18, 7),
+                              cbar=True, annot=True, square=True):
+    """
+    Etapas:
+        1. construção de correlação entre as variáveis
+        2. filtragem das top k variáveis com maior correlação
+        3. plotagem e configuração da matriz de correlação
+
+    Argumentos:
+        data -- DataFrame a ser analisado [pandas.DataFrame]
+        label_name -- nome da coluna contendo a variável resposta [string]
+        n_vars -- indicador das top k variáveis a serem analisadas [int]
+        corr -- indicador booleano para plotagem de correlações ('positive', 'negative') [string]
+        fmt -- formato dos números de correlação na plotagem [string]
+        cmap -- color mapping [string]
+        figsize -- dimensões da plotagem gráfica [tupla]
+        cbar -- indicador de plotagem da barra indicadora lateral [bool]
+        annot -- indicador de anotação dos números de correlação na matriz [bool]
+        square -- indicador para redimensionamento quadrático da matriz [bool]
+
+    Retorno:
+        None
+    """
+
+    # Criando matriz de correlação para a base de dados
+    corr_mx = data.corr()
+
+    # Retornando apenas as top k variáveis com maior correlação frente a variável resposta
+    if corr == 'positive':
+        corr_cols = list(corr_mx.nlargest(n_vars+1, label_name)[label_name].index)
+        title = f'Top {n_vars} fatures com maior correlação positiva com a variável {label_name}'
+    elif corr == 'negative':
+        corr_cols = list(corr_mx.nsmallest(n_vars+1, label_name)[label_name].index)
+        corr_cols = [label_name] + corr_cols[:-1]
+        title = f'Top {n_vars} fatures com maior correlação negativa com a variável {label_name}'
+        cmap = 'magma'
+
+    corr_data = np.corrcoef(data[corr_cols].values.T)
+
+    # Construindo plotagem da matriz
+    fig, ax = plt.subplots(figsize=figsize)
+    sns.heatmap(corr_data, cbar=cbar, annot=annot, square=square, fmt=fmt, cmap=cmap,
+                yticklabels=corr_cols, xticklabels=corr_cols)
+    ax.set_title(title, size=14, color='dimgrey', pad=20)
+    plt.show()
+
+    return corr_cols[1:]
 
 
 # Função para plotagem de boxenplot (https://stackoverflow.com/questions/52403381/how-boxen-plot-is-different-from-box-plot)
@@ -224,39 +336,193 @@ def distplot(data, target_column, target_names, features, color_list, n_rows, n_
     plt.show()
 
 
-# Função para análise da matriz de correlação
-def correlation_matrix(data, label_name, top_k=10, fmt='.2f', cmap='YlGnBu', figsize=(18, 7),
-                       cbar=True, annot=True, square=True):
+# Função para plotagem de stripplot
+def stripplot(data, label, features, n_rows, n_cols, figsize=(16, 8), palette='viridis'):
     """
     Etapas:
-        1. construção de correlação entre as variáveis
-        2. filtragem das top k variáveis com maior correlação
-        3. plotagem e configuração da matriz de correlação
+        1. criação de figura de acordo com as especificações dos argumentos
+        2. laço para plotagem de striplot por eixo
+        3. formatação gráfica
+        4. validação de eixos excedentes
 
     Argumentos:
-        data -- DataFrame a ser analisado [pandas.DataFrame]
-        label_name -- nome da coluna contendo a variável resposta [string]
-        top_k -- indicador das top k variáveis a serem analisadas [int]
-        fmt -- formato dos números de correlação na plotagem [string]
-        cmap -- color mapping [string]
-        figsize -- dimensões da plotagem gráfica [tupla]
-        cbar -- indicador de plotagem da barra indicadora lateral [bool]
-        annot -- indicador de anotação dos números de correlação na matriz [bool]
-        square -- indicador para redimensionamento quadrático da matriz [bool]
+        data -- base de dados para plotagem [pandas.DataFrame]
+        label -- variável resposta contida na base [string]
+        features -- conjunto de colunas a serem avaliadas [list]
+        n_rows, n_cols -- especificações da figura do matplotlib [int]
+        palette -- paleta de cores [string]
 
     Retorno:
         None
     """
 
-    # Criando matriz de correlação para a base de dados
-    corr_mx = data.corr()
+    # Validando parâmetros de figura inseridos
+    n_features = len(features)
+    if (n_rows == 1) & (n_cols < n_features) | (n_cols == 1) & (n_rows < n_features):
+        print(f'Com a combinação de n_rows ({n_rows}) e n_cols ({n_cols}) não será possível plotar ' \
+              f'todas as features ({n_features})')
+        return None
 
-    # Retornando apenas as top k variáveis com maior correlação frente a variável resposta
-    corr_cols = corr_mx.nlargest(top_k, label_name)[label_name].index
-    corr_data = np.corrcoef(data[corr_cols].values.T)
+    # Criando figura para plotagem fráfica
+    fig, axs = plt.subplots(n_rows, n_cols, figsize=figsize)
 
-    # Construindo plotagem da matriz
-    fig, ax = plt.subplots(figsize=figsize)
-    sns.heatmap(corr_data, cbar=cbar, annot=annot, square=square, fmt=fmt, cmap=cmap,
-                yticklabels=corr_cols.values, xticklabels=corr_cols.values)
+    # Definindo índices para percorrer os eixos
+    i, j = (0, 0)
+    for feat in features:
+        # Tratando possíveis erros nas definições dos eixos
+        try:
+            ax = axs[i][j]
+        except IndexError as e:
+            print(f'Número de features ({n_features}) excede a quantidade de eixos ' \
+                  f'definidos por n_rows ({n_rows}) e n_cols ({n_cols})! \n{e.args}')
+            return None
+        except TypeError as e:
+            try:
+                ax = axs[j]
+            except IndexError as e:
+                print(f'Número de features ({n_features}) excede a quantidade de eixos ' \
+                      f'definidos por n_rows ({n_rows}) e n_cols ({n_cols})! \n{e.args}')
+                return None
+
+        # Plotando gráfico
+        sns.stripplot(x=data[label], y=data[feat], ax=ax, palette=palette)
+
+        # Formatando gráfico
+        format_spines(ax, right_border=False)
+        ax.set_title(f'Feature: {feat.upper()}', size=14, color='dimgrey')
+        plt.tight_layout()
+
+        # Incrementando
+        j += 1
+        if j == n_cols:
+            j = 0
+            i += 1
+
+    # Tratando caso apartado: figura(s) vazia(s)
+    i, j = (0, 0)
+    for n_plots in range(n_rows * n_cols):
+
+        # Se o índice do eixo for maior que a quantidade de features, elimina as bordas
+        if n_plots >= n_features:
+            try:
+                axs[i][j].axis('off')
+            except TypeError as e:
+                axs[j].axis('off')
+
+        # Incrementando
+        j += 1
+        if j == n_cols:
+            j = 0
+            i += 1
+
+
+# Função responsável por plotar volumetria de uma variável categórica (quebra por hue é opcional)
+def countplot(df, feature, order=True, hue=False, label_names=None, palette='plasma', colors=['darkgray', 'navy'],
+              figsize=(12, 5), loc_legend='lower left', width=0.75, sub_width=0.3, sub_size=12):
+    """
+    Etapas:
+        1. customização da plotagem de acordo com a presença (ou não) do parâmetro hue
+        2. definição das figuras e plotagem dos gráficos adequados
+        3. customização da plotagem
+
+    Argumentos:
+        df -- DataFrame alvo da análise [pandas.DataFrame]
+        feature -- coluna a ser analisada [string]
+        order -- flag booleano pra indicar a ordenação da plotagem [bool - default: True]
+        hue -- parâmetro de quebra de análise [string - default: False]
+        label_names -- descrição dos labels a serem colocados na legenda [list - default: None]
+        palette -- paleta de cores a ser utilizada no plot singular da variável [string - default: 'viridis']
+        colors -- cores a serem utilizadas no plot quebrado por hue [list - default: ['darkgray', 'navy']]
+        figsize -- dimensões da plotagem [tupla - default: (15, 5)]
+        loc_legend -- posição da legenda em caso de plotagem por hue [string - default: 'best']
+        width -- largura das barras em caso de plotagem por hue [float - default: 0.5]
+        sub_width -- parâmetro de alinhamento dos rótulos em caso de plotagem por hue [float - default: 0.3]
+
+    Retorno:
+    """
+
+    # Verificando plotagem por quebra de alguma variável categórica
+    ncount = len(df)
+    if hue != False:
+        # Redifinindo dimensões e plotando gráfico solo + versus variável categórica
+        figsize = (figsize[0], figsize[1] * 2)
+        fig, axs = plt.subplots(nrows=2, ncols=1, figsize=figsize)
+        if order:
+            sns.countplot(x=feature, data=df, palette=palette, ax=axs[0], order=df[feature].value_counts().index)
+        else:
+            sns.countplot(x=feature, data=df, palette=palette, ax=axs[0])
+
+        # Plotando gráfico de análise por hue (stacked bar chart)
+        feature_rate = pd.crosstab(df[feature], df[hue])
+        percent_df = feature_rate.div(feature_rate.sum(1).astype(float), axis=0)
+        if order:
+            sort_cols = list(df[feature].value_counts().index)
+            sorter_index = dict(zip(sort_cols, range(len(sort_cols))))
+            percent_df['rank'] = percent_df.index.map(sorter_index)
+            percent_df = percent_df.sort_values(by='rank')
+            percent_df = percent_df.drop('rank', axis=1)
+            percent_df.plot(kind='bar', stacked=True, ax=axs[1], color=colors, width=width)
+        else:
+            percent_df.plot(kind='bar', stacked=True, ax=axs[1], color=colors, width=width)
+        # sns.countplot(x=feature, data=df, palette=colors, hue=hue, ax=axs[1], order=df[feature].value_counts().index)
+
+        # Inserindo rótulo de percentual para gráfico singular
+        for p in axs[0].patches:
+            # Coletando parâmetros e inserindo no gráfico
+            x = p.get_bbox().get_points()[:, 0]
+            y = p.get_bbox().get_points()[1, 1]
+            axs[0].annotate('{:.1f}%'.format(100. * y / ncount), (x.mean(), y), ha='center', va='bottom',
+                            size=sub_size)
+
+        # Inserindo rótulo de percentual para gráfico hue
+        for p in axs[1].patches:
+            # Coletando parâmetros
+            height = p.get_height()
+            width = p.get_width()
+            x = p.get_x()
+            y = p.get_y()
+
+            # Formatando parâmetros coletados e inserindo no gráfico
+            label_text = f'{round(100 * height, 1)}%'
+            label_x = x + width - sub_width
+            label_y = y + height / 2
+            axs[1].text(label_x, label_y, label_text, ha='center', va='center', color='white', fontweight='bold',
+                        size=sub_size)
+
+        # Definindo títulos
+        axs[0].set_title(f'Análise de Volumetria da Variável {feature}', size=14, color='dimgrey', pad=20)
+        axs[0].set_ylabel('Volumetria')
+        axs[1].set_title(f'Análise de Volumetria da Variável {feature} por {hue}', size=14, color='dimgrey', pad=20)
+        axs[1].set_ylabel('Percentual')
+
+        # Formatando eixo de cada uma das plotagens
+        for ax in axs:
+            format_spines(ax, right_border=False)
+
+        # Definindo legenda para hue
+        plt.legend(loc=loc_legend, title=f'{hue}', labels=label_names)
+
+    else:
+        # Plotagem única: sem quebra por variável hue
+        fig, ax = plt.subplots(figsize=figsize)
+        if order:
+            sns.countplot(x=feature, data=df, palette=palette, ax=ax, order=df[feature].value_counts().index)
+        else:
+            sns.countplot(x=feature, data=df, palette=palette, ax=ax)
+
+            # Formatando eixos
+        ax.set_ylabel('Volumetria')
+        format_spines(ax, right_border=False)
+
+        # Inserindo rótulo de percentual
+        for p in ax.patches:
+            x = p.get_bbox().get_points()[:, 0]
+            y = p.get_bbox().get_points()[1, 1]
+            ax.annotate('{:.1f}%'.format(100. * y / ncount), (x.mean(), y), ha='center', va='bottom')
+
+        # Definindo título
+        ax.set_title(f'Análise de Volumetria da Variável {feature}', size=14, color='dimgrey')
+
+    # Configurações finais
+    plt.tight_layout()
     plt.show()
