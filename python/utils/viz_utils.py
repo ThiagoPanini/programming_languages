@@ -9,11 +9,14 @@
 """
 import pandas as pd
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 from warnings import filterwarnings
 filterwarnings('ignore')
-
+from typing import *
+from dataclasses import dataclass
+from math import ceil
 
 """
 --------------------------------------------
@@ -42,6 +45,47 @@ def format_spines(ax, right_border=True):
         ax.spines['right'].set_color('#FFFFFF')
     ax.patch.set_facecolor('#FFFFFF')
 
+# Classe para plotagem dos rótulos dos dados em gráficos de barras
+# Referência: https://towardsdatascience.com/annotating-bar-charts-and-other-matplolib-techniques-cecb54315015
+#Alias types to reduce typing, no pun intended
+Patch = matplotlib.patches.Patch
+PosVal = Tuple[float, Tuple[float, float]]
+Axis = matplotlib.axes.Axes
+PosValFunc = Callable[[Patch], PosVal]
+
+@dataclass
+class AnnotateBars:
+    font_size: int = 10
+    color: str = "black"
+    n_dec: int = 2
+    def horizontal(self, ax: Axis, centered=False):
+        def get_vals(p: Patch) -> PosVal:
+            value = p.get_width()
+            div = 2 if centered else 1
+            pos = (
+                p.get_x() + p.get_width() / div,
+                p.get_y() + p.get_height() / 2,
+            )
+            return value, pos
+        ha = "center" if centered else  "left"
+        self._annotate(ax, get_vals, ha=ha, va="center")
+    def vertical(self, ax: Axis, centered:bool=False):
+        def get_vals(p: Patch) -> PosVal:
+            value = p.get_height()
+            div = 2 if centered else 1
+            pos = (p.get_x() + p.get_width() / 2,
+                   p.get_y() + p.get_height() / div
+            )
+            return value, pos
+        va = "center" if centered else "bottom"
+        self._annotate(ax, get_vals, ha="center", va=va)
+    def _annotate(self, ax, func: PosValFunc, **kwargs):
+        cfg = {"color": self.color,
+               "fontsize": self.font_size, **kwargs}
+        for p in ax.patches:
+            value, pos = func(p)
+            ax.annotate(f"{value:.{self.n_dec}f}", pos, **cfg)
+
 
 """
 --------------------------------------------
@@ -51,7 +95,7 @@ def format_spines(ax, right_border=True):
 
 
 # Função para plotagem de gráfico de rosca em relação a uma variávei específica do dataset
-def donut_plot(df, col, label_names, text='', colors=['crimson', 'navy'], figsize=(8, 8), circle_radius=0.8):
+def donut_plot(df, col, label_names, ax, text='', colors=['crimson', 'navy'], circle_radius=0.8):
     """
     Etapas:
         1. definição de funções úteis para mostrar rótulos em valor absoluto e porcentagem
@@ -94,7 +138,6 @@ def donut_plot(df, col, label_names, text='', colors=['crimson', 'navy'], figsiz
         return my_autopct
 
     # Retorno dos valores e definição da figura
-    fig, ax = plt.subplots(figsize=figsize)
     values = df[col].value_counts().values
     center_circle = plt.Circle((0, 0), circle_radius, color='white')
 
@@ -106,7 +149,6 @@ def donut_plot(df, col, label_names, text='', colors=['crimson', 'navy'], figsiz
     kwargs = dict(size=20, fontweight='bold', va='center')
     ax.text(0, 0, text, ha='center', **kwargs)
     ax.set_title(f'Gráfico de Rosca para {col}', size=14, color='dimgrey')
-    plt.show()
 
 
 # Função para análise da matriz de correlação
@@ -524,5 +566,73 @@ def countplot(df, feature, order=True, hue=False, label_names=None, palette='pla
         ax.set_title(f'Análise de Volumetria da Variável {feature}', size=14, color='dimgrey')
 
     # Configurações finais
+    plt.tight_layout()
+    plt.show()
+
+
+# Função para plotagem de volumetria das variáveis categóricas do conjunto de dados
+def catplot_analysis(df, fig_cols, palette='viridis'):
+    """
+    Etapas:
+        1. retorno das variáveis categóricas do conjunto de dados
+        2. parametrização de variáveis de plotagem
+        3. aplicação de laços de repetição para plotagens / formatação
+
+    Argumentos:
+        df -- conjunto de dados a ser analisado [pandas.DataFrame]
+        fig_cols -- quantidade de colunas da figura matplotlib [int]
+
+    Retorno:
+        None
+    """
+
+    # Criando um DataFrame de variáveis categóricas
+    cat_features = [col for col, dtype in df.dtypes.items() if dtype == 'object']
+    df_categorical = df.loc[:, cat_features]
+
+    # Retornando parâmetros para organização da figura
+    total_cols = df_categorical.shape[1]
+    fig_cols = 3
+    fig_rows = ceil(total_cols / fig_cols)
+    ncount = len(df)
+
+    # Criando figura de plotagem
+    fig, axs = plt.subplots(nrows=fig_rows, ncols=fig_cols, figsize=(fig_cols * 5, fig_rows * 4))
+    i, j = 0, 0
+
+    # Laço de repetição para plotagem categórica
+    for col in cat_features:
+        # Indexando variáveis e plotando gráfico
+        ax = axs[i, j]
+        sns.countplot(y=col, data=df_categorical, palette=palette, ax=ax,
+                      order=df_categorical[col].value_counts().index)
+
+        # Customizando gráfico
+        format_spines(ax, right_border=False)
+        AnnotateBars(n_dec=0, color='dimgrey').horizontal(ax)
+
+        # Incrementando índices de eixo
+        j += 1
+        if j == fig_cols:
+            j = 0
+            i += 1
+
+    # Tratando caso apartado: figura(s) vazia(s)
+    i, j = (0, 0)
+    for n_plots in range(fig_rows * fig_cols):
+
+        # Se o índice do eixo for maior que a quantidade de features, elimina as bordas
+        if n_plots >= len(cat_features):
+            try:
+                axs[i][j].axis('off')
+            except TypeError as e:
+                axs[j].axis('off')
+
+        # Incrementando
+        j += 1
+        if j == fig_cols:
+            j = 0
+            i += 1
+
     plt.tight_layout()
     plt.show()
