@@ -282,7 +282,7 @@ def boxenplot(data, label, features, n_rows, n_cols, figsize=(16, 8), palette='v
 
 
 # Distplot para comparação de densidade das features baseadas na variável target
-def distplot(data, target_column, target_names, features, color_list, n_rows, n_cols, figsize=(16, 8), hist=False):
+def distplot(df, features, fig_cols, hue=False, color=['crimson', 'darkslateblue'], hist=False, figsize=(16, 10)):
     """
     Etapas:
         1. criação de figura de acordo com as especificações dos argumentos
@@ -291,74 +291,56 @@ def distplot(data, target_column, target_names, features, color_list, n_rows, n_
         4. validação de eixos excedentes
 
     Argumentos:
-        data -- base de dados para plotagem [pandas.DataFrame]
-        target_column -- variável resposta contida na base [string]
-        target_names -- rótulos dados à variável resposta [list]
+        df -- base de dados para plotagem [pandas.DataFrame]
         features -- conjunto de colunas a serem avaliadas [list]
+        fig_cols -- especificações da figura do matplotlib [int]
+        hue -- variável resposta contida na base [string]
         color_list -- cores para identificação de cada classe nos gráficos [list]
-        n_rows, n_cols -- especificações da figura do matplotlib [int]
-        figsize -- dimensões da plotagem [tupla]
         hist -- indicador de plotagem das faixas do histograma [bool]
+        figsize -- dimensões da plotagem [tupla]
 
     Retorno:
         None
     """
 
-    # Separando variável target
-    unique_vals = data[target_column].unique()
-    targets = [data[data[target_column] == val] for val in unique_vals]
-
-    # Definindo variáveis de controle
-    i, j, color_idx = (0, 0, 0)
+    # # Definindo variáveis de controle
     n_features = len(features)
-
-    # Validando configuração de linhas e colunas
-    if (n_rows == 1) & (n_cols < n_features) | (n_cols == 1) & (n_rows < n_features):
-        print(f'Com a combinação de n_rows ({n_rows}) e n_cols ({n_cols}) não será possível plotar ' \
-              f'todas as features ({n_features})')
-        return None
+    fig_cols = fig_cols
+    fig_rows = ceil(n_features / fig_cols)
+    i, j, color_idx = (0, 0, 0)
 
     # Plotando gráficos
-    fig, axs = plt.subplots(nrows=n_rows, ncols=n_cols, figsize=figsize)
+    fig, axs = plt.subplots(nrows=fig_rows, ncols=fig_cols, figsize=figsize)
 
     # Percorrendo por cada uma das features
-    for feat in features:
-        # Tratando possíveis erros nas definições dos eixos
-        try:
-            ax = axs[i][j]
-        except IndexError as e:
-            print(f'Número de features ({n_features}) excede a quantidade de eixos ' \
-                  f'definidos por n_rows ({n_rows}) e n_cols ({n_cols})! \nSerão mostradas apenas {n_rows * n_cols} features.')
-            return None
-        except TypeError as e:
-            try:
-                ax = axs[j]
-            except IndexError as e:
-                print(f'Número de features ({n_features}) excede a quantidade de eixos ' \
-                      f'definidos por n_rows ({n_rows}) e n_cols ({n_cols})! \nSerão mostradas apenas {n_rows * n_cols} features.')
-                return None
+    for col in features:
+        ax = axs[i, j]
         target_idx = 0
 
         # Plotando, para cada eixo, um gráfico por classe target
-        for target in targets:
-            sns.distplot(target[feat], color=color_list[target_idx], hist=hist, ax=ax, label=target_names[target_idx])
-            target_idx += 1
+        if hue != False:
+            for classe in df[hue].value_counts().index:
+                df_hue = df[df[hue] == classe]
+                sns.distplot(df_hue[col], color=color[target_idx], hist=hist, ax=ax, label=classe)
+                target_idx += 1
+        else:
+            sns.distplot(df[col], color=color, hist=hist, ax=ax)
 
         # Incrementando índices
         j += 1
-        if j == n_cols:
+        if j == fig_cols:
             j = 0
             i += 1
 
         # Customizando plotagem
-        ax.set_title(f'Feature: {feat}', color='dimgrey', size=14)
+        ax.set_title(f'Feature: {col}', color='dimgrey', size=14)
         plt.setp(ax, yticks=[])
         sns.set(style='white')
         sns.despine(left=True)
 
     # Tratando caso apartado: figura(s) vazia(s)
     i, j = (0, 0)
-    for n_plots in range(n_rows * n_cols):
+    for n_plots in range(fig_rows * fig_cols):
 
         # Se o índice do eixo for maior que a quantidade de features, elimina as bordas
         if n_plots >= n_features:
@@ -369,7 +351,7 @@ def distplot(data, target_column, target_names, features, color_list, n_rows, n_
 
         # Incrementando
         j += 1
-        if j == n_cols:
+        if j == fig_cols:
             j = 0
             i += 1
 
@@ -571,7 +553,7 @@ def countplot(df, feature, order=True, hue=False, label_names=None, palette='pla
 
 
 # Função para plotagem de volumetria das variáveis categóricas do conjunto de dados
-def catplot_analysis(df, fig_cols, palette='viridis'):
+def catplot_analysis(df, cat_features, fig_cols, hue=False, palette='viridis', figsize=(16, 10)):
     """
     Etapas:
         1. retorno das variáveis categóricas do conjunto de dados
@@ -586,26 +568,25 @@ def catplot_analysis(df, fig_cols, palette='viridis'):
         None
     """
 
-    # Criando um DataFrame de variáveis categóricas
-    cat_features = [col for col, dtype in df.dtypes.items() if dtype == 'object']
-    df_categorical = df.loc[:, cat_features]
-
     # Retornando parâmetros para organização da figura
-    total_cols = df_categorical.shape[1]
-    fig_cols = 3
+    total_cols = len(cat_features)
     fig_rows = ceil(total_cols / fig_cols)
     ncount = len(df)
 
     # Criando figura de plotagem
-    fig, axs = plt.subplots(nrows=fig_rows, ncols=fig_cols, figsize=(fig_cols * 5, fig_rows * 4))
+    fig, axs = plt.subplots(nrows=fig_rows, ncols=fig_cols, figsize=(figsize))
     i, j = 0, 0
 
     # Laço de repetição para plotagem categórica
     for col in cat_features:
         # Indexando variáveis e plotando gráfico
         ax = axs[i, j]
-        sns.countplot(y=col, data=df_categorical, palette=palette, ax=ax,
-                      order=df_categorical[col].value_counts().index)
+        if hue != False:
+            sns.countplot(y=col, data=df, palette=palette, ax=ax, hue=hue,
+                          order=df[col].value_counts().index)
+        else:
+            sns.countplot(y=col, data=df, palette=palette, ax=ax,
+                          order=df[col].value_counts().index)
 
         # Customizando gráfico
         format_spines(ax, right_border=False)
@@ -623,6 +604,81 @@ def catplot_analysis(df, fig_cols, palette='viridis'):
 
         # Se o índice do eixo for maior que a quantidade de features, elimina as bordas
         if n_plots >= len(cat_features):
+            try:
+                axs[i][j].axis('off')
+            except TypeError as e:
+                axs[j].axis('off')
+
+        # Incrementando
+        j += 1
+        if j == fig_cols:
+            j = 0
+            i += 1
+
+    plt.tight_layout()
+    plt.show()
+
+
+# Função para plotagem de volumetria das variáveis categóricas do conjunto de dados
+def numplot_analysis(df, fig_cols, hue=False, color='navy', hist=False):
+    """
+    Etapas:
+        1. retorno das variáveis categóricas do conjunto de dados
+        2. parametrização de variáveis de plotagem
+        3. aplicação de laços de repetição para plotagens / formatação
+
+    Argumentos:
+        df -- conjunto de dados a ser analisado [pandas.DataFrame]
+        fig_cols -- quantidade de colunas da figura matplotlib [int]
+
+    Retorno:
+        None
+    """
+
+    # Criando um DataFrame de variáveis categóricas
+    num_features = [col for col, dtype in df.dtypes.items() if dtype != 'object']
+    df_numerical = df.loc[:, num_features]
+
+    # Retornando parâmetros para organização da figura
+    total_cols = df_numerical.shape[1]
+    fig_cols = fig_cols
+    fig_rows = ceil(total_cols / fig_cols)
+    ncount = len(df)
+
+    # Criando figura de plotagem
+    fig, axs = plt.subplots(nrows=fig_rows, ncols=fig_cols, figsize=(fig_cols * 5, fig_rows * 4))
+    i, j = 0, 0
+
+    # Laço de repetição para plotagem categórica
+    for col in num_features:
+        # Indexando variáveis e plotando gráfico
+        ax = axs[i, j]
+        target_idx = 0
+
+        if hue != False:
+            for classe in df[hue].value_counts().index:
+                df_hue = df_numerical[df_numerical[hue] == classe]
+                sns.distplot(df_hue[col], color=color[target_idx], hist=hist, ax=ax, label=classe)
+                target_idx += 1
+        else:
+            sns.distplot(df_numerical[col], color=color, hist=hist, ax=ax)
+
+        # Customizando gráfico
+        format_spines(ax, right_border=False)
+        AnnotateBars(n_dec=0, color='dimgrey').horizontal(ax)
+
+        # Incrementando índices de eixo
+        j += 1
+        if j == fig_cols:
+            j = 0
+            i += 1
+
+    # Tratando caso apartado: figura(s) vazia(s)
+    i, j = (0, 0)
+    for n_plots in range(fig_rows * fig_cols):
+
+        # Se o índice do eixo for maior que a quantidade de features, elimina as bordas
+        if n_plots >= len(num_features):
             try:
                 axs[i][j].axis('off')
             except TypeError as e:
