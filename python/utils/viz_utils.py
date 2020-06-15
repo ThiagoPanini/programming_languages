@@ -201,88 +201,8 @@ def target_correlation_matrix(data, label_name, n_vars=10, corr='positive', fmt=
     return corr_cols[1:]
 
 
-# Função para plotagem de boxenplot (https://stackoverflow.com/questions/52403381/how-boxen-plot-is-different-from-box-plot)
-def boxenplot(data, label, features, n_rows, n_cols, figsize=(16, 8), palette='viridis'):
-    """
-    Etapas:
-        1. criação de figura de acordo com as especificações dos argumentos
-        2. laço para plotagem de boxplot por eixo
-        3. formatação gráfica
-        4. validação de eixos excedentes
-
-    Argumentos:
-        data -- base de dados para plotagem [pandas.DataFrame]
-        label -- variável resposta contida na base [string]
-        features -- conjunto de colunas a serem avaliadas [list]
-        n_rows, n_cols -- especificações da figura do matplotlib [int]
-        palette -- paleta de cores [string]
-
-    Retorno:
-        None
-    """
-
-    # Validando parâmetros de figura inseridos
-    n_features = len(features)
-    if (n_rows == 1) & (n_cols < n_features) | (n_cols == 1) & (n_rows < n_features):
-        print(f'Com a combinação de n_rows ({n_rows}) e n_cols ({n_cols}) não será possível plotar ' \
-              f'todas as features ({n_features})')
-        return None
-
-    # Criando figura para plotagem fráfica
-    fig, axs = plt.subplots(n_rows, n_cols, figsize=figsize)
-
-    # Definindo índices para percorrer os eixos
-    i, j = (0, 0)
-    for feat in features:
-        # Tratando possíveis erros nas definições dos eixos
-        try:
-            ax = axs[i][j]
-        except IndexError as e:
-            print(f'Número de features ({n_features}) excede a quantidade de eixos ' \
-                  f'definidos por n_rows ({n_rows}) e n_cols ({n_cols})! \n{e.args}')
-            return None
-        except TypeError as e:
-            try:
-                ax = axs[j]
-            except IndexError as e:
-                print(f'Número de features ({n_features}) excede a quantidade de eixos ' \
-                      f'definidos por n_rows ({n_rows}) e n_cols ({n_cols})! \n{e.args}')
-                return None
-
-        # Plotando gráfico
-        sns.boxenplot(x=data[label], y=data[feat], ax=ax, palette=palette)
-
-        # Formatando gráfico
-        format_spines(ax, right_border=False)
-        ax.set_title(f'Feature: {feat.upper()}', size=14, color='dimgrey')
-        plt.tight_layout()
-
-        # Incrementando
-        j += 1
-        if j == n_cols:
-            j = 0
-            i += 1
-
-    # Tratando caso apartado: figura(s) vazia(s)
-    i, j = (0, 0)
-    for n_plots in range(n_rows * n_cols):
-
-        # Se o índice do eixo for maior que a quantidade de features, elimina as bordas
-        if n_plots >= n_features:
-            try:
-                axs[i][j].axis('off')
-            except TypeError as e:
-                axs[j].axis('off')
-
-        # Incrementando
-        j += 1
-        if j == n_cols:
-            j = 0
-            i += 1
-
-
 # Distplot para comparação de densidade das features baseadas na variável target
-def distplot(df, features, fig_cols, hue=False, color=['crimson', 'darkslateblue'], hist=False, figsize=(16, 10)):
+def distplot(df, features, fig_cols, hue=False, color=['crimson', 'darkslateblue'], hist=False, figsize=(16, 12)):
     """
     Etapas:
         1. criação de figura de acordo com as especificações dos argumentos
@@ -294,16 +214,16 @@ def distplot(df, features, fig_cols, hue=False, color=['crimson', 'darkslateblue
         df -- base de dados para plotagem [pandas.DataFrame]
         features -- conjunto de colunas a serem avaliadas [list]
         fig_cols -- especificações da figura do matplotlib [int]
-        hue -- variável resposta contida na base [string]
-        color_list -- cores para identificação de cada classe nos gráficos [list]
-        hist -- indicador de plotagem das faixas do histograma [bool]
-        figsize -- dimensões da plotagem [tupla]
+        hue -- variável resposta contida na base [string -- default: False]
+        color_list -- cores para cada classe nos gráficos [list - default: ['crimson', 'darkslateblue']]
+        hist -- indicador de plotagem das faixas do histograma [bool - default: False]
+        figsize -- dimensões da plotagem [tupla - default: (16, 12)]
 
     Retorno:
         None
     """
 
-    # # Definindo variáveis de controle
+    # Definindo variáveis de controle
     n_features = len(features)
     fig_cols = fig_cols
     fig_rows = ceil(n_features / fig_cols)
@@ -361,70 +281,59 @@ def distplot(df, features, fig_cols, hue=False, color=['crimson', 'darkslateblue
 
 
 # Função para plotagem de stripplot
-def stripplot(data, label, features, n_rows, n_cols, figsize=(16, 8), palette='viridis'):
+def stripplot(df, features, fig_cols, hue=False, palette='viridis', figsize=(16, 12)):
     """
     Etapas:
         1. criação de figura de acordo com as especificações dos argumentos
-        2. laço para plotagem de striplot por eixo
+        2. laço para plotagem de stripplot por eixo
         3. formatação gráfica
         4. validação de eixos excedentes
 
     Argumentos:
-        data -- base de dados para plotagem [pandas.DataFrame]
-        label -- variável resposta contida na base [string]
+        df -- base de dados para plotagem [pandas.DataFrame]
         features -- conjunto de colunas a serem avaliadas [list]
-        n_rows, n_cols -- especificações da figura do matplotlib [int]
-        palette -- paleta de cores [string]
+        fig_cols -- especificações da figura do matplotlib [int]
+        hue -- variável resposta contida na base [string - default: False]
+        palette -- paleta de cores [string / lista - default: 'viridis']
+        figsize -- dimensões da figura de plotagem [tupla - default: (16, 12)]
 
     Retorno:
         None
     """
 
-    # Validando parâmetros de figura inseridos
+    # Definindo variáveis de controle
     n_features = len(features)
-    if (n_rows == 1) & (n_cols < n_features) | (n_cols == 1) & (n_rows < n_features):
-        print(f'Com a combinação de n_rows ({n_rows}) e n_cols ({n_cols}) não será possível plotar ' \
-              f'todas as features ({n_features})')
-        return None
+    fig_cols = fig_cols
+    fig_rows = ceil(n_features / fig_cols)
+    i, j, color_idx = (0, 0, 0)
 
-    # Criando figura para plotagem fráfica
-    fig, axs = plt.subplots(n_rows, n_cols, figsize=figsize)
+    # Plotando gráficos
+    fig, axs = plt.subplots(nrows=fig_rows, ncols=fig_cols, figsize=figsize)
 
-    # Definindo índices para percorrer os eixos
-    i, j = (0, 0)
-    for feat in features:
-        # Tratando possíveis erros nas definições dos eixos
-        try:
-            ax = axs[i][j]
-        except IndexError as e:
-            print(f'Número de features ({n_features}) excede a quantidade de eixos ' \
-                  f'definidos por n_rows ({n_rows}) e n_cols ({n_cols})! \n{e.args}')
-            return None
-        except TypeError as e:
-            try:
-                ax = axs[j]
-            except IndexError as e:
-                print(f'Número de features ({n_features}) excede a quantidade de eixos ' \
-                      f'definidos por n_rows ({n_rows}) e n_cols ({n_cols})! \n{e.args}')
-                return None
+    # Plotando gráfico
+    for col in features:
+        ax = axs[i, j]
 
-        # Plotando gráfico
-        sns.stripplot(x=data[label], y=data[feat], ax=ax, palette=palette)
+        # Plotando gráfico atribuindo a variável target como hue
+        if hue != False:
+            sns.stripplot(x=df[hue], y=df[col], ax=ax, palette=palette)
+        else:
+            sns.stripplot(y=df[col], ax=ax, palette=palette)
 
         # Formatando gráfico
         format_spines(ax, right_border=False)
-        ax.set_title(f'Feature: {feat.upper()}', size=14, color='dimgrey')
+        ax.set_title(f'Feature: {col.upper()}', size=14, color='dimgrey')
         plt.tight_layout()
 
-        # Incrementando
+        # Incrementando índices
         j += 1
-        if j == n_cols:
+        if j == fig_cols:
             j = 0
             i += 1
 
     # Tratando caso apartado: figura(s) vazia(s)
     i, j = (0, 0)
-    for n_plots in range(n_rows * n_cols):
+    for n_plots in range(fig_rows * fig_cols):
 
         # Se o índice do eixo for maior que a quantidade de features, elimina as bordas
         if n_plots >= n_features:
@@ -435,7 +344,75 @@ def stripplot(data, label, features, n_rows, n_cols, figsize=(16, 8), palette='v
 
         # Incrementando
         j += 1
-        if j == n_cols:
+        if j == fig_cols:
+            j = 0
+            i += 1
+
+
+def boxenplot(df, features, fig_cols, hue=False, palette='viridis', figsize=(16, 12)):
+    """
+    Etapas:
+        1. criação de figura de acordo com as especificações dos argumentos
+        2. laço para plotagem de boxplot por eixo
+        3. formatação gráfica
+        4. validação de eixos excedentes
+
+    Argumentos:
+        df -- base de dados para plotagem [pandas.DataFrame]
+        features -- conjunto de colunas a serem avaliadas [list]
+        fig_cols -- especificações da figura do matplotlib [int]
+        hue -- variável resposta contida na base [string - default: False]
+        palette -- paleta de cores [string / lista - default: 'viridis']
+        figsize -- dimensões da figura de plotagem [tupla - default: (16, 12)]
+
+    Retorno:
+        None
+    """
+
+    # Definindo variáveis de controle
+    n_features = len(features)
+    fig_cols = fig_cols
+    fig_rows = ceil(n_features / fig_cols)
+    i, j, color_idx = (0, 0, 0)
+
+    # Plotando gráficos
+    fig, axs = plt.subplots(nrows=fig_rows, ncols=fig_cols, figsize=figsize)
+
+    # Plotando gráfico
+    for col in features:
+        ax = axs[i, j]
+
+        # Plotando gráfico atribuindo a variável target como hue
+        if hue != False:
+            sns.boxenplot(x=df[hue], y=df[col], ax=ax, palette=palette)
+        else:
+            sns.boxenplot(y=df[col], ax=ax, palette=palette)
+
+        # Formatando gráfico
+        format_spines(ax, right_border=False)
+        ax.set_title(f'Feature: {col.upper()}', size=14, color='dimgrey')
+        plt.tight_layout()
+
+        # Incrementando índices
+        j += 1
+        if j == fig_cols:
+            j = 0
+            i += 1
+
+    # Tratando caso apartado: figura(s) vazia(s)
+    i, j = (0, 0)
+    for n_plots in range(fig_rows * fig_cols):
+
+        # Se o índice do eixo for maior que a quantidade de features, elimina as bordas
+        if n_plots >= n_features:
+            try:
+                axs[i][j].axis('off')
+            except TypeError as e:
+                axs[j].axis('off')
+
+        # Incrementando
+        j += 1
+        if j == fig_cols:
             j = 0
             i += 1
 

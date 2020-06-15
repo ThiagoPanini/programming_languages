@@ -19,7 +19,8 @@ from sklearn.cluster import KMeans
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split, RandomizedSearchCV, cross_val_score, cross_val_predict, \
                                     learning_curve
-from sklearn.metrics import classification_report, roc_auc_score, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score, roc_curve, \
+    accuracy_score, precision_score, recall_score, f1_score
 
 
 """
@@ -110,16 +111,16 @@ def plot_kmeans_clusters(df, y_kmeans, centers, figsize=(14, 7), cmap='viridis')
 
 class BinaryBaselineClassifier():
 
-    def __init__(self, baseline_model, X, y, features):
-        self.baseline_model = baseline_model
-        self.X = X
-        self.y = y
+    def __init__(self, model, set_prep, features):
+        self.model = model
+        self.X_train = set_prep['X_train_prep']
+        self.y_train = set_prep['y_train']
+        self.X_test = set_prep['X_test_prep']
+        self.y_test = set_prep['y_test']
         self.features = features
-        self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=.20,
-                                                                                random_state=42)
-        self.model_name = baseline_model.__class__.__name__
+        self.model_name = model.__class__.__name__
 
-    def random_search(self, scoring, param_grid=None, tree=True, cv=5):
+    def random_search(self, scoring, param_grid=None, cv=5):
         """
         Etapas:
             1. definição automática de parâmetros de busca caso o modelo sejá uma Árvore de Decisão
@@ -135,21 +136,22 @@ class BinaryBaselineClassifier():
         """
 
         # Validando baseline como Árvore de Decisão (grid definido automaticamente)
-        if tree:
+        """if tree:
             param_grid = {
                 'criterion': ['entropy', 'gini'],
                 'max_depth': [3, 4, 5, 8, 10],
                 'max_features': np.arange(1, self.X_train.shape[1]),
                 'class_weight': ['balanced', None]
-            }
+            }"""
 
         # Aplicando busca aleatória dos hiperparâmetros
-        rnd_search = RandomizedSearchCV(self.baseline_model, param_grid, scoring=scoring, cv=cv, random_state=42)
+        rnd_search = RandomizedSearchCV(self.model, param_grid, scoring=scoring, cv=cv, verbose=1,
+                                        random_state=42, n_jobs=-1)
         rnd_search.fit(self.X_train, self.y_train)
 
         return rnd_search.best_estimator_
 
-    def fit(self, rnd_search=False, scoring=None, param_grid=None, tree=True):
+    def fit(self, rnd_search=False, scoring=None, param_grid=None):
         """
         Etapas:
             1. treinamento do modelo e atribuição do resultado como um atributo da classe
@@ -167,14 +169,14 @@ class BinaryBaselineClassifier():
         # Treinando modelo de acordo com o argumento selecionado
         if rnd_search:
             print(f'Treinando modelo {self.model_name} com RandomSearchCV.')
-            self.trained_model = self.random_search(scoring=scoring)
+            self.trained_model = self.random_search(param_grid=param_grid, scoring=scoring)
             print(f'Treinamento finalizado com sucesso! Configurações do modelo: \n\n{self.trained_model}')
         else:
             print(f'Treinando modelo {self.model_name}.')
-            self.trained_model = self.baseline_model.fit(self.X_train, self.y_train)
+            self.trained_model = self.model.fit(self.X_train, self.y_train)
             print(f'Treinamento finalizado com sucesso! Configurações do modelo: \n\n{self.trained_model}')
 
-    def evaluate_performance(self, cv=5):
+    def evaluate_performance(self, cv=5, test=False):
         """
         Etapas:
             1. medição das principais métricas pro modelo
@@ -189,15 +191,27 @@ class BinaryBaselineClassifier():
         # Iniciando medição de tempo
         t0 = time.time()
 
-        # Avaliando principais métricas do modelo através de validação cruzada
-        accuracy = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
-                                   scoring='accuracy').mean()
-        precision = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
-                                    scoring='precision').mean()
-        recall = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
-                                 scoring='recall').mean()
-        f1 = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
-                             scoring='f1').mean()
+        if test:
+            # Retornando predições com os dados de teste
+            y_pred = self.trained_model.predict(self.X_test)
+
+            # Retornando métricas para os dados de teste
+            accuracy = accuracy_score(self.y_test, y_pred)
+            precision = precision_score(self.y_test, y_pred)
+            recall = recall_score(self.y_test, y_pred)
+            f1 = f1_score(self.y_test, y_pred)
+            approach = 'Test Set'
+        else:
+            # Avaliando principais métricas do modelo através de validação cruzada
+            accuracy = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
+                                       scoring='accuracy').mean()
+            precision = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
+                                        scoring='precision').mean()
+            recall = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
+                                     scoring='recall').mean()
+            f1 = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
+                                 scoring='f1').mean()
+            approach = f'Train (CV={cv})'
 
         # AUC score
         try:
@@ -214,10 +228,10 @@ class BinaryBaselineClassifier():
         # Finalizando medição de tempo
         t1 = time.time()
         delta_time = t1 - t0
-        model_name = self.trained_model.__class__.__name__
 
         # Salvando dados em um DataFrame
         performance = {}
+        performance['approach'] = approach
         performance['acc'] = round(accuracy, 4)
         performance['precision'] = round(precision, 4)
         performance['recall'] = round(recall, 4)
@@ -226,15 +240,23 @@ class BinaryBaselineClassifier():
         performance['total_time'] = round(delta_time, 3)
 
         df_performance = pd.DataFrame(performance, index=performance.keys()).reset_index(drop=True).loc[:0, :]
-        df_performance.index = [model_name]
+        df_performance.index = [self.model_name]
 
         return df_performance
 
-    def plot_confusion_matrix(self, labels, cv=5, cmap=plt.cm.Blues, normalize=False, figsize=(6, 5)):
+    def plot_confusion_matrix(self, classes, cv=5, cmap=plt.cm.Blues, title='Confusion Matrix', normalize=False):
         """
         Etapas:
+            1. cálculo de matriz de confusão utilizando predições com cross-validation
+            2. configuração e construção de plotagem
+            3. formatação dos labels da plotagem
 
         Argumentos:
+            classes -- nome das classes envolvidas no modelo [list]
+            cv -- número de folds aplicados na validação cruzada [int - default: 5]
+            cmap -- mapeamento colorimétrico da matriz [plt.colormap - default: plt.cm.Blues]
+            title -- título da matriz de confusão [string - default: 'Confusion Matrix']
+            normaliza -- indicador para normalização dos dados da matriz [bool - default: False]
 
         Retorno
         """
@@ -244,15 +266,14 @@ class BinaryBaselineClassifier():
         conf_mx = confusion_matrix(self.y_train, y_pred)
 
         # Plotando matriz
-        plt.figure(figsize=figsize)
         sns.set(style='white', palette='muted', color_codes=True)
         plt.imshow(conf_mx, interpolation='nearest', cmap=cmap)
         plt.colorbar()
-        tick_marks = np.arange(len(labels))
+        tick_marks = np.arange(len(classes))
 
         # Customizando eixos
-        plt.xticks(tick_marks, labels, rotation=45)
-        plt.yticks(tick_marks, labels)
+        plt.xticks(tick_marks, classes, rotation=45)
+        plt.yticks(tick_marks, classes)
 
         # Customizando entradas
         fmt = '.2f' if normalize else 'd'
@@ -263,10 +284,44 @@ class BinaryBaselineClassifier():
                      color='white' if conf_mx[i, j] > thresh else 'black')
         plt.ylabel('True Label')
         plt.xlabel('Predicted Label')
-        plt.title(self.trained_model.__class__.__name__ + '\nConfusion Matrix', size=14)
-        plt.show()
+        plt.title(title, size=14)
 
-        return conf_mx
+    def plot_roc_curve(self, cv=5):
+        """
+        Etapas:
+            1. retorno dos scores do modelo utilizando predição por validação cruzada
+            2. encontro das taxas de falsos positivos e verdadeiros negativos
+            3. cálculo da métrica AUC e plotagem da curva ROC
+
+        Argumentos:
+            cv -- número de k-folds utilizados na validação cruzada [int - default: 5]
+
+        Retorno:
+            None
+        """
+
+        # Calculando scores utilizando predição por validação cruzada
+        try:
+            y_scores = cross_val_predict(self.trained_model, self.X_train, self.y_train, cv=cv,
+                                         method='decision_function')
+        except:
+            # Algoritmos baseados em Árvore não possuem o methodo "decision_function"
+            y_probas = cross_val_predict(self.trained_model, self.X_train, self.y_train, cv=cv,
+                                         method='predict_proba')
+            y_scores = y_probas[:, 1]
+
+        # Calculando taxas de falsos positivos e verdadeiros positivos
+        fpr, tpr, thresholds = roc_curve(self.y_train, y_scores)
+        auc = roc_auc_score(self.y_train, y_scores)
+
+        # Plotando curva ROC
+        plt.plot(fpr, tpr, linewidth=2, label=f'{self.model_name} auc={auc: .3f}')
+        plt.plot([0, 1], [0, 1], 'k--')
+        plt.axis([-0.02, 1.02, -0.02, 1.02])
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.title('ROC Curve')
+        plt.legend()
 
     def feature_importance_analysis(self):
         """
@@ -300,12 +355,11 @@ class BinaryBaselineClassifier():
             3. plotagem da curva de aprendizado de treino e validação
 
         Argumentos:
-            y_lim -- definição de limites do eixo y [int]
-            cv -- k folds na aplicação de validação cruzada [int]
-            n_jobs -- número de jobs durante a execução da função learning_curve [int]
-            train_sizes -- tamanhos considerados para as fatias do dataset [np.array]
-            figsize -- dimensões da plotagem gráfica [tupla]
-
+            y_lim -- definição de limites do eixo y [list - default: None]
+            cv -- k folds na aplicação de validação cruzada [int - default: 5]
+            n_jobs -- número de jobs durante a execução da função learning_curve [int - default: 1]
+            train_sizes -- tamanhos considerados para as fatias do dataset [np.array - default: linspace(.1, 1, 10)]
+            figsize -- dimensões da plotagem gráfica [tupla - default: (12, 6)]
 
         Retorno:
             None
@@ -335,7 +389,7 @@ class BinaryBaselineClassifier():
                         alpha=0.1, color='crimson')
 
         # Customizando gráfico
-        ax.set_title(f'Modelo {self.trained_model.__class__.__name__} Curva de Aprendizado', size=14)
+        ax.set_title(f'Modelo {self.model_name} - Curva de Aprendizado', size=14)
         ax.set_xlabel('Training size (m)')
         ax.set_ylabel('Score')
         ax.grid(True)
