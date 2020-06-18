@@ -95,7 +95,8 @@ class AnnotateBars:
 
 
 # Função para plotagem de gráfico de rosca em relação a uma variávei específica do dataset
-def donut_plot(df, col, label_names, ax, text='', colors=['crimson', 'navy'], circle_radius=0.8):
+def donut_plot(df, col, label_names, ax, text='', colors=['crimson', 'navy'], circle_radius=0.8,
+            title=f'Gráfico de Rosca'):
     """
     Etapas:
         1. definição de funções úteis para mostrar rótulos em valor absoluto e porcentagem
@@ -148,7 +149,7 @@ def donut_plot(df, col, label_names, ax, text='', colors=['crimson', 'navy'], ci
     # Configurando argumentos do texto central
     kwargs = dict(size=20, fontweight='bold', va='center')
     ax.text(0, 0, text, ha='center', **kwargs)
-    ax.set_title(f'Gráfico de Rosca para {col}', size=14, color='dimgrey')
+    ax.set_title(title, size=14, color='dimgrey')
 
 
 # Função para análise da matriz de correlação

@@ -10,6 +10,9 @@ a seguinte estrutura:
     6. Atualização dos Parâmetros
     7. Consolidação de conceitos
     8. Predição e Resultados
+
+    Segunda Onda:
+    2.1. Classe completa para treinamento de uma Rede Neural Profunda
 """
 
 """
@@ -18,9 +21,10 @@ a seguinte estrutura:
 --------------------------------------------
 """
 import numpy as np
+from datetime import datetime
 import matplotlib.pyplot as plt
 from utils.viz_utils import *
-
+import tensorflow as tf
 
 """
 --------------------------------------------
@@ -770,3 +774,260 @@ def print_mislabeled_images(classes, X, y, p):
         plt.title(
             "Prediction: " + classes[int(p[0, index])].decode("utf-8") + " \n Class: " + classes[y[0, index]].decode(
                 "utf-8"))
+
+
+"""
+-------------------------------------------------------------------------------------
+-------- SEGUNDA ONDA 2.1. Classe para Treinamento de Rede Neural Profunda ----------
+-------------------------------------------------------------------------------------
+"""
+
+# Função para reset do grafo
+def reset_graph(seed=42):
+    tf.reset_default_graph()
+    tf.set_random_seed(seed)
+    np.random.seed(seed)
+
+
+# Classe para treinamento de uma Rede Neural Profunda
+class DNNTraining():
+
+    def __init__(self, n_hidden_layers=5, n_neurons=50, activation=tf.nn.relu, learning_rate=0.01,
+                 optimizer=tf.train.AdamOptimizer, random_state=None, n_epochs=100, batch_size=128):
+        self.n_hidden_layers = n_hidden_layers
+        self.n_neurons = n_neurons
+        self.activation = activation
+        self.learning_rate = learning_rate
+        self.optimizer = optimizer
+        self.n_epochs = n_epochs
+        self.batch_size = batch_size
+        self.session = None
+
+        # Resetando grafo default
+        reset_graph()
+
+    def construction_phase(self):
+        """
+        Etapas:
+            1. definição de variáveis;
+            2. definição de placeholders;
+            3. definição das camadas da rede;
+            4. definição da função custo;
+            5. definição do otimizador e training op;
+            6. critérios de performance da rede;
+            7. nós para visualização no TensorBoard;
+            8. nós de inicialização e salvamento do modelo.
+
+        Argumentos:
+            self
+
+        Retorno:
+            None
+        """
+
+        # Criando placeholders para X e y
+        with tf.name_scope('inputs'):
+            X = tf.placeholder(tf.float32, shape=(None, self.n_inputs), name='X')
+            y = tf.placeholder(tf.int32, shape=(None), name='y')
+
+        # Definindo nós para as camadas da rede
+        previous_layer = X
+        with tf.name_scope('dnn'):
+            for layer in range(self.n_hidden_layers):
+                hidden_layer = tf.layers.dense(previous_layer, self.n_neurons, activation=self.activation,
+                                               name=f'hidden{layer + 1}')
+                previous_layer = hidden_layer
+            # Última camada: logits e probabilidades
+            logits = tf.layers.dense(previous_layer, self.n_outputs, name='outputs')
+            y_proba = tf.nn.softmax(logits, name="y_proba")
+
+        # Definindo função custo
+        with tf.name_scope('loss'):
+            xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=logits)
+            loss = tf.reduce_mean(xentropy, name='loss')
+
+        # Operação de treinamento da rede
+        with tf.name_scope('train'):
+            training_op = self.optimizer(learning_rate=self.learning_rate).minimize(loss)
+
+        # Métricas de avaliação: acurácia
+        with tf.name_scope('eval'):
+            correct = tf.nn.in_top_k(logits, y, 1)
+            accuracy = tf.reduce_mean(tf.cast(correct, tf.float32), name='accuracy')
+
+        # Nós de inicialização da rede
+        init = tf.global_variables_initializer()
+        saver = tf.train.Saver()
+
+        # Parâmetros para visualização no TensorBoard
+        now = datetime.now().strftime('%Y%m%d_%H%M%S')
+        root_logdir = 'tf_logs'
+        logdir = f'{root_logdir}/mnist_run_{now}'
+        loss_summary = tf.summary.scalar('loss', loss)
+        file_writer = tf.summary.FileWriter(logdir, tf.get_default_graph())
+
+        # Salvando alguns nós em forma de atributos para serem acessados posteriormente
+        self.X, self.y = X, y
+        self.y_proba, self.loss = y_proba, loss
+        self.training_op = training_op
+        self.accuracy = accuracy
+        self.init, self.saver = init, saver
+        self.loss_summary, self.file_writer = loss_summary, file_writer
+
+    # Definindo função para encerramento da sessão
+    def close_session(self):
+        if self.session:
+            self.session.close()
+
+    # Definindo função para leitura de dados em mini-batches
+    def fetch_batch(self, X, y, epoch, batch_index, batch_size):
+        """
+        Etapas:
+            1. leitura do conjunto de dados em diferentes mini-batches
+
+        Argumentos:
+            X -- conjunto de dados a ser fatiado
+            y -- vetor target a ser fatiado
+            epoch -- época do treinamento do algoritmo
+            batch_index -- índice do mini-batch a ser lido do conjunto total
+            batch_size -- tamanho do mini-batch em termos de número de registros
+
+        Retorno:
+            X_batch, y_batch -- conjuntos mini-batch de dados lidos a partir do conjunto total
+        """
+
+        # Retornando parâmetros
+        m = X.shape[0]
+        n_batches = m // batch_size
+
+        # Definindo semente aleatória
+        np.random.seed(epoch * n_batches + batch_index)
+
+        # Indexando mini-batches do conjunto total
+        indices = np.random.randint(m, size=batch_size)
+        X_batch = X[indices]
+        y_batch = y[indices]
+
+        return X_batch, y_batch
+
+    # Função responsável por plotar o custo de treinamento da rede
+    def plot_loss_curve(self, costs):
+        """
+        Etapas:
+            1. plotagem da curva de custo a longo das épocas de treinamento
+
+        Argumentos:
+            costs -- lista com custos acumulados durante o treinamento [list]
+
+        Retorno:
+            None
+        """
+
+        # Plotando custo
+        fig, ax = plt.subplots(figsize=(10, 5))
+        ax.plot(np.squeeze(costs), color='navy')
+        format_spines(ax, right_border=False)
+        ax.set_title('Neural Network Cost', color='dimgrey')
+        ax.set_xlabel('Epoch')
+        ax.set_ylabel('Cost')
+        plt.show()
+
+    def execution_phase(self, plot_cost=True):
+        """
+        Etapas:
+            1. definindo parâmetros de controle e inicializando sessão
+            2. iterando por cada época de treino e por cada mini-batch do conjunto de dados
+            3. rodando operação de treinamento no mini-batch
+            4. avaliando métricas da rede e medindo custo
+            5. plotando curva de custo ao longo das épocas
+
+        Argumentos:
+            plot_cost -- indicador booleano para plotagem da curva de custo [bool - default: True]
+
+        Retorno:
+            None
+        """
+
+        # Definindo variáveis de controle
+        m_train = self.X_train.shape[0]
+        n_batches = m_train // self.batch_size
+        costs = []
+
+        # Inicializando sessão
+        self.session = tf.Session(graph=self.graph)
+        with self.session.as_default() as sess:
+
+            # Inicializando variáveis globais
+            self.init.run()
+
+            # Iterando sobre as épocas de treinamento
+            print('\n--- Inicializando Treinamento da Rede Neural ---\n')
+            for epoch in range(self.n_epochs):
+                # Iterando sobre cada mini-batch
+                for batch in range(n_batches):
+                    X_batch, y_batch = self.fetch_batch(self.X_train, self.y_train, epoch, batch, self.batch_size)
+                    batch_feed_dict = {self.X: X_batch, self.y: y_batch}
+
+                    # Salvando status do modelo a cada T mini-batches
+                    if batch % 10 == 0:
+                        summary_loss_str = self.loss_summary.eval(feed_dict=batch_feed_dict)
+                        step = epoch * n_batches + batch
+                        self.file_writer.add_summary(summary_loss_str, step)
+
+                    # Inicializando treinamento em cada mini-batch
+                    sess.run(self.training_op, feed_dict=batch_feed_dict)
+
+                # Métricas de performance a cada N épocas
+                test_feed_dict = {self.X: self.X_test, self.y: self.y_test}
+                if epoch % 10 == 0:
+                    acc_train = round(float(self.accuracy.eval(feed_dict=batch_feed_dict)), 4)
+                    acc_test = round(float(self.accuracy.eval(feed_dict=test_feed_dict)), 4)
+                    print(f'Epoch: {epoch}, Training acc: {acc_train}, Test acc: {acc_test}')
+
+                # Custo da rede
+                cost = self.loss.eval(feed_dict=batch_feed_dict)
+                costs.append(cost)
+
+            # Finalizando FileWriter
+            self.file_writer.close()
+
+            # Plotando custo de treinamento da rede
+            if plot_cost:
+                print('\n--- Plotando Custo ao longo das Épocas de Treinamento ---\n')
+                self.plot_loss_curve(costs)
+
+    # Função para encapsular todas as tratativas da rede neural
+    def fit(self, X_train, y_train, X_test, y_test, plot_cost=True):
+        """
+        Etapas:
+            1. encerramento de qualquer sessão aberta
+            2. configurando grafo como atributo da classe
+            3. chamando fase de construção da rede
+            4. chamando fase de execução dos cálculos da rede
+
+        Argumentos:
+            X_train, y_train -- conjuntos de treinamento (features e target)
+            X_test, y_test -- conjuntos de validação (features e target)
+            plot_cost -- indicador booleano para plotagem da curva de custo [bool - default: True]
+
+        Retorno:
+            None
+        """
+
+        # Configurando atributos da classe
+        self.X_train, self.X_test = X_train.astype('float32'), X_test.astype('float32')
+        self.y_train, self.y_test = y_train.astype('int32'), y_test.astype('int32')
+        self.n_inputs = X_train.shape[1]
+        self.classes = np.unique(y_train)
+        self.n_outputs = len(self.classes)
+
+        # Encerrando sessão
+        self.close_session()
+
+        # Definindo grafo default e chamando construção da rede
+        self.graph = tf.Graph()
+        with self.graph.as_default():
+            self.construction_phase()
+
+        # Chamando fase de execução da rede
+        self.execution_phase(plot_cost=plot_cost)
