@@ -116,17 +116,15 @@ class DataPrep():
 
         return df_null_overview
 
-    def split_cat_num_data(self, X):
+    def split_cat_num_data(self, df):
         """
         Etapas:
             1. levantamento de atributos numéricos e categóricos do conjunto
-            2. separação de datasets numéricos e categóricos
 
         Argumentos:
-            X -- conjunto de dados (apenas features) [pandas.DataFrame]
+            df -- conjunto de dados [pandas.DataFrame]
 
         Retorno:
-            X_num, X_cat -- datasets numéricos e categóricos [pandas.DataFrame]
             num_attribs, cat_attribs -- atributos numéricos e categóricos [list]
         """
 
@@ -134,11 +132,7 @@ class DataPrep():
         num_attribs = [col for col, dtype in X.dtypes.items() if dtype != 'object']
         cat_attribs = [col for col, dtype in X.dtypes.items() if dtype == 'object']
 
-        # Indexando DataFrame
-        X_num = X[num_attribs]
-        X_cat = X[cat_attribs]
-
-        return X_num, X_cat, num_attribs, cat_attribs
+        return num_attribs, cat_attribs
 
     def null_data_strategy(self, X_num, X_cat, num_strategy, cat_strategy, fill_na_num=0, fill_na_cat='Unknown'):
         """
