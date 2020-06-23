@@ -404,6 +404,7 @@ class BinaryBaselineClassifier():
 --------------------------------------------
 """
 
+
 class ClassifiersAnalysis():
 
     def __init__(self, set_classifiers, set_prep, features):
@@ -418,7 +419,7 @@ class ClassifiersAnalysis():
         for model_name, model_info in self.set_classifiers.items():
             self.trained_classifiers[model_name] = {}
 
-    def fit(self, rnd_search=False, scoring='roc_auc', cv=5, n_jobs=-1, verbose=5, random_state=42):
+    def fit(self, rnd_search=False, scoring='roc_auc', cv=5, n_jobs=-1, verbose=5, random_state=42, approach=''):
         """
         Etapas:
             1. treinamento de cada um dos modelos armazenados no set de classificadores
@@ -456,11 +457,12 @@ class ClassifiersAnalysis():
                 random_search.fit(self.X_train, self.y_train)
 
                 # Salvando melhor modelo em atributo da classe
-                self.trained_classifiers[model_name]['estimator'] = random_search.best_estimator_
+                self.trained_classifiers[model_name + approach]['estimator'] = random_search.best_estimator_
 
             else:
                 # Treinamento sem busca por Random Search
-                self.trained_classifiers[model_name]['estimator'] = model_info['model'].fit(self.X_train, self.y_train)
+                self.trained_classifiers[model_name + approach]['estimator'] = model_info['model'].fit(self.X_train,
+                                                                                                       self.y_train)
 
             # Parâmetros para controle de verbosity
             t1 = datetime.now()
@@ -637,6 +639,43 @@ class ClassifiersAnalysis():
                          xy=(0.5, 0.5), xytext=(0.6, 0.4), arrowprops=dict(facecolor='#6E726D', shrink=0.05))
             plt.legend()
 
+    def feature_importance_analysis(self, model_name, graph=True, ax=None, topn=50, palette='viridis'):
+        """
+        Etapas:
+            1. retorno de importância das features
+            2. construção de um DataFrame com as features mais importantes pro modelo
+
+        Argumentos:
+            None
+
+        Retorno:
+            feat_imp -- DataFrame com feature importances [pandas.DataFrame]
+        """
+
+        # Retornando modelo a ser avaliado
+        try:
+            model = self.trained_classifiers[model_name]
+        except:
+            print(f'Classificador {model_name} não foi treinado.')
+            print(f'Opções possíveis: {list(self.trained_classifiers.keys())}')
+            return None
+
+        # Retornando feature importance do modelo
+        importances = model['estimator'].feature_importances_
+        feat_imp = pd.DataFrame({})
+        feat_imp['feature'] = self.features
+        feat_imp['importance'] = importances
+        feat_imp = feat_imp.sort_values(by='importance', ascending=False)
+        feat_imp.reset_index(drop=True, inplace=True)
+
+        # Validando plotagem gráfica
+        if graph:
+            sns.barplot(x='importance', y='feature', data=feat_imp.iloc[:topn, :], ax=ax, palette=palette)
+            format_spines(ax, right_border=False)
+            ax.set_title(f' Top {topn} {model_name} Feature Importance', size=12, color='dimgrey')
+
+        return feat_imp
+
     def plot_score_distribution(self, model_name):
         """
         Etapas:
@@ -785,7 +824,7 @@ class ClassifiersAnalysis():
 
         # Definições finais
         axs[0, 0].set_title('Volumetria das Classes por Faixa - Treino', size=12, color='dimgrey')
-        axs[1, 0].set_title('Volumetria das Classes por Faixa - teste', size=12, color='dimgrey')
+        axs[1, 0].set_title('Volumetria das Classes por Faixa - Teste', size=12, color='dimgrey')
         axs[0, 1].set_title('Percentual das Classes por Faixa - Treino', size=12, color='dimgrey')
         axs[1, 1].set_title('Percentual das Classes por Faixa - Teste', size=12, color='dimgrey')
         # plt.suptitle(f'Análise Detalhada de Scores - {model_name}', size=14, color='black')
