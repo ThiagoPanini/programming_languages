@@ -405,108 +405,76 @@ class BinaryBaselineClassifier():
 """
 
 
-class ClassifiersAnalysis():
+class BinaryClassifiersAnalysis():
 
-    def __init__(self, set_classifiers, set_prep, features):
-        self.set_classifiers = set_classifiers
-        self.X_train = set_prep['X_train_prep']
-        self.y_train = set_prep['y_train']
-        self.X_test = set_prep['X_test_prep']
-        self.y_test = set_prep['y_test']
-        self.features = features
-        self.trained_classifiers = {}
-        self.classifiers_performance = {}
-        for model_name, model_info in self.set_classifiers.items():
-            self.trained_classifiers[model_name] = {}
+    def __init__(self):
+        self.classifiers_info = {}
 
-    def fit(self, rnd_search=False, scoring='roc_auc', cv=5, n_jobs=-1, verbose=5, random_state=42, approach=''):
+    def fit(self, classifiers, X, y, approach='', random_search=False, scoring='roc_auc', cv=5, verbose=5, n_jobs=-1):
         """
-        Etapas:
-            1. treinamento de cada um dos modelos armazenados no set de classificadores
+        Parâmetros
+        ----------
+        classifiers: conjunto de classificadores em forma de dicionário [dict]
+        X: array com os dados a serem utilizados no treinamento [np.array]
+        y: array com o vetor target do modelo [np.array]
 
-        Argumentos:
-            rnd_search -- flag indicativo de aplicação de RandomizedSearchCV [bool, default: False]
-            scoring -- métrica a ser otimizada na busca dos hyperparâmetros [string, default: 'roc_auc']
-            cv -- número de k-folds a ser utilizado na validação cruzada [int, default: 5]
-            n_jobs -- número de workers no processamento do grid [int, default: -1]
-            verbose -- indicador de comunicação durante a busca [int, default: 5]
-            random_state -- semente aleatória [int, default: 42]
-
-        Retorno:
-            None
+        Retorno
+        -------
+        None
         """
 
-        # Comunicação inicial de treinamento de modelos
-        print('------------ Treinamento de Classificadores Selecionados ------------\n')
-        i = 1
+        # Iterando sobre cada modelo no dicionário de classificadores
+        for model_name, model_info in classifiers.items():
+            clf_key = model_name + approach
+            self.classifiers_info[clf_key] = {}
 
-        # Iterando sobre cada um dos modelos selecionados
-        for model_name, model_info in self.set_classifiers.items():
-
-            # Parâmetros para controle de verbosity
-            t0 = datetime.now()
-            t0_fmt = t0.strftime("%Hh:%Mm:%Ss")
-            print(f'{i}. {model_name}')
-            print(f'   RandomSearhCV: {rnd_search} - Início: {t0_fmt}')
-
-            # Validando aplicação de Random Search
-            if rnd_search:
-                # Início da busca pelo melhor conjunto de hyperparâmetros
-                random_search = RandomizedSearchCV(model_info['model'], model_info['params'], scoring=scoring, cv=cv,
-                                                   verbose=verbose, random_state=random_state, n_jobs=n_jobs)
-                random_search.fit(self.X_train, self.y_train)
-
-                # Salvando melhor modelo em atributo da classe
-                self.trained_classifiers[model_name + approach]['estimator'] = random_search.best_estimator_
-
+            # Validando aplicação de RandomizedSearchCV
+            if random_search:
+                rnd_search = RandomizedSearchCV(model_info['model'], model_info['params'], scoring=scoring, cv=cv,
+                                                verbose=verbose, random_state=42, n_jobs=n_jobs)
+                rnd_search.fit(X, y)
+                self.classifiers_info[clf_key]['estimator'] = rnd_search.best_estimator_
             else:
-                # Treinamento sem busca por Random Search
-                self.trained_classifiers[model_name + approach]['estimator'] = model_info['model'].fit(self.X_train,
-                                                                                                       self.y_train)
+                self.classifiers_info[clf_key]['estimator'] = model_info['model'].fit(X, y)
 
-            # Parâmetros para controle de verbosity
-            t1 = datetime.now()
-            t1_fmt = t1.strftime("%Hh:%Mm:%Ss")
-            print(f'   Treinamento finalizado - Fim: {t1_fmt}. Tempo total: {(t1 - t0)}\n')
-            i += 1
-
-    def compute_cv_performance(self, model_name, trained_model, cv):
+    def compute_train_performance(self, model_name, estimator, X, y, cv=5):
         """
-        Etapas:
-            1. cálculo das principais métricas utilizando validação ruzada
-            2. salvando resultados em um objeto do tipo DataFrame
+        Parâmetros
+        ----------
+        classifiers: conjunto de classificadores em forma de dicionário [dict]
+        X: array com os dados a serem utilizados no treinamento [np.array]
+        y: array com o vetor target do modelo [np.array]
 
-        Argumentos:
-            model_name -- nome do classificador avaliado [string]
-            trained_model -- classificador já treinado [sklearn.Classifier]
-
-        Retorno:
-            cv_performance -- métricas consolidadas [pandas.DataFrame]
+        Retorno
+        -------
+        None
         """
 
-        # Calculando principais métricas utilizando validação cruzada
+        # Computando as principais métricas por validação cruzada
         t0 = time.time()
-        accuracy = cross_val_score(trained_model, self.X_train, self.y_train, cv=cv, scoring='accuracy').mean()
-        precision = cross_val_score(trained_model, self.X_train, self.y_train, cv=cv, scoring='precision').mean()
-        recall = cross_val_score(trained_model, self.X_train, self.y_train, cv=cv, scoring='recall').mean()
-        f1 = cross_val_score(trained_model, self.X_train, self.y_train, cv=cv, scoring='f1').mean()
+        accuracy = cross_val_score(estimator, X, y, cv=cv, scoring='accuracy').mean()
+        precision = cross_val_score(estimator, X, y, cv=cv, scoring='precision').mean()
+        recall = cross_val_score(estimator, X, y, cv=cv, scoring='recall').mean()
+        f1 = cross_val_score(estimator, X, y, cv=cv, scoring='f1').mean()
+
+        # Probabilidades para o cálculo da AUC
         try:
-            y_scores = cross_val_predict(trained_model, self.X_train, self.y_train, cv=cv, method='decision_function')
+            y_scores = cross_val_predict(estimator, X, y, cv=cv, method='decision_function')
         except:
             # Modelos baseados em árvores não possuem o método 'decision_function', mas sim 'predict_proba'
-            y_probas = cross_val_predict(trained_model, self.X_train, self.y_train, cv=cv, method='predict_proba')
+            y_probas = cross_val_predict(estimator, X, y, cv=cv, method='predict_proba')
             y_scores = y_probas[:, 1]
-        auc = roc_auc_score(self.y_train, y_scores)
+        auc = roc_auc_score(y, y_scores)
 
-        # Salvando probabilidades nos stats dos classificadores treinados
-        self.trained_classifiers[model_name]['train_scores'] = y_scores
+        # Salvando scores no dicionário do classificador
+        self.classifiers_info[model_name]['train_scores'] = y_scores
 
-        # Criação de DataFrame para alocação das métricas
+        # Criando DataFrame com as métricas
         t1 = time.time()
         delta_time = t1 - t0
         train_performance = {}
         train_performance['model'] = model_name
-        train_performance['approach'] = f'Treino cv={cv}'
+        train_performance['approach'] = f'Treino {cv} K-folds'
         train_performance['acc'] = round(accuracy, 4)
         train_performance['precision'] = round(precision, 4)
         train_performance['recall'] = round(recall, 4)
@@ -514,39 +482,39 @@ class ClassifiersAnalysis():
         train_performance['auc'] = round(auc, 4)
         train_performance['total_time'] = round(delta_time, 3)
 
-        # Salvando métricas no respectivo dicionário do classificador
+        df_train_performance = pd.DataFrame(train_performance,
+                                            index=train_performance.keys()).reset_index(drop=True).loc[:0, :]
 
-        return pd.DataFrame(train_performance, index=train_performance.keys()).reset_index(drop=True).loc[:0, :]
+        return df_train_performance
 
-    def compute_test_performance(self, model_name, trained_model):
+    def compute_test_performance(self, model_name, estimator, X, y, cv=5):
         """
-        Etapas:
-            1. cálculo das principais métricas utilizando os dados de teste
-            2. salvando resultados em um objeto do tipo DataFrame
+        Parâmetros
+        ----------
+        classifiers: conjunto de classificadores em forma de dicionário [dict]
+        X: array com os dados a serem utilizados no treinamento [np.array]
+        y: array com o vetor target do modelo [np.array]
 
-        Argumentos:
-            model_name -- nome do classificador avaliado [string]
-            trained_model -- classificador já treinado [sklearn.Classifier]
-
-        Retorno:
-            cv_performance -- métricas consolidadas [pandas.DataFrame]
+        Retorno
+        -------
+        None
         """
 
-        # Retornando predições com os dados de teste
+        # Calculando predições e scores com dados de treino
         t0 = time.time()
-        y_pred = trained_model.predict(self.X_test)
-        y_proba = trained_model.predict_proba(self.X_test)
+        y_pred = estimator.predict(X)
+        y_proba = estimator.predict_proba(X)
         y_scores = y_proba[:, 1]
 
         # Retornando métricas para os dados de teste
-        accuracy = accuracy_score(self.y_test, y_pred)
-        precision = precision_score(self.y_test, y_pred)
-        recall = recall_score(self.y_test, y_pred)
-        f1 = f1_score(self.y_test, y_pred)
-        auc = roc_auc_score(self.y_test, y_scores)
+        accuracy = accuracy_score(y, y_pred)
+        precision = precision_score(y, y_pred)
+        recall = recall_score(y, y_pred)
+        f1 = f1_score(y, y_pred)
+        auc = roc_auc_score(y, y_scores)
 
         # Salvando probabilidades nos stats dos classificadores treinados
-        self.trained_classifiers[model_name]['test_scores'] = y_scores
+        self.classifiers_info[model_name]['test_scores'] = y_scores
 
         # Criação de DataFrame para alocação das métricas
         t1 = time.time()
@@ -561,152 +529,187 @@ class ClassifiersAnalysis():
         test_performance['auc'] = round(auc, 4)
         test_performance['total_time'] = round(delta_time, 3)
 
-        return pd.DataFrame(test_performance, index=test_performance.keys()).reset_index(drop=True).loc[:0, :]
+        df_test_performance = pd.DataFrame(test_performance,
+                                           index=test_performance.keys()).reset_index(drop=True).loc[:0, :]
 
-    def evaluate_performance(self, cv=5):
+        return df_test_performance
+
+    def evaluate_performance(self, X_train, y_train, X_test, y_test, cv=5, approach=''):
         """
-        Etapas:
-            1. iteração sobre os classificadores treinados em dicionário da classe
-            2. retorno das métricas utilizando validação cruzada
-            3. retorno das métricas utilizando os dados de teste
+        Parâmetros
+        ----------
+        classifiers: conjunto de classificadores em forma de dicionário [dict]
+        X: array com os dados a serem utilizados no treinamento [np.array]
+        y: array com o vetor target do modelo [np.array]
 
-        Argumentos:
-            cv -- k-folds utilizados na validação cruzada [int, default: 5]
-
-        Retorno:
-            df_performances -- resultado das métricas dos modelos em treino e teste [pandas.DataFrame]
+        Retorno
+        -------
+        None
         """
 
-        # Comunicação inicial de treinamento de modelos
-        print('------------ Avaliação de Classificadores Selecionados ------------\n')
-        i = 1
+        # Iterando sobre cada classificador já treinado
         df_performances = pd.DataFrame({})
+        for model_name, model_info in self.classifiers_info.items():
 
-        # Iterando sobre cada um dos classificadores do set
-        for model_name, model_stats in self.trained_classifiers.items():
-            # Início da avaliação
-            t0 = time.time()
-            t0_fmt = datetime.now().strftime("%Hh:%Mm:%Ss")
-            print(f'{i}. {model_name}')
-            print(f'   Início: {t0_fmt}\n')
+            # Verificando se o modelo já foi avaliado anteriormente
+            if 'train_performance' in model_info.keys():
+                df_performances = df_performances.append(model_info['train_performance'])
+                df_performances = df_performances.append(model_info['test_performance'])
+                continue
 
-            # Retornando performance via cross validation
-            cv_performance = self.compute_cv_performance(model_name, trained_model=model_stats['estimator'], cv=cv)
-            self.trained_classifiers[model_name]['train_performance'] = cv_performance
+                # Indexando variáveis para os cálculos
+            estimator = model_info['estimator']
 
-            # Retornando performance nos dados de teste
-            test_performance = self.compute_test_performance(model_name, trained_model=model_stats['estimator'])
-            self.trained_classifiers[model_name]['test_performance'] = test_performance
+            # Retornando métricas nos dados de treino
+            train_performance = self.compute_train_performance(model_name, estimator, X_train, y_train)
+            test_performance = self.compute_test_performance(model_name, estimator, X_test, y_test)
 
-            # Unindo DataFrames
-            model_performance = cv_performance.append(test_performance)
+            # Salvando resultados no dicionário do modelo
+            self.classifiers_info[model_name]['train_performance'] = train_performance
+            self.classifiers_info[model_name]['test_performance'] = test_performance
+
+            # Retornando DataFrame único com as performances obtidas
+            model_performance = train_performance.append(test_performance)
             df_performances = df_performances.append(model_performance)
-            i += 1
+
+            # Salvando conjuntos de dados como atributos para acesso futuro
+            model_data = {
+                'X_train': X_train,
+                'y_train': y_train,
+                'X_test': X_test,
+                'y_test': y_test
+            }
+            model_info['model_data'] = model_data
 
         return df_performances
 
-    def plot_roc_curve(self, cv=5):
+    def feature_importance_analysis(self, features, specific_model=None, graph=True, ax=None, top_n=30,
+                                    palette='viridis'):
         """
-        Etapas:
-            1. retorno dos scores do modelo utilizando predição por validação cruzada
-            2. encontro das taxas de falsos positivos e verdadeiros negativos
-            3. cálculo da métrica AUC e plotagem da curva ROC
+        Parâmetros
+        ----------
+        classifiers: conjunto de classificadores em forma de dicionário [dict]
+        X: array com os dados a serem utilizados no treinamento [np.array]
+        y: array com o vetor target do modelo [np.array]
 
-        Argumentos:
-            cv -- número de k-folds utilizados na validação cruzada [int, default: 5]
-
-        Retorno:
-            None
-        """
-
-        # Iterando por cada classificador do set
-        for model_name, model_stats in self.trained_classifiers.items():
-            # Retornando scores
-            y_scores = self.trained_classifiers[model_name]['train_scores']
-
-            # Calculando taxas de falsos positivos e verdadeiros positivos
-            fpr, tpr, thresholds = roc_curve(self.y_train, y_scores)
-            auc = roc_auc_score(self.y_train, y_scores)
-
-            # Plotando curva ROC
-            plt.plot(fpr, tpr, linewidth=2, label=f'{model_name} auc={auc: .3f}')
-            plt.plot([0, 1], [0, 1], 'k--')
-            plt.axis([-0.02, 1.02, -0.02, 1.02])
-            plt.xlabel('False Positive Rate')
-            plt.ylabel('True Positive Rate')
-            plt.title('ROC Curve - Dados de Treino com Validação Cruzada')
-            plt.annotate('Área sob a curva (AUC) de 50%\n(Score de um modelo aleatório)',
-                         xy=(0.5, 0.5), xytext=(0.6, 0.4), arrowprops=dict(facecolor='#6E726D', shrink=0.05))
-            plt.legend()
-
-    def feature_importance_analysis(self, model_name, graph=True, ax=None, topn=50, palette='viridis'):
-        """
-        Etapas:
-            1. retorno de importância das features
-            2. construção de um DataFrame com as features mais importantes pro modelo
-
-        Argumentos:
-            None
-
-        Retorno:
-            feat_imp -- DataFrame com feature importances [pandas.DataFrame]
+        Retorno
+        -------
+        None
         """
 
-        # Retornando modelo a ser avaliado
-        try:
-            model = self.trained_classifiers[model_name]
-        except:
-            print(f'Classificador {model_name} não foi treinado.')
-            print(f'Opções possíveis: {list(self.trained_classifiers.keys())}')
+        # Iterando sobre cada um dos classificadores já treinados
+        feat_imp = pd.DataFrame({})
+        for model_name, model_info in self.classifiers_info.items():
+            # Criando DataFrame com as features importances
+            importances = model_info['estimator'].feature_importances_
+            feat_imp['feature'] = features
+            feat_imp['importance'] = importances
+            feat_imp.sort_values(by='importance', ascending=False, inplace=True)
+            feat_imp.reset_index(drop=True, inplace=True)
+
+            # Salvando set de feature importances no dicionário do classificador
+            self.classifiers_info[model_name]['feature_importances'] = feat_imp
+
+        # Retornando feature importances de um classificador específico
+        if specific_model is not None:
+            try:
+                model_feature_importance = self.classifiers_info[specific_model]['feature_importances']
+                if graph:  # Plotando gráfico
+                    sns.barplot(x='importance', y='feature', data=model_feature_importance.iloc[:top_n, :],
+                                ax=ax, palette=palette)
+                    format_spines(ax, right_border=False)
+                    ax.set_title(f'Top {top_n} {model_name} Features mais Relevantes', size=14, color='dimgrey')
+                return model_feature_importance
+            except:
+                print(f'Classificador {specific_model} não foi treinado.')
+                print(f'Opções possíveis: {list(self.classifiers_info.keys())}')
+                return None
+
+        # Validando combinação incoerente de argumentos
+        if graph and specific_model is None:
+            print('Por favor, escolha um modelo específico para visualizar o gráfico das feature importances')
             return None
 
-        # Retornando feature importance do modelo
-        importances = model['estimator'].feature_importances_
-        feat_imp = pd.DataFrame({})
-        feat_imp['feature'] = self.features
-        feat_imp['importance'] = importances
-        feat_imp = feat_imp.sort_values(by='importance', ascending=False)
-        feat_imp.reset_index(drop=True, inplace=True)
+    def plot_roc_curve(self, figsize=(16, 6)):
+        """
+        Parâmetros
+        ----------
+        classifiers: conjunto de classificadores em forma de dicionário [dict]
+        X: array com os dados a serem utilizados no treinamento [np.array]
+        y: array com o vetor target do modelo [np.array]
 
-        # Validando plotagem gráfica
-        if graph:
-            sns.barplot(x='importance', y='feature', data=feat_imp.iloc[:topn, :], ax=ax, palette=palette)
-            format_spines(ax, right_border=False)
-            ax.set_title(f' Top {topn} {model_name} Feature Importance', size=12, color='dimgrey')
+        Retorno
+        -------
+        None
+        """
 
-        return feat_imp
+        # Criando figura para plotagem da curva ROC
+        fig, axs = plt.subplots(ncols=2, figsize=figsize)
+
+        # Iterando sobre cada um dos classificadores treinados
+        for model_name, model_info in self.classifiers_info.items():
+            # Retornando conjuntos y do modelo
+            y_train = model_info['model_data']['y_train']
+            y_test = model_info['model_data']['y_test']
+
+            # Retornando scores
+            train_scores = model_info['train_scores']
+            test_scores = model_info['test_scores']
+
+            # Calculando taxas de falsos positivos e verdadeiros positivos
+            train_fpr, train_tpr, train_thresholds = roc_curve(y_train, train_scores)
+            test_fpr, test_tpr, test_thresholds = roc_curve(y_test, test_scores)
+
+            # Retornando AUC pra treino e teste
+            train_auc = model_info['train_performance']['auc'].values[0]
+            test_auc = model_info['test_performance']['auc'].values[0]
+
+            # Plotando gráfico
+            sns.lineplot(train_fpr, train_tpr, ax=axs[0], label=f'{model_name} AUC={train_auc:.3f}')
+            sns.lineplot(test_fpr, test_tpr, ax=axs[1], label=f'{model_name} AUC={test_auc:.3f}')
+
+        # Customizando layout
+        axs[0].set_title('ROC Curve - Dados de Treino', size=12, color='dimgrey')
+        axs[1].set_title('ROC Curve - Dados de Teste', size=12, color='dimgrey')
+        format_spines(axs[0], right_border=False)
+        format_spines(axs[1], right_border=False)
+        plt.show()
 
     def plot_score_distribution(self, model_name):
         """
-        Etapas:
-            1. retorno dos scores dos modelos em dicionário de classificadores treinados
-            2. plotagem das distribuições de scores de treino e teste pra cada modelo
+        Parâmetros
+        ----------
+        classifiers: conjunto de classificadores em forma de dicionário [dict]
+        X: array com os dados a serem utilizados no treinamento [np.array]
+        y: array com o vetor target do modelo [np.array]
 
-        Argumentos:
-            model_name -- chave do dicionário do modelo treinado [string]
-
-        Retorno:
-            None
+        Retorno
+        -------
+        None
         """
 
         # Retornando modelo a ser avaliado
         try:
-            model = self.trained_classifiers[model_name]
+            model = self.classifiers_info[model_name]
         except:
             print(f'Classificador {model_name} não foi treinado.')
-            print(f'Opções possíveis: {list(self.trained_classifiers.keys())}')
+            print(f'Opções possíveis: {list(self.classifiers_info.keys())}')
             return None
 
+        # Retornando conjuntos y do modelo
+        y_train = self.classifiers_info[model_name]['model_data']['y_train']
+        y_test = self.classifiers_info[model_name]['model_data']['y_test']
+
         # Retornando scores de treino e de teste
-        train_scores = self.trained_classifiers[model_name]['train_scores']
-        test_scores = self.trained_classifiers[model_name]['test_scores']
+        train_scores = self.classifiers_info[model_name]['train_scores']
+        test_scores = self.classifiers_info[model_name]['test_scores']
 
         # Plotando distribuição de scores
         fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(16, 5))
-        sns.kdeplot(train_scores[self.y_train == 1], ax=axs[0], label='y=1', color='darkslateblue')
-        sns.kdeplot(train_scores[self.y_train == 0], ax=axs[0], label='y=0', color='crimson')
-        sns.kdeplot(test_scores[self.y_test == 1], ax=axs[1], label='y=1', color='darkslateblue')
-        sns.kdeplot(test_scores[self.y_test == 0], ax=axs[1], label='y=0', color='crimson')
+        sns.kdeplot(train_scores[y_train == 1], ax=axs[0], label='y=1', color='darkslateblue')
+        sns.kdeplot(train_scores[y_train == 0], ax=axs[0], label='y=0', color='crimson')
+        sns.kdeplot(test_scores[y_test == 1], ax=axs[1], label='y=1', color='darkslateblue')
+        sns.kdeplot(test_scores[y_test == 0], ax=axs[1], label='y=0', color='crimson')
 
         # Customizando plotagem
         format_spines(axs[0])
@@ -715,37 +718,6 @@ class ClassifiersAnalysis():
         axs[1].set_title('Distribuição de Scores - Dados de Teste', size=12, color='dimgrey')
         plt.suptitle(f'Análise de Scores - Modelo {model_name}\n', size=14, color='black')
         plt.show()
-
-    def save_class_distrib(self):
-        """
-        Etapas:
-
-        Argumentos:
-
-        Retorno:
-        """
-
-        # Retornando análise estatística sobre o score de cada classe
-        for model_name, model_stats in self.trained_classifiers.items():
-            # Retornando scores da classe positiva - Dados de treino
-            train_scores_neg_class = model_stats['train_scores'][self.y_train == 0]
-            train_scores_pos_class = model_stats['train_scores'][self.y_train == 1]
-
-            # Criando DataFrame para consolidar estatísticas
-            train_distrib_scores = pd.DataFrame({})
-            train_distrib_scores['negativa'] = pd.Series(train_scores_neg_class).describe()
-            train_distrib_scores['positiva'] = pd.Series(train_scores_pos_class).describe()
-            trained_classifiers[model_name]['train_distrib_scores'] = train_distrib_scores
-
-            # Retornando scores da classe positiva - Dados de teste
-            test_scores_neg_class = model_stats['test_scores'][self.y_test == 0]
-            test_scores_pos_class = model_stats['test_scores'][self.y_test == 1]
-
-            # Criando DataFrame para consolidar estatísticas
-            test_distrib_scores = pd.DataFrame({})
-            test_distrib_scores['negativa'] = pd.Series(test_scores_neg_class).describe()
-            test_distrib_scores['positiva'] = pd.Series(test_scores_pos_class).describe()
-            trained_classifiers[model_name]['test_distrib_scores'] = train_distrib_scores
 
     def plot_score_bins(self, model_name, bin_range):
         """
@@ -758,10 +730,10 @@ class ClassifiersAnalysis():
 
         # Retornando modelo a ser avaliado
         try:
-            model = self.trained_classifiers[model_name]
+            model = self.classifiers_info[model_name]
         except:
             print(f'Classificador {model_name} não foi treinado.')
-            print(f'Opções possíveis: {list(self.trained_classifiers.keys())}')
+            print(f'Opções possíveis: {list(self.classifiers_info.keys())}')
             return None
 
         # Criando array de bins
@@ -770,10 +742,11 @@ class ClassifiersAnalysis():
                        if i > 0]
 
         # Retornando scores de treino e criando um DataFrame
-        train_scores = self.trained_classifiers[model_name]['train_scores']
+        train_scores = self.classifiers_info[model_name]['train_scores']
+        y_train = self.classifiers_info[model_name]['model_data']['y_train']
         df_train_scores = pd.DataFrame({})
         df_train_scores['scores'] = train_scores
-        df_train_scores['target'] = self.y_train
+        df_train_scores['target'] = y_train
         df_train_scores['faixa'] = pd.cut(train_scores, bins, labels=bins_labels)
 
         # Calculando distribuição por cada faixa - treino
@@ -781,10 +754,11 @@ class ClassifiersAnalysis():
         df_train_percent = df_train_rate.div(df_train_rate.sum(1).astype(float), axis=0)
 
         # Retornando scores de teste e criando um DataFrame
-        test_scores = self.trained_classifiers[model_name]['test_scores']
+        test_scores = self.classifiers_info[model_name]['test_scores']
+        y_test = self.classifiers_info[model_name]['model_data']['y_test']
         df_test_scores = pd.DataFrame({})
         df_test_scores['scores'] = test_scores
-        df_test_scores['target'] = self.y_test
+        df_test_scores['target'] = y_test
         df_test_scores['faixa'] = pd.cut(test_scores, bins, labels=bins_labels)
 
         # Calculando distribuição por cada faixa - teste
@@ -795,7 +769,7 @@ class ClassifiersAnalysis():
         fig, axs = plt.subplots(nrows=2, ncols=2, figsize=(16, 12))
 
         # Plotando gráficos de volumetria de cada classe por faixa
-        for df_scores, ax in zip([df_train_scores, df_test_scores], [axs[0, 0], axs[1, 0]]):
+        for df_scores, ax in zip([df_train_scores, df_test_scores], [axs[0, 0], axs[0, 1]]):
             sns.countplot(x='faixa', data=df_scores, hue='target', ax=ax, palette=['darkslateblue', 'crimson'])
             AnnotateBars(n_dec=0, color='dimgrey').vertical(ax)
             ax.legend(loc='upper right')
@@ -803,7 +777,7 @@ class ClassifiersAnalysis():
             format_spines(ax, right_border=False)
 
         # Plotando percentual de representatividade de cada classe por faixa
-        for df_percent, ax in zip([df_train_percent, df_test_percent], [axs[0, 1], axs[1, 1]]):
+        for df_percent, ax in zip([df_train_percent, df_test_percent], [axs[1, 0], axs[1, 1]]):
             df_percent.plot(kind='bar', ax=ax, stacked=True, color=['darkslateblue', 'crimson'], width=0.6)
 
             # Customizando plotagem
@@ -824,9 +798,9 @@ class ClassifiersAnalysis():
 
         # Definições finais
         axs[0, 0].set_title('Volumetria das Classes por Faixa - Treino', size=12, color='dimgrey')
-        axs[1, 0].set_title('Volumetria das Classes por Faixa - Teste', size=12, color='dimgrey')
-        axs[0, 1].set_title('Percentual das Classes por Faixa - Treino', size=12, color='dimgrey')
+        axs[0, 1].set_title('Volumetria das Classes por Faixa - Teste', size=12, color='dimgrey')
+        axs[1, 0].set_title('Percentual das Classes por Faixa - Treino', size=12, color='dimgrey')
         axs[1, 1].set_title('Percentual das Classes por Faixa - Teste', size=12, color='dimgrey')
-        # plt.suptitle(f'Análise Detalhada de Scores - {model_name}', size=14, color='black')
+        plt.suptitle(f'Análise Detalhada de Scores - {model_name}', size=14, color='black')
         plt.tight_layout()
         plt.show()
