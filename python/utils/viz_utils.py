@@ -233,7 +233,10 @@ def distplot(df, features, fig_cols, hue=False, color=['crimson', 'darkslateblue
 
     # Percorrendo por cada uma das features
     for col in features:
-        ax = axs[i, j]
+        try:
+            ax = axs[i, j]
+        except:
+            ax = axs[j]
         target_idx = 0
 
         # Plotando, para cada eixo, um gráfico por classe target
@@ -311,7 +314,10 @@ def stripplot(df, features, fig_cols, hue=False, palette='viridis', figsize=(16,
 
     # Plotando gráfico
     for col in features:
-        ax = axs[i, j]
+        try:
+            ax = axs[i, j]
+        except:
+            ax = axs[j]
 
         # Plotando gráfico atribuindo a variável target como hue
         if hue != False:
@@ -370,7 +376,6 @@ def boxenplot(df, features, fig_cols, hue=False, palette='viridis', figsize=(16,
 
     # Definindo variáveis de controle
     n_features = len(features)
-    fig_cols = fig_cols
     fig_rows = ceil(n_features / fig_cols)
     i, j, color_idx = (0, 0, 0)
 
@@ -379,7 +384,10 @@ def boxenplot(df, features, fig_cols, hue=False, palette='viridis', figsize=(16,
 
     # Plotando gráfico
     for col in features:
-        ax = axs[i, j]
+        try:
+            ax = axs[i, j]
+        except:
+            ax = axs[j]
 
         # Plotando gráfico atribuindo a variável target como hue
         if hue != False:
@@ -530,7 +538,7 @@ def countplot(df, feature, order=True, hue=False, label_names=None, palette='pla
 
 
 # Função para plotagem de volumetria das variáveis categóricas do conjunto de dados
-def catplot_analysis(df, cat_features, fig_cols, hue=False, palette='viridis', figsize=(16, 10)):
+def catplot_analysis(df_categorical, fig_cols=3, hue=False, palette='viridis', figsize=(16, 10)):
     """
     Etapas:
         1. retorno das variáveis categóricas do conjunto de dados
@@ -546,9 +554,20 @@ def catplot_analysis(df, cat_features, fig_cols, hue=False, palette='viridis', f
     """
 
     # Retornando parâmetros para organização da figura
+    if hue != False:
+        cat_features = list(df_categorical.drop(hue, axis=1).columns)
+    else:
+        cat_features = list(df_categorical.columns)
+
+    total_cols = len(cat_features)
+    fig_cols = fig_cols
+    fig_rows = ceil(total_cols / fig_cols)
+    ncount = len(cat_features)
+
+    # Retornando parâmetros para organização da figura
+    sns.set(style='white', palette='muted', color_codes=True)
     total_cols = len(cat_features)
     fig_rows = ceil(total_cols / fig_cols)
-    ncount = len(df)
 
     # Criando figura de plotagem
     fig, axs = plt.subplots(nrows=fig_rows, ncols=fig_cols, figsize=(figsize))
@@ -557,17 +576,21 @@ def catplot_analysis(df, cat_features, fig_cols, hue=False, palette='viridis', f
     # Laço de repetição para plotagem categórica
     for col in cat_features:
         # Indexando variáveis e plotando gráfico
-        ax = axs[i, j]
+        try:
+            ax = axs[i, j]
+        except:
+            ax = axs[j]
         if hue != False:
-            sns.countplot(y=col, data=df, palette=palette, ax=ax, hue=hue,
-                          order=df[col].value_counts().index)
+            sns.countplot(y=col, data=df_categorical, palette=palette, ax=ax, hue=hue,
+                          order=df_categorical[col].value_counts().index)
         else:
-            sns.countplot(y=col, data=df, palette=palette, ax=ax,
-                          order=df[col].value_counts().index)
+            sns.countplot(y=col, data=df_categorical, palette=palette, ax=ax,
+                          order=df_categorical[col].value_counts().index)
 
         # Customizando gráfico
         format_spines(ax, right_border=False)
         AnnotateBars(n_dec=0, color='dimgrey').horizontal(ax)
+        ax.set_title(col)
 
         # Incrementando índices de eixo
         j += 1
@@ -597,7 +620,8 @@ def catplot_analysis(df, cat_features, fig_cols, hue=False, palette='viridis', f
 
 
 # Função para plotagem de volumetria das variáveis categóricas do conjunto de dados
-def numplot_analysis(df, fig_cols, hue=False, color='darkslateblue', hist=False):
+def numplot_analysis(df_numerical, fig_cols=3, color_sequence=['darkslateblue', 'mediumseagreen', 'darkslateblue'],
+                     hue=False, color_hue=['darkslateblue', 'crimson'], hist=False):
     """
     Etapas:
         1. retorno das variáveis categóricas do conjunto de dados
@@ -612,43 +636,58 @@ def numplot_analysis(df, fig_cols, hue=False, color='darkslateblue', hist=False)
         None
     """
 
+    # Configurando sets do seaborn
+    sns.set(style='white', palette='muted', color_codes=True)
+
     # Criando um DataFrame de variáveis categóricas
-    num_features = [col for col, dtype in df.dtypes.items() if dtype != 'object']
-    df_numerical = df.loc[:, num_features]
+    #num_features = [col for col, dtype in df.dtypes.items() if dtype != 'object']
+    #df_numerical = df.loc[:, num_features]
 
     # Retornando parâmetros para organização da figura
-    total_cols = df_numerical.shape[1]
+    if hue != False:
+        num_features = list(df_numerical.drop(hue, axis=1).columns)
+    else:
+        num_features = list(df_numerical.columns)
+
+    total_cols = len(num_features)
     fig_cols = fig_cols
     fig_rows = ceil(total_cols / fig_cols)
-    ncount = len(df)
 
     # Criando figura de plotagem
-    fig, axs = plt.subplots(nrows=fig_rows, ncols=fig_cols, figsize=(fig_cols * 5, fig_rows * 4))
+    fig, axs = plt.subplots(nrows=fig_rows, ncols=fig_cols, figsize=(fig_cols * 5, fig_rows * 4.5))
+    sns.despine(left=True)
     i, j = 0, 0
 
     # Laço de repetição para plotagem categórica
+    color_idx = 0
     for col in num_features:
         # Indexando variáveis e plotando gráfico
-        ax = axs[i, j]
+        try:
+            ax = axs[i, j]
+        except:
+            ax = axs[j]
         target_idx = 0
 
         if hue != False:
-            for classe in df[hue].value_counts().index:
+            for classe in df_numerical[hue].value_counts().index:
                 df_hue = df_numerical[df_numerical[hue] == classe]
-                sns.distplot(df_hue[col], color=color[target_idx], hist=hist, ax=ax, label=classe)
+                sns.distplot(df_hue[col], color=color_hue[target_idx], hist=hist, ax=ax, label=classe)
                 target_idx += 1
+                ax.set_title(col)
         else:
-            sns.distplot(df_numerical[col], color=color, hist=hist, ax=ax)
+            sns.distplot(df_numerical[col], color=color_sequence[color_idx], hist=hist, ax=ax)
+            ax.set_title(col, color=color_sequence[color_idx])
 
         # Customizando gráfico
         format_spines(ax, right_border=False)
-        AnnotateBars(n_dec=0, color='dimgrey').horizontal(ax)
 
         # Incrementando índices de eixo
+        color_idx += 1
         j += 1
         if j == fig_cols:
             j = 0
             i += 1
+            color_idx = 0
 
     # Tratando caso apartado: figura(s) vazia(s)
     i, j = (0, 0)
@@ -667,9 +706,122 @@ def numplot_analysis(df, fig_cols, hue=False, color='darkslateblue', hist=False)
             j = 0
             i += 1
 
+    plt.setp(axs, yticks=[])
     plt.tight_layout()
     plt.show()
 
+
+# Função para plotagem de representatividade de cada categoria quanto a um hue específico
+def catplot_percentage_analysis(df_categorical, hue, fig_cols=2, palette='viridis', figsize=(16, 10)):
+    """
+    Etapas:
+        1. retorno das variáveis categóricas do conjunto de dados
+        2. parametrização de variáveis de plotagem
+        3. aplicação de laços de repetição para plotagens / formatação
+
+    Argumentos:
+        df -- conjunto de dados a ser analisado [pandas.DataFrame]
+        fig_cols -- quantidade de colunas da figura matplotlib [int]
+
+    Retorno:
+        None
+    """
+ 
+    # Retornando parâmetros para organização da figura
+    sns.set(style='white', palette='muted', color_codes=True)
+    cat_features = list(df_categorical.drop(hue, axis=1).columns)
+    total_cols = len(cat_features)
+    fig_rows = ceil(total_cols / fig_cols)
+
+    # Criando figura de plotagem
+    fig, axs = plt.subplots(nrows=fig_rows, ncols=fig_cols, figsize=(figsize))
+    i, j = 0, 0
+
+    # Laço de repetição para plotagem categórica
+    for col in cat_features:
+        # Indexando variáveis e plotando gráfico
+        try:
+            ax = axs[i, j]
+        except:
+            ax = axs[j]
+
+        # Aplicando crosstab para análise de representatividade da categoria
+        col_to_hue = pd.crosstab(df_categorical[col], df_categorical[hue])
+        col_to_hue.div(col_to_hue.sum(1).astype(float), axis=0).plot(kind='barh', stacked=True, ax=ax,
+                                                                     colors=palette)
+
+        # Customizando gráfico
+        format_spines(ax, right_border=False)
+        ax.set_title(col)
+        ax.set_ylabel('')
+
+        # Incrementando índices de eixo
+        j += 1
+        if j == fig_cols:
+            j = 0
+            i += 1
+
+    # Tratando caso apartado: figura(s) vazia(s)
+    i, j = (0, 0)
+    for n_plots in range(fig_rows * fig_cols):
+
+        # Se o índice do eixo for maior que a quantidade de features, elimina as bordas
+        if n_plots >= len(cat_features):
+            try:
+                axs[i][j].axis('off')
+            except TypeError as e:
+                axs[j].axis('off')
+
+        # Incrementando
+        j += 1
+        if j == fig_cols:
+            j = 0
+            i += 1
+
+    plt.tight_layout()
+    plt.show()
+
+
+def mean_sum_analysis(df, group_col, value_col, palette='plasma', figsize=(15, 6)):
+    """
+    Parâmetros
+    ----------
+    classifiers: conjunto de classificadores em forma de dicionário [dict]
+    X: array com os dados a serem utilizados no treinamento [np.array]
+    y: array com o vetor target do modelo [np.array]
+
+    Retorno
+    -------
+    None
+    """
+
+    # Grouping data
+    df_mean = df.groupby(group_col, as_index=False).mean()
+    df_sum = df.groupby(group_col, as_index=False).sum()
+
+    # Sorting grouped dataframes
+    df_mean.sort_values(by=value_col, ascending=False, inplace=True)
+    sorter = list(df_mean[group_col].values)
+    sorter_idx = dict(zip(sorter, range(len(sorter))))
+    df_sum['mean_rank'] = df_mean[group_col].map(sorter_idx)
+    df_sum.sort_values(by='mean_rank', inplace=True)
+    df_sum.drop('mean_rank', axis=1, inplace=True)
+
+    # Plotting data
+    fig, axs = plt.subplots(ncols=2, figsize=figsize)
+    sns.barplot(x=value_col, y=group_col, data=df_mean, ax=axs[0], palette=palette)
+    sns.barplot(x=value_col, y=group_col, data=df_sum, ax=axs[1], palette=palette)
+
+    # Customizing plot
+    for ax in axs:
+        AnnotateBars(n_dec=0, font_size=12, color='black').horizontal(ax)
+        format_spines(ax, right_border=False)
+        ax.set_ylabel('')
+    axs[0].set_title(f'Mean of {value_col} by {group_col}', size=14, color='dimgrey')
+    axs[1].set_title(f'Sum of {value_col} by {group_col}', size=14, color='dimgrey')
+
+    plt.tight_layout()
+    plt.show()
 
 """
 --------------------------------------------

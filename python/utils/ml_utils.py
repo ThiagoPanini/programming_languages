@@ -426,6 +426,7 @@ class BinaryClassifiersAnalysis():
         # Iterando sobre cada modelo no dicionário de classificadores
         for model_name, model_info in classifiers.items():
             clf_key = model_name + approach
+            print(f'\nTreinando modelo {clf_key}')
             self.classifiers_info[clf_key] = {}
 
             # Validando aplicação de RandomizedSearchCV
@@ -557,7 +558,8 @@ class BinaryClassifiersAnalysis():
                 df_performances = df_performances.append(model_info['test_performance'])
                 continue
 
-                # Indexando variáveis para os cálculos
+            # Indexando variáveis para os cálculos
+            print(f'\nAvaliando performance do modelo {model_name}')
             estimator = model_info['estimator']
 
             # Retornando métricas nos dados de treino
@@ -601,7 +603,10 @@ class BinaryClassifiersAnalysis():
         feat_imp = pd.DataFrame({})
         for model_name, model_info in self.classifiers_info.items():
             # Criando DataFrame com as features importances
-            importances = model_info['estimator'].feature_importances_
+            try:
+                importances = model_info['estimator'].feature_importances_
+            except:
+                continue
             feat_imp['feature'] = features
             feat_imp['importance'] = importances
             feat_imp.sort_values(by='importance', ascending=False, inplace=True)
