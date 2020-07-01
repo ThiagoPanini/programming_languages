@@ -86,6 +86,26 @@ class AnnotateBars:
             value, pos = func(p)
             ax.annotate(f"{value:.{self.n_dec}f}", pos, **cfg)
 
+# Definindo funções úteis para plotagem dos rótulos no gráfico
+def make_autopct(values):
+    """
+    Etapas:
+        1. definição de função para formatação dos rótulos
+
+    Argumentos:
+        values -- valores extraídos da função value_counts() da coluna de análise [list]
+
+    Retorno:
+        my_autopct -- string formatada para plotagem dos rótulos
+    """
+
+    def my_autopct(pct):
+        total = sum(values)
+        val = int(round(pct * total / 100.0))
+
+        return '{p:.1f}%\n({v:d})'.format(p=pct, v=val)
+
+    return my_autopct
 
 """
 --------------------------------------------
@@ -116,27 +136,6 @@ def donut_plot(df, col, label_names, ax, text='', colors=['crimson', 'navy'], ci
     Retorno:
         None
     """
-
-    # Definindo funções úteis para plotagem dos rótulos no gráfico
-    def make_autopct(values):
-        """
-        Etapas:
-            1. definição de função para formatação dos rótulos
-
-        Argumentos:
-            values -- valores extraídos da função value_counts() da coluna de análise [list]
-
-        Retorno:
-            my_autopct -- string formatada para plotagem dos rótulos
-        """
-
-        def my_autopct(pct):
-            total = sum(values)
-            val = int(round(pct * total / 100.0))
-
-            return '{p:.1f}%\n({v:d})'.format(p=pct, v=val)
-
-        return my_autopct
 
     # Retorno dos valores e definição da figura
     values = df[col].value_counts().values
@@ -782,7 +781,7 @@ def catplot_percentage_analysis(df_categorical, hue, fig_cols=2, palette='viridi
     plt.show()
 
 
-def mean_sum_analysis(df, group_col, value_col, palette='plasma', figsize=(15, 6)):
+def mean_sum_analysis(df, group_col, value_col, orient='vertical', palette='plasma', figsize=(15, 6)):
     """
     Parâmetros
     ----------
@@ -809,12 +808,19 @@ def mean_sum_analysis(df, group_col, value_col, palette='plasma', figsize=(15, 6
 
     # Plotting data
     fig, axs = plt.subplots(ncols=2, figsize=figsize)
-    sns.barplot(x=value_col, y=group_col, data=df_mean, ax=axs[0], palette=palette)
-    sns.barplot(x=value_col, y=group_col, data=df_sum, ax=axs[1], palette=palette)
+    if orient == 'vertical':
+        sns.barplot(x=value_col, y=group_col, data=df_mean, ax=axs[0], palette=palette)
+        sns.barplot(x=value_col, y=group_col, data=df_sum, ax=axs[1], palette=palette)
+        AnnotateBars(n_dec=0, font_size=12, color='black').horizontal(axs[0])
+        AnnotateBars(n_dec=0, font_size=12, color='black').horizontal(axs[1])
+    elif orient == 'horizontal':
+        sns.barplot(x=group_col, y=value_col, data=df_mean, ax=axs[0], palette=palette)
+        sns.barplot(x=group_col, y=value_col, data=df_sum, ax=axs[1], palette=palette)
+        AnnotateBars(n_dec=0, font_size=12, color='black').vertical(axs[0])
+        AnnotateBars(n_dec=0, font_size=12, color='black').vertical(axs[1])
 
     # Customizing plot
     for ax in axs:
-        AnnotateBars(n_dec=0, font_size=12, color='black').horizontal(ax)
         format_spines(ax, right_border=False)
         ax.set_ylabel('')
     axs[0].set_title(f'Mean of {value_col} by {group_col}', size=14, color='dimgrey')

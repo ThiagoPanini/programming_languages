@@ -426,7 +426,7 @@ class BinaryClassifiersAnalysis():
         # Iterando sobre cada modelo no dicionário de classificadores
         for model_name, model_info in classifiers.items():
             clf_key = model_name + approach
-            print(f'\nTreinando modelo {clf_key}')
+            print(f'Training model {clf_key}\n')
             self.classifiers_info[clf_key] = {}
 
             # Validando aplicação de RandomizedSearchCV
@@ -559,7 +559,7 @@ class BinaryClassifiersAnalysis():
                 continue
 
             # Indexando variáveis para os cálculos
-            print(f'\nAvaliando performance do modelo {model_name}')
+            print(f'Evaluating model {model_name}\n')
             estimator = model_info['estimator']
 
             # Retornando métricas nos dados de treino

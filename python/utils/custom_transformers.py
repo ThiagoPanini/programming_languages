@@ -70,6 +70,9 @@ class SplitData(BaseEstimator, TransformerMixin):
 # [PROCESSING] Classe para aplicar processo de encoding nos dados
 class DummiesEncoding(BaseEstimator, TransformerMixin):
 
+    def __init__(self, dummy_na=True):
+        self.dummy_na = dummy_na
+
     def fit(self, X, y=None):
         return self
 
@@ -79,7 +82,7 @@ class DummiesEncoding(BaseEstimator, TransformerMixin):
         self.cat_features_ori = list(X.columns)
 
         # Aplicando encoding com método get_dummies do pandas
-        X_cat_dum = pd.get_dummies(X)
+        X_cat_dum = pd.get_dummies(X, dummy_na=self.dummy_na)
 
         # Juntando os datasets e eliminando colunas originais
         X_dum = X.join(X_cat_dum)
@@ -90,7 +93,7 @@ class DummiesEncoding(BaseEstimator, TransformerMixin):
 
 
 # [PROCESSING] Classe para preencher dados nulos de um conjunto
-class DummiesEncoding(BaseEstimator, TransformerMixin):
+class FillNullData(BaseEstimator, TransformerMixin):
 
     def __init__(self, cols_to_fill=None, fill_na=0):
         self.cols_to_fill = cols_to_fill
