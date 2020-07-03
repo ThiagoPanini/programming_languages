@@ -669,15 +669,107 @@ class BinaryClassifiersAnalysis():
             train_auc = model_info['train_performance']['auc'].values[0]
             test_auc = model_info['test_performance']['auc'].values[0]
 
-            # Plotando gráfico
-            sns.lineplot(train_fpr, train_tpr, ax=axs[0], label=f'{model_name} AUC={train_auc:.3f}')
-            sns.lineplot(test_fpr, test_tpr, ax=axs[1], label=f'{model_name} AUC={test_auc:.3f}')
+            # Plotando gráfico (dados de treino)
+            plt.subplot(1, 2, 1)
+            plt.plot(train_fpr, train_tpr, linewidth=2, label=f'{model_name} auc={train_auc}')
+            plt.plot([0, 1], [0, 1], 'k--')
+            plt.axis([-0.02, 1.02, -0.02, 1.02])
+            plt.xlabel('False Positive Rate')
+            plt.ylabel('True Positive Rate')
+            plt.title(f'ROC Curve - Train Data')
+            plt.legend()
 
-        # Customizando layout
-        axs[0].set_title('ROC Curve - Dados de Treino', size=12, color='dimgrey')
-        axs[1].set_title('ROC Curve - Dados de Teste', size=12, color='dimgrey')
-        format_spines(axs[0], right_border=False)
-        format_spines(axs[1], right_border=False)
+            # Plotando gráfico (dados de teste)
+            plt.subplot(1, 2, 2)
+            plt.plot(test_fpr, test_tpr, linewidth=2, label=f'{model_name} auc={test_auc}')
+            plt.plot([0, 1], [0, 1], 'k--')
+            plt.axis([-0.02, 1.02, -0.02, 1.02])
+            plt.xlabel('False Positive Rate')
+            plt.ylabel('True Positive Rate')
+            plt.title(f'ROC Curve - Test Data', size=12)
+            plt.legend()
+
+        plt.show()
+
+    def custom_confusion_matrix(self, model_name, y_true, y_pred, classes, cmap, normalize=False):
+        """
+        Parâmetros
+        ----------
+        classifiers: conjunto de classificadores em forma de dicionário [dict]
+        X: array com os dados a serem utilizados no treinamento [np.array]
+        y: array com o vetor target do modelo [np.array]
+
+        Retorno
+        -------
+        None
+        """
+
+        # Retornando matriz de confusão
+        conf_mx = confusion_matrix(y_true, y_pred)
+
+        # Plotando matriz
+        plt.imshow(conf_mx, interpolation='nearest', cmap=cmap)
+        plt.colorbar()
+        tick_marks = np.arange(len(classes))
+
+        # Customizando eixos
+        plt.xticks(tick_marks, classes, rotation=45)
+        plt.yticks(tick_marks, classes)
+
+        # Customizando entradas
+        fmt = '.2f' if normalize else 'd'
+        thresh = conf_mx.max() / 2.
+        for i, j in itertools.product(range(conf_mx.shape[0]), range(conf_mx.shape[1])):
+            plt.text(j, i, format(conf_mx[i, j]),
+                     horizontalalignment='center',
+                     color='white' if conf_mx[i, j] > thresh else 'black')
+        plt.ylabel('True Label')
+        plt.xlabel('Predicted Label')
+        plt.title(f'{model_name}\nConfusion Matrix', size=12)
+
+    def plot_confusion_matrix(self, classes, normalize=False, cmap=plt.cm.Blues):
+        """
+        Parâmetros
+        ----------
+        classifiers: conjunto de classificadores em forma de dicionário [dict]
+        X: array com os dados a serem utilizados no treinamento [np.array]
+        y: array com o vetor target do modelo [np.array]
+
+        Retorno
+        -------
+        None
+        """
+
+        k = 1
+        nrows = len(self.classifiers_info.keys())
+        fig = plt.figure(figsize=(10, nrows * 4))
+        sns.set(style='white', palette='muted', color_codes=True)
+
+        # Iterando por cada um dos classificadores
+        for model_name, model_info in self.classifiers_info.items():
+            # Retornando dados em cada modelo
+            X_train = model_info['model_data']['X_train']
+            y_train = model_info['model_data']['y_train']
+            X_test = model_info['model_data']['X_test']
+            y_test = model_info['model_data']['y_test']
+
+            # Realizando predições e retornando matriz de confusão
+            train_pred = cross_val_predict(model_info['estimator'], X_train, y_train, cv=5)
+            test_pred = model_info['estimator'].predict(X_test)
+
+            # Plotando matriz (dados de treino)
+            plt.subplot(nrows, 2, k)
+            self.custom_confusion_matrix(model_name + ' Train', y_train, train_pred, classes=classes, cmap=cmap,
+                                         normalize=normalize)
+            k += 1
+
+            # Plotando matriz (dados de teste)
+            plt.subplot(nrows, 2, k)
+            self.custom_confusion_matrix(model_name + ' Test', y_test, test_pred, classes=classes, cmap=plt.cm.Greens,
+                                         normalize=normalize)
+            k += 1
+
+        plt.tight_layout()
         plt.show()
 
     def plot_score_distribution(self, model_name):
