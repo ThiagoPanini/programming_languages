@@ -772,7 +772,61 @@ class BinaryClassifiersAnalysis():
         plt.tight_layout()
         plt.show()
 
-    def plot_score_distribution(self, model_name):
+    def plot_learning_curve(self, model_name, ax, ylim=None, cv=5, n_jobs=1, train_sizes=np.linspace(.1, 1.0, 10)):
+        """
+        Parâmetros
+        ----------
+        classifiers: conjunto de classificadores em forma de dicionário [dict]
+        X: array com os dados a serem utilizados no treinamento [np.array]
+        y: array com o vetor target do modelo [np.array]
+
+        Retorno
+        -------
+        None
+        """
+
+        # Retornando modelo a ser avaliado
+        try:
+            model = self.classifiers_info[model_name]
+        except:
+            print(f'Classificador {model_name} não foi treinado.')
+            print(f'Opções possíveis: {list(self.classifiers_info.keys())}')
+            return None
+
+        # Retornando dados em cada modelo
+        X_train = model['model_data']['X_train']
+        y_train = model['model_data']['y_train']
+        X_test = model['model_data']['X_test']
+        y_test = model['model_data']['y_test']
+
+        # Retornando parâmetros de scores de treino e validação
+        train_sizes, train_scores, val_scores = learning_curve(model['estimator'], X_train, y_train, cv=cv,
+                                                               n_jobs=n_jobs, train_sizes=train_sizes)
+
+        # Calculando médias e desvios padrão (treino e validação)
+        train_scores_mean = np.mean(train_scores, axis=1)
+        train_scores_std = np.std(train_scores, axis=1)
+        val_scores_mean = np.mean(val_scores, axis=1)
+        val_scores_std = np.std(val_scores, axis=1)
+
+        # Resultado em dados de treino
+        ax.plot(train_sizes, train_scores_mean, 'o-', color='navy', label='Training Score')
+        ax.fill_between(train_sizes, (train_scores_mean - train_scores_std), (train_scores_mean + train_scores_std),
+                        alpha=0.1, color='blue')
+
+        # Resultado em validação cruzada
+        ax.plot(train_sizes, val_scores_mean, 'o-', color='red', label='Cross Val Score')
+        ax.fill_between(train_sizes, (val_scores_mean - val_scores_std), (val_scores_mean + val_scores_std),
+                        alpha=0.1, color='crimson')
+
+        # Customizando gráfico
+        ax.set_title(f'Model {model_name} - Learning Curve', size=14)
+        ax.set_xlabel('Training size (m)')
+        ax.set_ylabel('Score')
+        ax.grid(True)
+        ax.legend(loc='best')
+
+    def plot_score_distribution(self, model_name, shade=False):
         """
         Parâmetros
         ----------
@@ -803,17 +857,17 @@ class BinaryClassifiersAnalysis():
 
         # Plotando distribuição de scores
         fig, axs = plt.subplots(nrows=1, ncols=2, figsize=(16, 5))
-        sns.kdeplot(train_scores[y_train == 1], ax=axs[0], label='y=1', color='darkslateblue')
-        sns.kdeplot(train_scores[y_train == 0], ax=axs[0], label='y=0', color='crimson')
-        sns.kdeplot(test_scores[y_test == 1], ax=axs[1], label='y=1', color='darkslateblue')
-        sns.kdeplot(test_scores[y_test == 0], ax=axs[1], label='y=0', color='crimson')
+        sns.kdeplot(train_scores[y_train == 1], ax=axs[0], label='y=1', shade=shade, color='darkslateblue')
+        sns.kdeplot(train_scores[y_train == 0], ax=axs[0], label='y=0', shade=shade, color='crimson')
+        sns.kdeplot(test_scores[y_test == 1], ax=axs[1], label='y=1', shade=shade, color='darkslateblue')
+        sns.kdeplot(test_scores[y_test == 0], ax=axs[1], label='y=0', shade=shade, color='crimson')
 
         # Customizando plotagem
-        format_spines(axs[0])
-        format_spines(axs[1])
-        axs[0].set_title('Distribuição de Scores - Dados de Treino', size=12, color='dimgrey')
-        axs[1].set_title('Distribuição de Scores - Dados de Teste', size=12, color='dimgrey')
-        plt.suptitle(f'Análise de Scores - Modelo {model_name}\n', size=14, color='black')
+        format_spines(axs[0], right_border=False)
+        format_spines(axs[1], right_border=False)
+        axs[0].set_title('Score Distribution - Training Data', size=12, color='dimgrey')
+        axs[1].set_title('Score Distribution - Testing Data', size=12, color='dimgrey')
+        plt.suptitle(f'Score Distribution: a Probability Approach for {model_name}\n', size=14, color='black')
         plt.show()
 
     def plot_score_bins(self, model_name, bin_range):
@@ -870,7 +924,6 @@ class BinaryClassifiersAnalysis():
             sns.countplot(x='faixa', data=df_scores, hue='target', ax=ax, palette=['darkslateblue', 'crimson'])
             AnnotateBars(n_dec=0, color='dimgrey').vertical(ax)
             ax.legend(loc='upper right')
-            ax.set_title('Volumetria das Classes por Faixa', size=12, color='dimgrey')
             format_spines(ax, right_border=False)
 
         # Plotando percentual de representatividade de cada classe por faixa
@@ -894,10 +947,10 @@ class BinaryClassifiersAnalysis():
             format_spines(ax, right_border=False)
 
         # Definições finais
-        axs[0, 0].set_title('Volumetria das Classes por Faixa - Treino', size=12, color='dimgrey')
-        axs[0, 1].set_title('Volumetria das Classes por Faixa - Teste', size=12, color='dimgrey')
-        axs[1, 0].set_title('Percentual das Classes por Faixa - Treino', size=12, color='dimgrey')
-        axs[1, 1].set_title('Percentual das Classes por Faixa - Teste', size=12, color='dimgrey')
-        plt.suptitle(f'Análise Detalhada de Scores - {model_name}', size=14, color='black')
+        axs[0, 0].set_title('Quantity of each Class by Range - Train', size=12, color='dimgrey')
+        axs[0, 1].set_title('Quantity of each Class by Range - Test', size=12, color='dimgrey')
+        axs[1, 0].set_title('Percentage of each Class by Range - Train', size=12, color='dimgrey')
+        axs[1, 1].set_title('Percentage of each Class by Range - Test', size=12, color='dimgrey')
+        plt.suptitle(f'Score Distribution by Range - {model_name}\n', size=14, color='black')
         plt.tight_layout()
         plt.show()

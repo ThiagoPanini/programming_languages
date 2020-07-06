@@ -535,6 +535,42 @@ def countplot(df, feature, order=True, hue=False, label_names=None, palette='pla
     plt.tight_layout()
     plt.show()
 
+# Função responsável por plotar volumetria de uma única variável categórica em formato atualizado
+def single_countplot(df, col, ax, order=True, hue=False, palette='plasma', width=0.75, sub_width=0.3, sub_size=12):
+    """
+    Parâmetros
+    ----------
+    classifiers: conjunto de classificadores em forma de dicionário [dict]
+    X: array com os dados a serem utilizados no treinamento [np.array]
+    y: array com o vetor target do modelo [np.array]
+
+    Retorno
+    -------
+    None
+    """
+
+    # Verificando plotagem por quebra de alguma variável categórica
+    ncount = len(df)
+    if hue != False:
+        if order:
+            sns.countplot(x=col, data=df, palette=palette, ax=ax, order=df[col].value_counts().index, hue=hue)
+        else:
+            sns.countplot(x=col, data=df, palette=palette, ax=ax, hue=hue)
+    else:
+        if order:
+            sns.countplot(x=col, data=df, palette=palette, ax=ax, order=df[col].value_counts().index)
+        else:
+            sns.countplot(x=col, data=df, palette=palette, ax=ax)
+
+    # Formatando eixos
+    format_spines(ax, right_border=False)
+
+    # Inserindo rótulo de percentual
+    for p in ax.patches:
+        x = p.get_bbox().get_points()[:, 0]
+        y = p.get_bbox().get_points()[1, 1]
+        ax.annotate('{}\n{:.1f}%'.format(int(y), 100. * y / ncount), (x.mean(), y), ha='center', va='bottom')
+
 
 # Função para plotagem de volumetria das variáveis categóricas do conjunto de dados
 def catplot_analysis(df_categorical, fig_cols=3, hue=False, palette='viridis', figsize=(16, 10)):
