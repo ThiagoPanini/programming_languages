@@ -1,0 +1,628 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<!-- build 20194.19.1010.1202                               -->
+<workbook original-version='18.1' source-build='2019.4.0 (20194.19.1010.1202)' source-platform='win' version='18.1' xmlns:user='http://www.tableausoftware.com/xml/user'>
+  <document-format-change-manifest>
+    <AutoCreateAndUpdateDSDPhoneLayouts ignorable='true' predowngraded='true' />
+    <SheetIdentifierTracking ignorable='true' predowngraded='true' />
+    <WindowsPersistSimpleIdentifiers />
+  </document-format-change-manifest>
+  <preferences>
+    <preference name='ui.encoding.shelf.height' value='24' />
+    <preference name='ui.shelf.height' value='26' />
+  </preferences>
+  <datasources />
+  <worksheets>
+    <worksheet name='Planilha 1'>
+      <table>
+        <view>
+          <datasources />
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{E89EA337-875B-44CE-85A3-8C485B729549}' />
+    </worksheet>
+  </worksheets>
+  <dashboards>
+    <dashboard name='Painel 1'>
+      <style />
+      <size maxheight='2000' maxwidth='1280' minheight='2000' minwidth='1280' sizing-mode='fixed' />
+      <zones>
+        <zone h='100000' id='9' type='layout-basic' w='100000' x='0' y='0'>
+          <zone h='100000' id='8' is-centered='0' is-scaled='1' param='D:/Users/thiagoPanini/github_files/programming_languages/bank-stuff/layout_MacroAssunto_01.png' type='bitmap' w='100000' x='0' y='0'>
+            <zone-style>
+              <format attr='border-color' value='#000000' />
+              <format attr='border-style' value='none' />
+              <format attr='border-width' value='0' />
+              <format attr='margin' value='0' />
+            </zone-style>
+          </zone>
+        </zone>
+        <zone h='60100' id='10' param='vert' type='layout-flow' w='97422' x='1797' y='7550'>
+          <zone fixed-size='90' h='4500' id='12' is-fixed='true' param='horz' type='layout-flow' w='97422' x='1797' y='7550'>
+            <zone fixed-size='168' h='4500' id='14' is-fixed='true' param='vert' type='layout-flow' w='13125' x='1797' y='7550'>
+              <zone fixed-size='45' h='2250' id='16' is-fixed='true' param='vert' type='layout-flow' w='13125' x='1797' y='7550' />
+              <zone fixed-size='37' h='2250' id='15' is-fixed='true' type='empty' w='13125' x='1797' y='9800'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+            </zone>
+            <zone fixed-size='77' h='4500' id='17' is-fixed='true' type='empty' w='6641' x='14922' y='7550'>
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='4' />
+              </zone-style>
+            </zone>
+            <zone fixed-size='155' h='4500' id='18' is-fixed='true' param='vert' type='layout-flow' w='12109' x='21563' y='7550'>
+              <zone h='2900' id='20' param='vert' type='layout-flow' w='12109' x='21563' y='7550' />
+              <zone h='1600' id='19' type='empty' w='12109' x='21563' y='10450'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+            </zone>
+            <zone fixed-size='120' h='4500' id='21' is-fixed='true' param='horz' type='layout-flow' w='9375' x='33672' y='7550'>
+              <zone fixed-size='60' h='4500' id='23' is-fixed='true' param='vert' type='layout-flow' w='4688' x='33672' y='7550'>
+                <zone fixed-size='24' h='1600' id='27' is-fixed='true' type='empty' w='4688' x='33672' y='7550'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='58' h='2900' id='28' is-fixed='true' param='vert' type='layout-flow' w='4688' x='33672' y='9150' />
+              </zone>
+              <zone fixed-size='55' h='4500' id='24' is-fixed='true' param='vert' type='layout-flow' w='4297' x='38360' y='7550'>
+                <zone fixed-size='24' h='1600' id='25' is-fixed='true' type='empty' w='4297' x='38360' y='7550'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                  </zone-style>
+                </zone>
+                <zone fixed-size='58' h='2900' id='26' is-fixed='true' param='vert' type='layout-flow' w='4297' x='38360' y='9150' />
+              </zone>
+            </zone>
+            <zone fixed-size='77' h='4500' id='29' is-fixed='true' type='empty' w='6641' x='43047' y='7550'>
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='4' />
+              </zone-style>
+            </zone>
+            <zone fixed-size='155' h='4500' id='31' is-fixed='true' param='vert' type='layout-flow' w='12109' x='49688' y='7550'>
+              <zone h='2900' id='33' param='vert' type='layout-flow' w='12109' x='49688' y='7550' />
+              <zone h='1600' id='32' type='empty' w='12109' x='49688' y='10450'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+            </zone>
+            <zone fixed-size='120' h='4500' id='34' is-fixed='true' param='horz' type='layout-flow' w='9375' x='61797' y='7550'>
+              <zone fixed-size='60' h='4500' id='36' is-fixed='true' param='vert' type='layout-flow' w='4687' x='61797' y='7550'>
+                <zone h='1600' id='38' type='empty' w='4687' x='61797' y='7550'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                  </zone-style>
+                </zone>
+                <zone h='2900' id='39' param='vert' type='layout-flow' w='4687' x='61797' y='9150' />
+              </zone>
+              <zone fixed-size='60' h='4500' id='37' is-fixed='true' param='vert' type='layout-flow' w='4688' x='66484' y='7550'>
+                <zone h='1600' id='40' type='empty' w='4688' x='66484' y='7550'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                  </zone-style>
+                </zone>
+                <zone h='2900' id='41' param='vert' type='layout-flow' w='4688' x='66484' y='9150' />
+              </zone>
+            </zone>
+            <zone fixed-size='77' h='4500' id='30' is-fixed='true' type='empty' w='6641' x='71172' y='7550'>
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='4' />
+              </zone-style>
+            </zone>
+            <zone fixed-size='158' h='4500' id='42' is-fixed='true' param='vert' type='layout-flow' w='12344' x='77813' y='7550'>
+              <zone h='2900' id='44' param='vert' type='layout-flow' w='12344' x='77813' y='7550' />
+              <zone h='1600' id='43' type='empty' w='12344' x='77813' y='10450'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+            </zone>
+            <zone h='4500' id='45' param='horz' type='layout-flow' w='9062' x='90157' y='7550'>
+              <zone fixed-size='60' h='4500' id='47' is-fixed='true' param='vert' type='layout-flow' w='4531' x='90157' y='7550'>
+                <zone h='1600' id='49' type='empty' w='4531' x='90157' y='7550'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                  </zone-style>
+                </zone>
+                <zone h='2900' id='50' param='vert' type='layout-flow' w='4531' x='90157' y='9150' />
+              </zone>
+              <zone fixed-size='60' h='4500' id='48' is-fixed='true' param='vert' type='layout-flow' w='4531' x='94688' y='7550'>
+                <zone h='1600' id='51' type='empty' w='4531' x='94688' y='7550'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                  </zone-style>
+                </zone>
+                <zone h='2900' id='52' param='vert' type='layout-flow' w='4531' x='94688' y='9150' />
+              </zone>
+            </zone>
+          </zone>
+          <zone fixed-size='4' h='600' id='53' is-fixed='true' type='empty' w='97422' x='1797' y='12050'>
+            <zone-style>
+              <format attr='border-color' value='#000000' />
+              <format attr='border-style' value='none' />
+              <format attr='border-width' value='0' />
+              <format attr='margin' value='4' />
+            </zone-style>
+          </zone>
+          <zone fixed-size='38' h='1900' id='54' is-fixed='true' param='horz' type='layout-flow' w='97422' x='1797' y='12650'>
+            <zone fixed-size='148' h='1900' id='55' is-fixed='true' type='empty' w='12188' x='1797' y='12650'>
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='4' />
+              </zone-style>
+            </zone>
+            <zone fixed-size='200' h='1900' id='58' is-fixed='true' param='horz' type='layout-flow' w='15625' x='13985' y='12650' />
+            <zone fixed-size='316' h='1900' id='57' is-fixed='true' type='empty' w='25313' x='29610' y='12650'>
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='4' />
+              </zone-style>
+            </zone>
+            <zone h='1900' id='56' param='horz' type='layout-flow' w='44296' x='54923' y='12650'>
+              <zone fixed-size='150' h='1900' id='60' is-fixed='true' param='horz' type='layout-flow' w='11719' x='54923' y='12650' />
+              <zone fixed-size='143' h='1900' id='61' is-fixed='true' type='empty' w='11797' x='66642' y='12650'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+              <zone h='1900' id='62' param='horz' type='layout-flow' w='20780' x='78439' y='12650' />
+            </zone>
+          </zone>
+          <zone fixed-size='223' h='11150' id='66' is-fixed='true' type='layout-basic' w='97422' x='1797' y='14550'>
+            <zone h='11150' id='63' param='horz' type='layout-flow' w='64844' x='1797' y='14550'>
+              <zone fixed-size='790' h='11150' id='64' is-fixed='true' type='empty' w='62344' x='1797' y='14550'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+              <zone fixed-size='2' h='11150' id='68' is-fixed='true' type='empty' w='781' x='64141' y='14550'>
+                <zone-style>
+                  <format attr='border-color' value='#000000' />
+                  <format attr='border-style' value='none' />
+                  <format attr='border-width' value='0' />
+                  <format attr='margin' value='4' />
+                </zone-style>
+              </zone>
+            </zone>
+            <zone h='11150' id='67' param='horz' type='layout-flow' w='32578' x='66641' y='14550'>
+              <zone h='11150' id='65' param='vert' type='layout-flow' w='32578' x='66641' y='14550' />
+            </zone>
+          </zone>
+          <zone h='41950' id='11' type='empty' w='97422' x='1797' y='25700'>
+            <zone-style>
+              <format attr='border-color' value='#000000' />
+              <format attr='border-style' value='none' />
+              <format attr='border-width' value='0' />
+              <format attr='margin' value='4' />
+            </zone-style>
+          </zone>
+        </zone>
+      </zones>
+      <devicelayouts>
+        <devicelayout auto-generated='true' name='Phone'>
+          <size maxheight='700' minheight='700' sizing-mode='vscroll' />
+          <zones>
+            <zone h='100000' id='70' type='layout-basic' w='100000' x='0' y='0'>
+              <zone h='99200' id='69' param='vert' type='layout-flow' w='98750' x='625' y='400'>
+                <zone fixed-size='280' h='100000' id='8' is-centered='0' is-fixed='true' is-scaled='1' param='D:/Users/thiagoPanini/github_files/programming_languages/bank-stuff/layout_MacroAssunto_01.png' type='bitmap' w='100000' x='0' y='0'>
+                  <zone-style>
+                    <format attr='border-color' value='#000000' />
+                    <format attr='border-style' value='none' />
+                    <format attr='border-width' value='0' />
+                    <format attr='margin' value='4' />
+                    <format attr='padding' value='0' />
+                  </zone-style>
+                </zone>
+              </zone>
+              <zone-style>
+                <format attr='border-color' value='#000000' />
+                <format attr='border-style' value='none' />
+                <format attr='border-width' value='0' />
+                <format attr='margin' value='8' />
+              </zone-style>
+            </zone>
+          </zones>
+        </devicelayout>
+      </devicelayouts>
+      <simple-id uuid='{B2C681DA-C72A-46C9-AF74-53DE406AF727}' />
+    </dashboard>
+  </dashboards>
+  <windows>
+    <window class='worksheet' name='Planilha 1'>
+      <cards>
+        <edge name='left'>
+          <strip size='200'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{3DA25FCC-9771-4762-8136-D6D0CAC6E9B9}' />
+    </window>
+    <window class='dashboard' maximized='true' name='Painel 1'>
+      <viewpoints />
+      <active id='65' />
+      <simple-id uuid='{C2394EBE-1404-4C92-8657-2100A43C2B1C}' />
+    </window>
+  </windows>
+  <thumbnails>
+    <thumbnail height='192' name='Painel 1' width='192'>
+      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
+    </thumbnail>
+    <thumbnail height='192' name='Planilha 1' width='192'>
+      iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAABJ0AAASdAHeZh94
+      AAACFUlEQVR4nO3TMQEAIAzAMMC/5yFjRxMFfXpnZg5Eve0A2GQA0gxAmgFIMwBpBiDNAKQZ
+      gDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFI
+      MwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQD
+      kGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBp
+      BiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA
+      0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDN
+      AKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxA
+      mgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZ
+      gDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFI
+      MwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKR9Y+0F
+      fBUOM1sAAAAASUVORK5CYII=
+    </thumbnail>
+  </thumbnails>
+</workbook>
