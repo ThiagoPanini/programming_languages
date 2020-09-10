@@ -22,7 +22,7 @@ from sklearn.model_selection import train_test_split, RandomizedSearchCV, cross_
                                     learning_curve
 from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score, roc_curve, \
     accuracy_score, precision_score, recall_score, f1_score
-
+import shap
 
 """
 --------------------------------------------
@@ -623,7 +623,7 @@ class BinaryClassifiersAnalysis():
                     sns.barplot(x='importance', y='feature', data=model_feature_importance.iloc[:top_n, :],
                                 ax=ax, palette=palette)
                     format_spines(ax, right_border=False)
-                    ax.set_title(f'Top {top_n} {model_name} Features mais Relevantes', size=14, color='dimgrey')
+                    ax.set_title(f'Top {top_n} {specific_model} Features mais Relevantes', size=14, color='dimgrey')
                 return model_feature_importance
             except:
                 print(f'Classificador {specific_model} não foi treinado.')
@@ -954,3 +954,32 @@ class BinaryClassifiersAnalysis():
         plt.suptitle(f'Score Distribution by Range - {model_name}\n', size=14, color='black')
         plt.tight_layout()
         plt.show()
+
+    def shap_analysis(self, model_name):
+        """
+        Parâmetros
+        ----------
+        classifiers: conjunto de classificadores em forma de dicionário [dict]
+        X: array com os dados a serem utilizados no treinamento [np.array]
+        y: array com o vetor target do modelo [np.array]
+
+        Retorno
+        -------
+        None
+        """
+
+        # Retornando modelo a ser avaliado
+        try:
+            model = self.classifiers_info[model_name]
+        except:
+            print(f'Classificador {model_name} não foi treinado.')
+            print(f'Opções possíveis: {list(self.classifiers_info.keys())}')
+            return None
+
+        # Applying shap approach
+        explainer = shap.TreeExplainer(model)
+        df_X_train_prep = pd.DataFrame(X_train_prep, columns=model_features)
+        shap_values = explainer.shap_values(df_X_train_prep)
+
+        # Plotting a summary plot using shap
+        shap.summary_plot(shap_values[1], df_X_train_prep)

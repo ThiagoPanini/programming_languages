@@ -115,8 +115,8 @@ def make_autopct(values):
 
 
 # Função para plotagem de gráfico de rosca em relação a uma variávei específica do dataset
-def donut_plot(df, col, label_names, ax, text='', colors=['crimson', 'navy'], circle_radius=0.8,
-            title=f'Gráfico de Rosca'):
+def donut_plot(df, col, ax, label_names=None, text='', colors=['crimson', 'navy'], circle_radius=0.8,
+            title=f'Gráfico de Rosca', flag_ruido=0):
     """
     Etapas:
         1. definição de funções úteis para mostrar rótulos em valor absoluto e porcentagem
@@ -139,9 +139,16 @@ def donut_plot(df, col, label_names, ax, text='', colors=['crimson', 'navy'], ci
 
     # Retorno dos valores e definição da figura
     values = df[col].value_counts().values
-    center_circle = plt.Circle((0, 0), circle_radius, color='white')
+    if label_names is None:
+        label_names = df[col].value_counts().index
+
+    # Verificando parâmetro de supressão de alguma categoria da análise
+    if flag_ruido > 0:
+        values = values[:-flag_ruido]
+        label_names = label_names[:-flag_ruido]
 
     # Plotando gráfico de rosca
+    center_circle = plt.Circle((0, 0), circle_radius, color='white')
     ax.pie(values, labels=label_names, colors=colors, autopct=make_autopct(values))
     ax.add_artist(center_circle)
 
@@ -536,7 +543,8 @@ def countplot(df, feature, order=True, hue=False, label_names=None, palette='pla
     plt.show()
 
 # Função responsável por plotar volumetria de uma única variável categórica em formato atualizado
-def single_countplot(df, col, ax, order=True, hue=False, palette='plasma', width=0.75, sub_width=0.3, sub_size=12):
+def single_countplot(df, ax, x=None, y=None, top=None, order=True, hue=False, palette='plasma',
+                     width=0.75, sub_width=0.3, sub_size=12):
     """
     Parâmetros
     ----------
@@ -551,25 +559,43 @@ def single_countplot(df, col, ax, order=True, hue=False, palette='plasma', width
 
     # Verificando plotagem por quebra de alguma variável categórica
     ncount = len(df)
+    if x:
+        col = x
+    else:
+        col = y
+
+    # Verificando a plotagem de top categorias
+    if top is not None:
+        cat_count = df[col].value_counts()
+        top_categories = cat_count[:top].index
+        df = df[df[col].isin(top_categories)]
+
+    # Validando demais argumentos e plotando gráfico
     if hue != False:
         if order:
-            sns.countplot(x=col, data=df, palette=palette, ax=ax, order=df[col].value_counts().index, hue=hue)
+            sns.countplot(x=x, y=y, data=df, palette=palette, ax=ax, order=df[col].value_counts().index, hue=hue)
         else:
-            sns.countplot(x=col, data=df, palette=palette, ax=ax, hue=hue)
+            sns.countplot(x=x, y=y, data=df, palette=palette, ax=ax, hue=hue)
     else:
         if order:
-            sns.countplot(x=col, data=df, palette=palette, ax=ax, order=df[col].value_counts().index)
+            sns.countplot(x=x, y=y, data=df, palette=palette, ax=ax, order=df[col].value_counts().index)
         else:
-            sns.countplot(x=col, data=df, palette=palette, ax=ax)
+            sns.countplot(x=x, y=y, data=df, palette=palette, ax=ax)
 
     # Formatando eixos
     format_spines(ax, right_border=False)
 
     # Inserindo rótulo de percentual
-    for p in ax.patches:
-        x = p.get_bbox().get_points()[:, 0]
-        y = p.get_bbox().get_points()[1, 1]
-        ax.annotate('{}\n{:.1f}%'.format(int(y), 100. * y / ncount), (x.mean(), y), ha='center', va='bottom')
+    if x:
+        for p in ax.patches:
+            x = p.get_bbox().get_points()[:, 0]
+            y = p.get_bbox().get_points()[1, 1]
+            ax.annotate('{}\n{:.1f}%'.format(int(y), 100. * y / ncount), (x.mean(), y), ha='center', va='bottom')
+    else:
+        for p in ax.patches:
+            x = p.get_bbox().get_points()[1, 0]
+            y = p.get_bbox().get_points()[:, 1]
+            ax.annotate('{} ({:.1f}%)'.format(int(x), 100. * x / ncount), (x, y.mean()), va='center')
 
 
 # Função para plotagem de volumetria das variáveis categóricas do conjunto de dados
@@ -864,6 +890,66 @@ def mean_sum_analysis(df, group_col, value_col, orient='vertical', palette='plas
 
     plt.tight_layout()
     plt.show()
+
+
+def answear_plot(grouped_data, grouped_col, list_cols, axs, top=5, bottom_filter=True, palette='plasma'):
+    """
+    Parâmetros
+    ----------
+    grouped_data: pandas DataFrame com os dados já agrupados para análise [pd.DataFrame]
+    grouped_col: referência da coluna pivot utilizada no agrupamento [string]
+    list_cols: lista de colunas a serem utilizadas na análise [list]
+    axs: eixos a serem utilizados na plotagem [matplotlib.axis]
+    top: quantidade de entradas nas análises head and tail [int, default: 5]
+    bottom_filter: flag para filtragem de elementos com pelo menos 1 ocorrência no bot [bool, default: True]
+    palette: paleta de cores utilizada na plotagem [string, default: 'plasma']
+
+    Retorno
+    -------
+    None
+    """
+
+    # Extracting plot dims and looking at number of cols
+    nrows = axs.shape[0]
+    ncols = axs.shape[1]
+    if len(list_cols) != ncols:
+        print(f'Number of cols passed in list_cols arg is different for figure cols axis. Please check it.')
+        return None
+
+    # Iterating over columns in the list and creating charts
+    i, j = 0, 0
+    for col in list_cols:
+        ax0 = axs[-3, j]
+        ax1 = axs[-2, j]
+        ax2 = axs[-1, j]
+        sorted_data = grouped_data.sort_values(by=col, ascending=False)
+
+        # First Line: Top entries
+        sns.barplot(x=col, y=grouped_col, data=sorted_data.head(top), ax=ax1, palette=palette)
+        ax1.set_title(f'Top {top} {grouped_col.capitalize()} with Highest \n{col.capitalize()}')
+
+        # Second Line: Bottom entries
+        if bottom_filter:
+            sns.barplot(x=col, y=grouped_col, data=sorted_data[sorted_data[col] > 0].tail(top), ax=ax2,
+                        palette=palette+'_r')
+        else:
+            sns.barplot(x=col, y=grouped_col, data=sorted_data.tail(top), ax=ax2, palette=palette+'_r')
+        ax2.set_title(f'Top {top} {grouped_col.capitalize()} with Lowest \n{col.capitalize()}')
+
+        # Customizing charts
+        for ax in ax1, ax2:
+            ax.set_xlim(0, grouped_data[col].max())
+            ax.set_ylabel('')
+            format_spines(ax, right_border=False)
+
+        # Annotations
+        mean_ind = grouped_data[col].mean()
+        ax0.text(0.50, 0.30, round(mean_ind, 2), fontsize=45, ha='center')
+        ax0.text(0.50, 0.12, f'is the average of {col}', fontsize=12, ha='center')
+        ax0.text(0.50, 0.00, f'by {grouped_col}', fontsize=12, ha='center')
+        ax0.axis('off')
+
+        j += 1
 
 """
 --------------------------------------------
