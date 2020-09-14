@@ -25,20 +25,20 @@ class FeatureSelection(BaseEstimator, TransformerMixin):
     def __init__(self, features):
         self.features = features
 
-    def fit(self, df):
+    def fit(self, df, y=None):
         return self
 
-    def transform(self, df):
+    def transform(self, df, y=None):
         return df[self.features]
 
 
 # [PRE-PROCESSING] Classe para dropar dados duplicados
 class DropDuplicates(BaseEstimator, TransformerMixin):
 
-    def fit(self, df):
+    def fit(self, df, y=None):
         return self
 
-    def transform(self, df):
+    def transform(self, df, y=None):
         return df.drop_duplicates()
 
 
@@ -50,15 +50,15 @@ class SplitData(BaseEstimator, TransformerMixin):
         self.test_size = test_size
         self.random_state = random_state
 
-    def fit(self, df):
+    def fit(self, df, y=None):
         return self
 
-    def transform(self, df):
+    def transform(self, df, y=None):
         # Retornando conjuntos X e y
-        X = df.drop(self.target, axis=1)
-        y = df[self.target].values
+        self.X_ = df.drop(self.target, axis=1)
+        self.y_ = df[self.target].values # Salvando para resgate futuro da variável target
 
-        return train_test_split(X, y, test_size=self.test_size, random_state=self.random_state)
+        return train_test_split(self.X_, self.y_, test_size=self.test_size, random_state=self.random_state)
 
 # [PRE-PROCESSING] Classe para transformação de variável target
 class TargetDefinition(BaseEstimator, TransformerMixin):
@@ -85,6 +85,19 @@ class TargetDefinition(BaseEstimator, TransformerMixin):
 
         # Dropping the old target column
         return df.drop(self.target_col, axis=1)
+
+# [PRE-PROCESSING] Classe para transformação de nomes das colunas
+class ColsFormatting(BaseEstimator, TransformerMixin):
+
+    def fit(self, df, y=None):
+        return self
+
+    def transform(self, df, y=None):
+        # Modificando colunas
+        df.columns = [col.lower().strip().replace(' ', '_') for col in df.columns]
+        return df
+
+
 """
 --------------------------------------------
 -------- 2. PIPELINE PROCESSAMENTO ---------

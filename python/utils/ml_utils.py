@@ -103,300 +103,6 @@ def plot_kmeans_clusters(df, y_kmeans, centers, figsize=(14, 7), cmap='viridis')
     plt.show()
     
 
-"""
---------------------------------------------
-------- 1. MODELOS DE CLASSIFICAÇÃO --------
---------------------------------------------
-"""
-
-
-class BinaryBaselineClassifier():
-
-    def __init__(self, model, set_prep, features):
-        self.model = model
-        self.X_train = set_prep['X_train_prep']
-        self.y_train = set_prep['y_train']
-        self.X_test = set_prep['X_test_prep']
-        self.y_test = set_prep['y_test']
-        self.features = features
-        self.model_name = model.__class__.__name__
-
-    def random_search(self, scoring, param_grid=None, cv=5):
-        """
-        Etapas:
-            1. definição automática de parâmetros de busca caso o modelo sejá uma Árvore de Decisão
-            2. aplicação de RandomizedSearchCV com os parâmetros definidos
-
-        Argumentos:
-            scoring -- métrica a ser otimizada durante a busca [string]
-            param_grid -- dicionário com os parâmetros a serem utilizados na busca [dict]
-            tree -- flag para indicar se o modelo baseline é uma árvore de decisão [bool]
-
-        Retorno:
-            best_estimator_ -- melhor modelo encontrado na busca
-        """
-
-        # Validando baseline como Árvore de Decisão (grid definido automaticamente)
-        """if tree:
-            param_grid = {
-                'criterion': ['entropy', 'gini'],
-                'max_depth': [3, 4, 5, 8, 10],
-                'max_features': np.arange(1, self.X_train.shape[1]),
-                'class_weight': ['balanced', None]
-            }"""
-
-        # Aplicando busca aleatória dos hiperparâmetros
-        rnd_search = RandomizedSearchCV(self.model, param_grid, scoring=scoring, cv=cv, verbose=1,
-                                        random_state=42, n_jobs=-1)
-        rnd_search.fit(self.X_train, self.y_train)
-
-        return rnd_search.best_estimator_
-
-    def fit(self, rnd_search=False, scoring=None, param_grid=None):
-        """
-        Etapas:
-            1. treinamento do modelo e atribuição do resultado como um atributo da classe
-
-        Argumentos:
-            rnd_search -- flag indicativo de aplicação de RandomizedSearchCV [bool]
-            scoring -- métrica a ser otimizada durante a busca [string]
-            param_grid -- dicionário com os parâmetros a serem utilizados na busca [dict]
-            tree -- flag para indicar se o modelo baseline é uma árvore de decisão [bool]
-
-        Retorno:
-            None
-        """
-
-        # Treinando modelo de acordo com o argumento selecionado
-        if rnd_search:
-            print(f'Treinando modelo {self.model_name} com RandomSearchCV.')
-            self.trained_model = self.random_search(param_grid=param_grid, scoring=scoring)
-            print(f'Treinamento finalizado com sucesso! Configurações do modelo: \n\n{self.trained_model}')
-        else:
-            print(f'Treinando modelo {self.model_name}.')
-            self.trained_model = self.model.fit(self.X_train, self.y_train)
-            print(f'Treinamento finalizado com sucesso! Configurações do modelo: \n\n{self.trained_model}')
-
-    def evaluate_performance(self, approach, cv=5, test=False):
-        """
-        Etapas:
-            1. medição das principais métricas pro modelo
-
-        Argumentos:
-            cv -- número de k-folds durante a aplicação do cross validation [int]
-
-        Retorno:
-            df_performance -- DataFrame contendo a performance do modelo frente as métricas [pandas.DataFrame]
-        """
-
-        # Iniciando medição de tempo
-        t0 = time.time()
-
-        if test:
-            # Retornando predições com os dados de teste
-            y_pred = self.trained_model.predict(self.X_test)
-            y_proba = self.trained_model.predict_proba(self.X_test)[:, 1]
-
-            # Retornando métricas para os dados de teste
-            accuracy = accuracy_score(self.y_test, y_pred)
-            precision = precision_score(self.y_test, y_pred)
-            recall = recall_score(self.y_test, y_pred)
-            f1 = f1_score(self.y_test, y_pred)
-            auc = roc_auc_score(self.y_test, y_proba)
-        else:
-            # Avaliando principais métricas do modelo através de validação cruzada
-            accuracy = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
-                                       scoring='accuracy').mean()
-            precision = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
-                                        scoring='precision').mean()
-            recall = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
-                                     scoring='recall').mean()
-            f1 = cross_val_score(self.trained_model, self.X_train, self.y_train, cv=cv,
-                                 scoring='f1').mean()
-
-            # AUC score
-            try:
-                y_scores = cross_val_predict(self.trained_model, self.X_train, self.y_train, cv=cv,
-                                             method='decision_function')
-            except:
-                # Modelos baseados em árvores não possuem o método 'decision_function', mas sim 'predict_proba'
-                y_probas = cross_val_predict(self.trained_model, self.X_train, self.y_train, cv=cv,
-                                             method='predict_proba')
-                y_scores = y_probas[:, 1]
-            # Calculando AUC
-            auc = roc_auc_score(self.y_train, y_scores)
-
-        # Finalizando medição de tempo
-        t1 = time.time()
-        delta_time = t1 - t0
-
-        # Salvando dados em um DataFrame
-        performance = {}
-        performance['approach'] = approach
-        performance['acc'] = round(accuracy, 4)
-        performance['precision'] = round(precision, 4)
-        performance['recall'] = round(recall, 4)
-        performance['f1'] = round(f1, 4)
-        performance['auc'] = round(auc, 4)
-        performance['total_time'] = round(delta_time, 3)
-
-        df_performance = pd.DataFrame(performance, index=performance.keys()).reset_index(drop=True).loc[:0, :]
-        df_performance.index = [self.model_name]
-
-        return df_performance
-
-    def plot_confusion_matrix(self, classes, cv=5, cmap=plt.cm.Blues, title='Confusion Matrix', normalize=False):
-        """
-        Etapas:
-            1. cálculo de matriz de confusão utilizando predições com cross-validation
-            2. configuração e construção de plotagem
-            3. formatação dos labels da plotagem
-
-        Argumentos:
-            classes -- nome das classes envolvidas no modelo [list]
-            cv -- número de folds aplicados na validação cruzada [int - default: 5]
-            cmap -- mapeamento colorimétrico da matriz [plt.colormap - default: plt.cm.Blues]
-            title -- título da matriz de confusão [string - default: 'Confusion Matrix']
-            normaliza -- indicador para normalização dos dados da matriz [bool - default: False]
-
-        Retorno
-        """
-
-        # Realizando predições e retornando matriz de confusão
-        y_pred = cross_val_predict(self.trained_model, self.X_train, self.y_train, cv=cv)
-        conf_mx = confusion_matrix(self.y_train, y_pred)
-
-        # Plotando matriz
-        sns.set(style='white', palette='muted', color_codes=True)
-        plt.imshow(conf_mx, interpolation='nearest', cmap=cmap)
-        plt.colorbar()
-        tick_marks = np.arange(len(classes))
-
-        # Customizando eixos
-        plt.xticks(tick_marks, classes, rotation=45)
-        plt.yticks(tick_marks, classes)
-
-        # Customizando entradas
-        fmt = '.2f' if normalize else 'd'
-        thresh = conf_mx.max() / 2.
-        for i, j in itertools.product(range(conf_mx.shape[0]), range(conf_mx.shape[1])):
-            plt.text(j, i, format(conf_mx[i, j]),
-                     horizontalalignment='center',
-                     color='white' if conf_mx[i, j] > thresh else 'black')
-        plt.ylabel('True Label')
-        plt.xlabel('Predicted Label')
-        plt.title(title, size=14)
-
-    def plot_roc_curve(self, cv=5):
-        """
-        Etapas:
-            1. retorno dos scores do modelo utilizando predição por validação cruzada
-            2. encontro das taxas de falsos positivos e verdadeiros negativos
-            3. cálculo da métrica AUC e plotagem da curva ROC
-
-        Argumentos:
-            cv -- número de k-folds utilizados na validação cruzada [int - default: 5]
-
-        Retorno:
-            None
-        """
-
-        # Calculando scores utilizando predição por validação cruzada
-        try:
-            y_scores = cross_val_predict(self.trained_model, self.X_train, self.y_train, cv=cv,
-                                         method='decision_function')
-        except:
-            # Algoritmos baseados em Árvore não possuem o methodo "decision_function"
-            y_probas = cross_val_predict(self.trained_model, self.X_train, self.y_train, cv=cv,
-                                         method='predict_proba')
-            y_scores = y_probas[:, 1]
-
-        # Calculando taxas de falsos positivos e verdadeiros positivos
-        fpr, tpr, thresholds = roc_curve(self.y_train, y_scores)
-        auc = roc_auc_score(self.y_train, y_scores)
-
-        # Plotando curva ROC
-        plt.plot(fpr, tpr, linewidth=2, label=f'{self.model_name} auc={auc: .3f}')
-        plt.plot([0, 1], [0, 1], 'k--')
-        plt.axis([-0.02, 1.02, -0.02, 1.02])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title('ROC Curve')
-        plt.legend()
-
-    def feature_importance_analysis(self):
-        """
-        Etapas:
-            1. retorno de importância das features
-            2. construção de um DataFrame com as features mais importantes pro modelo
-
-        Argumentos:
-            None
-
-        Retorno:
-            feat_imp -- DataFrame com feature importances [pandas.DataFrame]
-        """
-
-        # Retornando feature importance do modelo
-        importances = self.trained_model.feature_importances_
-        feat_imp = pd.DataFrame({})
-        feat_imp['feature'] = self.features
-        feat_imp['importance'] = importances
-        feat_imp = feat_imp.sort_values(by='importance', ascending=False)
-        feat_imp.reset_index(drop=True, inplace=True)
-
-        return feat_imp
-
-    def plot_learning_curve(self, ylim=None, cv=5, n_jobs=1, train_sizes=np.linspace(.1, 1.0, 10),
-                            figsize=(12, 6)):
-        """
-        Etapas:
-            1. cálculo dos scores de treino e validação de acordo com a quantidade m de dados
-            2. cálculo de parâmetros estatísticos (média e desvio padrão) dos scores
-            3. plotagem da curva de aprendizado de treino e validação
-
-        Argumentos:
-            y_lim -- definição de limites do eixo y [list - default: None]
-            cv -- k folds na aplicação de validação cruzada [int - default: 5]
-            n_jobs -- número de jobs durante a execução da função learning_curve [int - default: 1]
-            train_sizes -- tamanhos considerados para as fatias do dataset [np.array - default: linspace(.1, 1, 10)]
-            figsize -- dimensões da plotagem gráfica [tupla - default: (12, 6)]
-
-        Retorno:
-            None
-        """
-
-        # Retornando parâmetros de scores de treino e validação
-        train_sizes, train_scores, val_scores = learning_curve(self.trained_model, self.X_train, self.y_train,
-                                                               cv=cv, n_jobs=n_jobs, train_sizes=train_sizes)
-
-        # Calculando médias e desvios padrão (treino e validação)
-        train_scores_mean = np.mean(train_scores, axis=1)
-        train_scores_std = np.std(train_scores, axis=1)
-        val_scores_mean = np.mean(val_scores, axis=1)
-        val_scores_std = np.std(val_scores, axis=1)
-
-        # Plotando gráfico de curva de aprendizado
-        fig, ax = plt.subplots(figsize=figsize)
-
-        # Resultado em dados de treino
-        ax.plot(train_sizes, train_scores_mean, 'o-', color='navy', label='Training Score')
-        ax.fill_between(train_sizes, (train_scores_mean - train_scores_std), (train_scores_mean + train_scores_std),
-                        alpha=0.1, color='blue')
-
-        # Resultado em validação cruzada
-        ax.plot(train_sizes, val_scores_mean, 'o-', color='red', label='Cross Val Score')
-        ax.fill_between(train_sizes, (val_scores_mean - val_scores_std), (val_scores_mean + val_scores_std),
-                        alpha=0.1, color='crimson')
-
-        # Customizando gráfico
-        ax.set_title(f'Modelo {self.model_name} - Curva de Aprendizado', size=14)
-        ax.set_xlabel('Training size (m)')
-        ax.set_ylabel('Score')
-        ax.grid(True)
-        ax.legend(loc='best')
-        plt.show()
-
 
 """
 --------------------------------------------
@@ -535,7 +241,8 @@ class BinaryClassifiersAnalysis():
 
         return df_test_performance
 
-    def evaluate_performance(self, X_train, y_train, X_test, y_test, cv=5, approach=''):
+    def evaluate_performance(self, X_train, y_train, X_test, y_test, cv=5, approach='',
+                             save=False, overwrite=False, performances_filepath='model_performances.csv'):
         """
         Parâmetros
         ----------
@@ -583,10 +290,31 @@ class BinaryClassifiersAnalysis():
             }
             model_info['model_data'] = model_data
 
+        # Salvando DataFrame de performances se aplicável
+        if save:
+            # Adicionando informações de data da medição
+            cols_performance = list(df_performances.columns)
+            df_performances['anomesdia'] = datetime.now().strftime('%Y%m%d')
+            df_performances['anomesdia_datetime'] = datetime.now()
+            df_performances = df_performances.loc[:, ['anomesdia', 'anomesdia_datetime'] + cols_performance]
+
+            # Validando sobrescrita ou append do log de performances já salvo
+            if overwrite:
+                df_performances.to_csv(performances_filepath, index=False)
+            else:
+                # Lendo base já existente e aplicando append
+                try:
+                    log_performances = pd.read_csv(performances_filepath)
+                    full_performances = log_performances.append(df_performances)
+                    full_performances.to_csv(performances_filepath, index=False)
+                except FileNotFoundError:
+                    print('Log de performances do modelo não existente no caminho especificado. Salvando apenas o atual.')
+                    df_performances.to_csv(performances_filepath, index=False)
+
         return df_performances
 
     def feature_importance_analysis(self, features, specific_model=None, graph=True, ax=None, top_n=30,
-                                    palette='viridis'):
+                                    palette='viridis', save=False, features_filepath='features_info.csv'):
         """
         Parâmetros
         ----------
@@ -601,6 +329,7 @@ class BinaryClassifiersAnalysis():
 
         # Iterando sobre cada um dos classificadores já treinados
         feat_imp = pd.DataFrame({})
+        all_feat_imp = pd.DataFrame({})
         for model_name, model_info in self.classifiers_info.items():
             # Criando DataFrame com as features importances
             try:
@@ -609,11 +338,15 @@ class BinaryClassifiersAnalysis():
                 continue
             feat_imp['feature'] = features
             feat_imp['importance'] = importances
+            feat_imp['anomesdia'] = datetime.now().strftime('%Y%m')
+            feat_imp['anomesdia_datetime'] = datetime.now()
             feat_imp.sort_values(by='importance', ascending=False, inplace=True)
             feat_imp.reset_index(drop=True, inplace=True)
 
             # Salvando set de feature importances no dicionário do classificador
             self.classifiers_info[model_name]['feature_importances'] = feat_imp
+            all_feat_imp = all_feat_imp.append(feat_imp)
+            all_feat_imp['model'] = model_name
 
         # Retornando feature importances de um classificador específico
         if specific_model is not None:
@@ -624,11 +357,28 @@ class BinaryClassifiersAnalysis():
                                 ax=ax, palette=palette)
                     format_spines(ax, right_border=False)
                     ax.set_title(f'Top {top_n} {specific_model} Features mais Relevantes', size=14, color='dimgrey')
+
+                # Saving features for a specific model
+                if save:
+                    model_feature_importance['model'] = specific_model
+                    order_cols = ['anomesdia', 'anomesdia_datetime', 'model', 'feature', 'importance']
+                    model_feature_importance = model_feature_importance.loc[:, order_cols]
+                    model_feature_importance.to_csv(features_filepath, index=False)
+
                 return model_feature_importance
+
+            # Exceção caso a chave passada no parâmetro "specific_model" não esteja presente no dicionário
             except:
-                print(f'Classificador {specific_model} não foi treinado.')
+                print(f'Classificador {specific_model} não existente nas chaves de classificadores treinados.')
                 print(f'Opções possíveis: {list(self.classifiers_info.keys())}')
                 return None
+
+        # Validando o salvamento das feature importances de todos os modelos caso "specific_model" não esteja definido
+        else:
+            if save:
+                order_cols = ['anomesdia', 'anomedia_datetime', 'model', 'feature', 'importance']
+                all_feat_imp = all_feat_imp.loc[:, order_cols]
+                all_feat_imp.to_csv(features_filepath, index=False)
 
         # Validando combinação incoerente de argumentos
         if graph and specific_model is None:
