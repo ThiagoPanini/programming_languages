@@ -13,6 +13,8 @@ from nltk.corpus import stopwords
 from nltk.stem import RSLPStemmer
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.base import BaseEstimator, TransformerMixin
+import pandas as pd
+import matplotlib.pyplot as plt
 
 """
 --------------------------------------------

@@ -8,7 +8,6 @@ The applications can be to simple optimized data reading or a custom transformer
 2. Custom Pipelines Transformers
     2.1 Pre Processing Pipelines
     2.2 Processing Pipelines
-    2.3 Text Pipelines
 
 ---------------------------------------------------------------
 Written by Thiago Panini - Latest version: September 14th 2020
@@ -29,7 +28,7 @@ from sklearn.model_selection import train_test_split
 """
 
 
-def import_data(path, sep=',', optimized=True, n_lines=50, encoding='utf-8', verbose=True):
+def import_data(path, sep=',', optimized=True, n_lines=50, encoding='utf-8', usecols=None, verbose=True):
     """
     This functions applies a csv reading in an optimized way, converting data types (float64 to float32 and
     int 64 to int32), reducing script memory usage.
@@ -42,6 +41,7 @@ def import_data(path, sep=',', optimized=True, n_lines=50, encoding='utf-8', ver
     :param n_lines: number of lines read during the data type optimization [type: int, default: 50]
     :param encoding: encoding param for read_csv() method [type: string, default: 'utf-8']
     :param verbose: the verbose arg allow communication between steps [type: bool, default: True]
+    :param usecols: columns to read - set None to read all the columns [type: list, default: None]
 
     Return
     ------
@@ -56,7 +56,7 @@ def import_data(path, sep=',', optimized=True, n_lines=50, encoding='utf-8', ver
     # Validating the optimized flag for optimizing memory usage
     if optimized:
         # Reading only the first rows of the data
-        df_raw = pd.read_csv(path, sep=sep, nrows=n_lines, encoding=encoding)
+        df_raw = pd.read_csv(path, sep=sep, nrows=n_lines, encoding=encoding, usecols=usecols)
         start_mem = df_raw.memory_usage().sum() / 1024 ** 2
 
         # Columns were the optimization is applicable
@@ -92,15 +92,15 @@ def import_data(path, sep=',', optimized=True, n_lines=50, encoding='utf-8', ver
 
         # Trying to read the dataset with new types
         try:
-            return pd.read_csv(path, sep=sep, dtype=column_types, encoding=encoding)
+            return pd.read_csv(path, sep=sep, dtype=column_types, encoding=encoding, usecols=usecols)
         except ValueError as e1:
             # Error cach during data reading with new data types
             print(f'ValueError on data reading: {e1}')
             print('The dataset will be read without optimization types.')
-            return pd.read_csv(path, sep=sep, encoding=encoding)
+            return pd.read_csv(path, sep=sep, encoding=encoding, usecols=usecols)
     else:
         # Reading the data without optimization
-        return pd.read_csv(path, sep=sep, encoding=encoding)
+        return pd.read_csv(path, sep=sep, encoding=encoding, usecols=usecols)
 
 
 def split_cat_num_data(df):
@@ -439,6 +439,39 @@ class FillNullData(BaseEstimator, TransformerMixin):
             return X.fillna(value=self.value_fill)
 
 
+class DropNullData(BaseEstimator, TransformerMixin):
+    """
+    This class drops null data. It's possible to select just some attributes to be filled with different values
+
+    Parameters
+    ----------
+    :param cols_dropna: columns to be filled. Leave None if all the columns will be filled [type: list, default: None]
+
+    Return
+    ------
+    :return: X: DataFrame object with NaN data filled [type: pd.DataFrame]
+
+    Application
+    -----------
+    null_dropper = DropNulldata(cols_to_fill=['colA', 'colB', 'colC'], value_fill=-999)
+    X = null_dropper.fit_transform(X)
+    """
+
+    def __init__(self, cols_dropna=None):
+        self.cols_dropna = cols_dropna
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X, y=None):
+        # Filling null data according to passed args
+        if self.cols_dropna is not None:
+            X[self.cols_dropna] = X[self.cols_dropna].dropna()
+            return X
+        else:
+            return X.dropna()
+
+
 class TopFeatureSelector(BaseEstimator, TransformerMixin):
     """
     This class selects the top k most important features from a trained model
@@ -466,4 +499,4 @@ class TopFeatureSelector(BaseEstimator, TransformerMixin):
         return self
 
     def transform(self, X, y=None):
-        return X.iloc[:, indices_of_top_k(self.feature_importance, self.k)]
+        return X[:, indices_of_top_k(self.feature_importance, self.k)]

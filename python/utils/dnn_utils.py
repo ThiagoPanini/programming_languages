@@ -15,16 +15,50 @@ a seguinte estrutura:
     2.1. Classe completa para treinamento de uma Rede Neural Profunda
 """
 
-"""
---------------------------------------------
----------- IMPORTANDO BIBLIOTECAS ----------
---------------------------------------------
-"""
 import numpy as np
 from datetime import datetime
 import matplotlib.pyplot as plt
 from utils.viz_utils import *
 import tensorflow as tf
+
+
+"""
+--------------------------------------------
+------ 1. UTILITY FUNCTIONS IN DNNS --------
+--------------------------------------------
+"""
+
+def fetch_batch(X, y, epoch, batch_index, batch_size):
+    """
+    This function read the data and returns the corresponding batch for applying batch optimization using TF
+
+    Parameters
+    ----------
+    :param X: input data for extracting the batch (features) [type: array]
+    :param y: input data for extracting the batch (target) [type: array]
+    :param epoch: epoch number of batch extraction [type: int]
+    :param batch_index: index of batch to be extracted [type: int]
+    :param batch_size: size of the batch [type: int]
+
+    Returns
+    -------
+    :return: X_batch, y_batch: batch extracted from both X and y arrays
+    """
+
+    # Retornando parâmetros
+    m = X.shape[0]
+    n_batches = m // batch_size
+
+    # Definindo semente aleatória
+    np.random.seed(epoch * n_batches + batch_index)
+
+    # Indexando mini-batches do conjunto total
+    indices = np.random.randint(m, size=batch_size)
+    X_batch = X[indices]
+    y_batch = y[indices]
+
+    return X_batch, y_batch
+
 
 """
 --------------------------------------------
